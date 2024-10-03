@@ -3,7 +3,7 @@ FROM openjdk:21-jdk-slim AS build
 WORKDIR /app
 
 # Copy Gradle build files and source code
-COPY build.gradle settings.gradle ./
+COPY build.gradle.kts settings.gradle.kts ./
 COPY gradlew .
 COPY gradle gradle
 COPY src src
