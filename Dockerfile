@@ -19,7 +19,7 @@ FROM openjdk:21-jdk-slim
 VOLUME /tmp
 
 # Copy the JAR file from the build stage to the runtime stage
-COPY --from=build /app/build/libs/rental-1.0.0-SNAPSHOT.jar app.jar
+COPY --from=build /app/build/libs/carent-1.0.0-SNAPSHOT.jar app.jar
 
 # Set the entrypoint to run the application
 ENTRYPOINT ["java", "-jar", "/app.jar"]
