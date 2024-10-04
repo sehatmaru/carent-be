@@ -4,9 +4,9 @@ WORKDIR /app
 
 # Copy Gradle build files and source code
 COPY ../settings.gradle.kts ./
-COPY ../tenant/build.gradle.kts ./tenant/
-COPY ../tenant/gradlew ./tenant/
-COPY ../tenant/gradle ./tenant/gradle
+COPY ../tenant/build.gradle.kts tenant/
+COPY ../tenant/gradlew tenant/
+COPY ../tenant/gradle tenant/gradle
 COPY ../tenant/src tenant/src
 
 WORKDIR /app/tenant
