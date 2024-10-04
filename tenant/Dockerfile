@@ -3,9 +3,10 @@ FROM openjdk:21-jdk-slim AS build
 WORKDIR /app
 
 # Copy Gradle build files and source code
-COPY build.gradle.kts settings.gradle.kts ./
-COPY gradlew .
-COPY gradle gradle
+COPY ../settings.gradle.kts ./
+COPY ../tenant/build.gradle.kts ./tenant/
+COPY ../gradlew .
+COPY ../gradle gradle
 COPY src src
 
 # Set execution permission for the Gradle wrapper
