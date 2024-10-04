@@ -9,10 +9,10 @@ COPY ../gradlew .
 COPY ../gradle gradle
 COPY ../tenant/src tenant/src
 
-WORKDIR /app/tenant
-
 # Set execution permission for the Gradle wrapper
 RUN chmod +x ./gradlew
+
+WORKDIR /app/tenant
 
 # Build the project and create the JAR
 RUN ./gradlew clean build -x test
