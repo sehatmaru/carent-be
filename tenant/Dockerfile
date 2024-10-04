@@ -5,8 +5,8 @@ WORKDIR /app
 # Copy Gradle build files and source code
 COPY ../settings.gradle.kts ./
 COPY ../tenant/build.gradle.kts ./tenant/
-COPY ../gradlew .
-COPY ../gradle gradle
+COPY ../tenant/gradlew ./tenant/
+COPY ../tenant/gradle ./tenant/gradle
 COPY ../tenant/src tenant/src
 
 # Set execution permission for the Gradle wrapper
