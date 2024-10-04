@@ -7,7 +7,7 @@ COPY ../settings.gradle.kts ./
 COPY ../tenant/build.gradle.kts ./tenant/
 COPY ../gradlew .
 COPY ../gradle gradle
-COPY src src
+COPY ../tenant/src tenant/src
 
 # Set execution permission for the Gradle wrapper
 RUN chmod +x ./gradlew
