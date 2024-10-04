@@ -9,6 +9,8 @@ COPY ../gradlew .
 COPY ../gradle gradle
 COPY ../tenant/src tenant/src
 
+WORKDIR /app/tenant
+
 # Set execution permission for the Gradle wrapper
 RUN chmod +x ./gradlew
 
@@ -20,7 +22,7 @@ FROM openjdk:21-jdk-slim
 VOLUME /tmp
 
 # Copy the JAR file from the build stage to the runtime stage
-COPY --from=build /app/build/libs/tenant-1.0.0-SNAPSHOT.jar app.jar
+COPY --from=build /app/tenant/build/libs/tenant-1.0.0-SNAPSHOT.jar app.jar
 
 # Set the entrypoint to run the application
 ENTRYPOINT ["java", "-jar", "/app.jar"]
