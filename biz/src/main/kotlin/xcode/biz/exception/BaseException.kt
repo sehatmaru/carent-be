@@ -73,7 +73,7 @@ class BaseExceptions : ResponseEntityExceptionHandler() {
         request: WebRequest?
     ): ResponseEntity<Any> {
         println(ex)
-        response.setFailed(ex.message)
+//        response.setFailed(ex.message)
 
         return ResponseEntity(response, HttpStatus.OK)
     }
