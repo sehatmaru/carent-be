@@ -8,6 +8,10 @@ COPY ../tenant/build.gradle.kts tenant/
 COPY ../tenant/gradlew tenant/
 COPY ../tenant/gradle tenant/gradle
 COPY ../tenant/src tenant/src
+COPY ../biz/build.gradle.kts biz/
+COPY ../biz/gradlew biz/
+COPY ../biz/gradle biz/gradle
+COPY ../biz/src biz/src
 
 WORKDIR /app/tenant
 
