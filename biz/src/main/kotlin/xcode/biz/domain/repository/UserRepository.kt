@@ -1,10 +1,17 @@
 package xcode.biz.domain.repository
 
 import org.springframework.data.jpa.repository.JpaRepository
+import org.springframework.data.jpa.repository.Query
+import org.springframework.data.repository.query.Param
 import org.springframework.stereotype.Repository
 import xcode.biz.domain.model.User
 
 @Repository
 interface UserRepository : JpaRepository<User?, String?> {
-    fun findByUsernameAndDeletedAtIsNull(username: String): User?
+
+    @Query(
+        value = "SELECT * FROM t_user WHERE username = :username AND deleted_at IS NULL AND verified_at IS NOT NULL AND role IN ('TENANT_MANAGER', 'TENANT_ADMIN') LIMIT 1",
+        nativeQuery = true,
+    )
+    fun getActiveTenantUser(@Param("username") username: String): User?
 }

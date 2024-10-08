@@ -17,14 +17,14 @@ import xcode.biz.domain.response.BaseResponse
 import xcode.biz.shared.ResponseCode
 
 @ControllerAdvice
-class BaseExceptions : ResponseEntityExceptionHandler() {
+class BaseException : ResponseEntityExceptionHandler() {
     private val response: BaseResponse<String> = BaseResponse()
 
     protected fun handleHttpMessageNotReadable(
         ex: HttpMessageNotReadableException,
         headers: HttpHeaders?,
         status: HttpStatus?,
-        request: WebRequest?
+        request: WebRequest?,
     ): ResponseEntity<Any> {
         ex.message?.let { response.setFailed(it) }
 
@@ -35,7 +35,7 @@ class BaseExceptions : ResponseEntityExceptionHandler() {
         ex: HttpRequestMethodNotSupportedException,
         headers: HttpHeaders?,
         status: HttpStatus?,
-        request: WebRequest?
+        request: WebRequest?,
     ): ResponseEntity<Any> {
         response.setInvalidMethod(ex.message)
 
@@ -47,7 +47,7 @@ class BaseExceptions : ResponseEntityExceptionHandler() {
         @Nullable body: Any?,
         headers: HttpHeaders?,
         status: HttpStatus?,
-        request: WebRequest?
+        request: WebRequest?,
     ): ResponseEntity<Any> {
         response.setServerError(ex.message)
 
@@ -58,7 +58,7 @@ class BaseExceptions : ResponseEntityExceptionHandler() {
         ex: ConversionNotSupportedException,
         headers: HttpHeaders?,
         status: HttpStatus?,
-        request: WebRequest?
+        request: WebRequest?,
     ): ResponseEntity<Any> {
         println(ex)
         response.setServerError(ex.message)
@@ -70,10 +70,10 @@ class BaseExceptions : ResponseEntityExceptionHandler() {
         ex: MissingPathVariableException,
         headers: HttpHeaders?,
         status: HttpStatus?,
-        request: WebRequest?
+        request: WebRequest?,
     ): ResponseEntity<Any> {
         println(ex)
-//        response.setFailed(ex.message)
+        response.setFailed(ex.message)
 
         return ResponseEntity(response, HttpStatus.OK)
     }
@@ -82,7 +82,7 @@ class BaseExceptions : ResponseEntityExceptionHandler() {
         ex: HttpMessageNotWritableException,
         headers: HttpHeaders?,
         status: HttpStatus?,
-        request: WebRequest?
+        request: WebRequest?,
     ): ResponseEntity<Any> {
         println(ex)
         ex.message?.let { response.setFailed(it) }
@@ -107,6 +107,10 @@ class BaseExceptions : ResponseEntityExceptionHandler() {
 
             ResponseCode.EXIST_MESSAGE -> {
                 response.setExistData()
+            }
+
+            ResponseCode.USERNAME_EXIST_MESSAGE -> {
+                response.setUsernameExistData()
             }
 
             ResponseCode.PARAMS_ERROR_MESSAGE -> {

@@ -1,23 +1,14 @@
 package xcode.biz.utils
 
-import org.jasypt.encryption.pbe.StandardPBEStringEncryptor
 import java.util.*
 import java.util.concurrent.TimeUnit
+import kotlin.math.pow
+import kotlin.random.Random
 
 object CommonUtil {
 
-    private const val EXPIRE_DURATION: Long = (24 * 60 * 60 * 1000).toLong()
-
     fun generateSecureId(): String {
         return UUID.randomUUID().toString()
-    }
-
-    fun encryptor(value: String?, isEncrypt: Boolean): String {
-        val jasypt = StandardPBEStringEncryptor()
-
-        jasypt.setPassword("xcode")
-
-        return if (isEncrypt) jasypt.encrypt(value) else jasypt.decrypt(value)
     }
 
     fun getDifferenceDays(date1: Date, date2: Date): Long {
@@ -48,7 +39,17 @@ object CommonUtil {
     }
 
     fun getTomorrowDate(): Date {
-        return Date(System.currentTimeMillis() + EXPIRE_DURATION)
+        return Date(System.currentTimeMillis() + (24 * 60 * 60 * 1000).toLong())
     }
 
+    fun generateOTP(): String {
+        val length = 5
+
+        val min = (10.0.pow(length - 1)).toInt()
+        val max = (10.0.pow(length) - 1).toInt()
+
+        val otp = Random.nextInt(min, max + 1)
+
+        return otp.toString()
+    }
 }

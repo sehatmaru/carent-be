@@ -4,5 +4,5 @@ enum class UserRole {
     ADMIN,
     TENANT_MANAGER,
     TENANT_ADMIN,
-    CUSTOMER
+    CUSTOMER,
 }

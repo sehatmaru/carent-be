@@ -49,6 +49,11 @@ class BaseResponse<T> {
         this.message = ResponseCode.EXIST_MESSAGE
     }
 
+    fun setUsernameExistData() {
+        this.statusCode = HttpStatus.CONFLICT.value()
+        this.message = ResponseCode.USERNAME_EXIST_MESSAGE
+    }
+
     fun setInvalidMethod(message: String?) {
         this.statusCode = HttpStatus.METHOD_NOT_ALLOWED.value()
         this.message = message

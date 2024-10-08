@@ -19,7 +19,7 @@ import xcode.tenant.service.AuthService
 @RestController
 @RequestMapping(value = ["auth"])
 class AuthApi @Autowired constructor(
-    private val authService: AuthService
+    private val authService: AuthService,
 ) {
 
     @PostMapping("/login")

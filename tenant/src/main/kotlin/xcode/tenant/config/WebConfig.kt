@@ -8,7 +8,7 @@ import xcode.tenant.interceptor.UserInterceptor
 
 @Configuration
 class WebConfig(
-    private val userInterceptor: UserInterceptor
+    private val userInterceptor: UserInterceptor,
 ) : WebMvcConfigurer {
 
     override fun addCorsMappings(registry: CorsRegistry) {
@@ -18,7 +18,8 @@ class WebConfig(
                 "http://localhost:4300",
                 "http://localhost:8090",
                 "https://tenant.xcodeid.uk/",
-                "https://tenant-admin.xcodeid.uk/")
+                "https://tenant-admin.xcodeid.uk/",
+            )
             .allowedMethods("*")
             .allowedHeaders("*")
             .exposedHeaders("Authorization")
@@ -29,7 +30,7 @@ class WebConfig(
     override fun addInterceptors(registry: InterceptorRegistry) {
         registry.addInterceptor(userInterceptor).excludePathPatterns(
             "/auth/login",
-            "/auth/register"
+            "/auth/register",
         )
     }
 }

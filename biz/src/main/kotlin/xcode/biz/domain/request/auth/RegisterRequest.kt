@@ -5,4 +5,6 @@ class RegisterRequest {
     var username = ""
     var email = ""
     var password = ""
+    var mobile = ""
+    var company: CompanyRegisterRequest? = null
 }

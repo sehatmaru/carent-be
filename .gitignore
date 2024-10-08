@@ -40,4 +40,5 @@ out/
 .kotlin
 
 ### Custom ###
-
+/tenant/src/main/resources/application.properties
+/biz/src/main/resources/application.properties

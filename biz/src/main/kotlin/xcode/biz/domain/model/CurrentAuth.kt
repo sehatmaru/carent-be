@@ -15,7 +15,7 @@ object CurrentAuth {
     fun get(): Token {
         try {
             return USER_HOLDER.get()
-        } catch (e : Exception) {
+        } catch (e: Exception) {
             throw AppException(ResponseCode.TOKEN_ERROR_MESSAGE)
         }
     }

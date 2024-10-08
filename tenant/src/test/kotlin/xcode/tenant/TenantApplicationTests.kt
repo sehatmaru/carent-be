@@ -9,5 +9,4 @@ class TenantApplicationTests {
     @Test
     fun contextLoads() {
     }
-
 }

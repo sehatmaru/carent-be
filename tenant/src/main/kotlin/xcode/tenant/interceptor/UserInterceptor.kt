@@ -14,7 +14,7 @@ import xcode.biz.shared.ResponseCode
 @Component
 @EnableAsync
 class UserInterceptor @Autowired constructor(
-    private val tokenRepository: TokenRepository
+    private val tokenRepository: TokenRepository,
 ) : HandlerInterceptor {
 
     override fun preHandle(request: HttpServletRequest, response: HttpServletResponse, handler: Any): Boolean {
