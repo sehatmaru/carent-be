@@ -7,13 +7,11 @@ import org.springframework.stereotype.Service
 import xcode.biz.exception.AppException
 
 @Service
-class EmailService {
-
-    private var mailSender: JavaMailSender? = null
+class EmailService(private val mailSender: JavaMailSender) {
 
     fun sendOtpEmail(email: String?, otp: String) {
         try {
-            val message = mailSender!!.createMimeMessage()
+            val message = mailSender.createMimeMessage()
             val helper = MimeMessageHelper(message, true)
 
             helper.setTo(email!!)
@@ -21,7 +19,7 @@ class EmailService {
             val emailContent = "Your OTP: <b>$otp</b>. This OTP is valid for 5 minutes."
             helper.setText(emailContent, true)
 
-            mailSender!!.send(message)
+            mailSender.send(message)
         } catch (e: MessagingException) {
             throw AppException(e.message)
         }
@@ -29,7 +27,7 @@ class EmailService {
 
     fun sendResetPasswordEmail(email: String?, code: String) {
         try {
-            val message = mailSender!!.createMimeMessage()
+            val message = mailSender.createMimeMessage()
             val helper = MimeMessageHelper(message, true)
 
             helper.setTo(email!!)
@@ -38,7 +36,7 @@ class EmailService {
                 "Click <a href=\"https://xcode-ingot.web.app/reset-password?code=$code\">here</a> to reset your password. This link is valid for 5 minutes."
             helper.setText(emailContent, true)
 
-            mailSender!!.send(message)
+            mailSender.send(message)
         } catch (e: MessagingException) {
             throw AppException(e.message)
         }
