@@ -44,7 +44,7 @@ class WebFilter : GenericFilterBean() {
 
             filterChain.doFilter(request, response)
         } catch (ex: Exception) {
-            throw AppException(ResponseCode.TOKEN_ERROR_MESSAGE)
+            throw AppException(ResponseCode.TOKEN_ERROR)
         }
     }
 }

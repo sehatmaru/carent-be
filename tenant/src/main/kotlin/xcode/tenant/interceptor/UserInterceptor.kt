@@ -21,10 +21,10 @@ class UserInterceptor @Autowired constructor(
         val token = request.getHeader("Authorization") ?: request.getHeader("authorization")
 
         if (token != null) {
-            val tokenModel = tokenRepository.findByToken(token.substring(7))
+            val tokenModel = tokenRepository.findByCode(token.substring(7))
 
             if (tokenModel != null && !tokenModel.isValid()) {
-                throw AppException(ResponseCode.TOKEN_ERROR_MESSAGE)
+                throw AppException(ResponseCode.TOKEN_ERROR)
             }
 
             CurrentAuth.set(tokenModel!!)

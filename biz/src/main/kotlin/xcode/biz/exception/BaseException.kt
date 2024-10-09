@@ -14,7 +14,14 @@ import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.context.request.WebRequest
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler
 import xcode.biz.domain.response.BaseResponse
-import xcode.biz.shared.ResponseCode
+import xcode.biz.shared.ResponseCode.AUTH_ERROR
+import xcode.biz.shared.ResponseCode.EXIST
+import xcode.biz.shared.ResponseCode.INVALID_OTP_TOKEN
+import xcode.biz.shared.ResponseCode.INVALID_PASSWORD
+import xcode.biz.shared.ResponseCode.NOT_FOUND
+import xcode.biz.shared.ResponseCode.PARAMS_ERROR
+import xcode.biz.shared.ResponseCode.TOKEN_ERROR
+import xcode.biz.shared.ResponseCode.USERNAME_EXIST
 
 @ControllerAdvice
 class BaseException : ResponseEntityExceptionHandler() {
@@ -93,32 +100,36 @@ class BaseException : ResponseEntityExceptionHandler() {
     @ExceptionHandler(AppException::class)
     fun exception(ex: AppException): ResponseEntity<BaseResponse<String>> {
         when (ex.message) {
-            ResponseCode.TOKEN_ERROR_MESSAGE -> {
-                response.setInvalidToken()
+            TOKEN_ERROR -> {
+                response.setInvalidToken(TOKEN_ERROR)
             }
 
-            ResponseCode.AUTH_ERROR_MESSAGE -> {
+            AUTH_ERROR -> {
                 response.setWrongAuth()
             }
 
-            ResponseCode.NOT_FOUND_MESSAGE -> {
+            NOT_FOUND -> {
                 response.setNotFound()
             }
 
-            ResponseCode.EXIST_MESSAGE -> {
+            EXIST -> {
                 response.setExistData()
             }
 
-            ResponseCode.USERNAME_EXIST_MESSAGE -> {
+            USERNAME_EXIST -> {
                 response.setUsernameExistData()
             }
 
-            ResponseCode.PARAMS_ERROR_MESSAGE -> {
+            PARAMS_ERROR -> {
                 response.setWrongParams()
             }
 
-            ResponseCode.INVALID_PASSWORD -> {
+            INVALID_PASSWORD -> {
                 response.setInvalidPassword()
+            }
+
+            INVALID_OTP_TOKEN -> {
+                response.setInvalidToken(INVALID_OTP_TOKEN)
             }
 
             else -> ex.message?.let { response.setFailed(it) }

@@ -16,7 +16,7 @@ object CurrentAuth {
         try {
             return USER_HOLDER.get()
         } catch (e: Exception) {
-            throw AppException(ResponseCode.TOKEN_ERROR_MESSAGE)
+            throw AppException(ResponseCode.TOKEN_ERROR)
         }
     }
 

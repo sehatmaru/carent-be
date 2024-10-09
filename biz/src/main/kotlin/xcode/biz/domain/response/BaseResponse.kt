@@ -8,35 +8,35 @@ class BaseResponse<T> {
     var message: String? = null
     var result: T? = null
 
-    fun setSuccess(data: T) {
+    fun setSuccess(data: T?) {
         this.statusCode = HttpStatus.OK.value()
-        this.message = ResponseCode.SUCCESS_MESSAGE
+        this.message = ResponseCode.SUCCESS
         this.result = data
     }
 
     fun setNotFound() {
         this.statusCode = HttpStatus.NOT_FOUND.value()
-        this.message = ResponseCode.NOT_FOUND_MESSAGE
+        this.message = ResponseCode.NOT_FOUND
     }
 
     fun setFailed(message: String) {
         this.statusCode = HttpStatus.BAD_REQUEST.value()
-        this.message = ResponseCode.FAILED_MESSAGE + ": " + message
+        this.message = ResponseCode.FAILED + ": " + message
     }
 
-    fun setInvalidToken() {
+    fun setInvalidToken(message: String) {
         this.statusCode = HttpStatus.UNAUTHORIZED.value()
-        this.message = ResponseCode.TOKEN_ERROR_MESSAGE
+        this.message = message
     }
 
     fun setWrongAuth() {
         this.statusCode = HttpStatus.UNAUTHORIZED.value()
-        this.message = ResponseCode.AUTH_ERROR_MESSAGE
+        this.message = ResponseCode.AUTH_ERROR
     }
 
     fun setWrongParams() {
         this.statusCode = HttpStatus.BAD_REQUEST.value()
-        this.message = ResponseCode.PARAMS_ERROR_MESSAGE
+        this.message = ResponseCode.PARAMS_ERROR
     }
 
     fun setInvalidPassword() {
@@ -46,12 +46,12 @@ class BaseResponse<T> {
 
     fun setExistData() {
         this.statusCode = HttpStatus.CONFLICT.value()
-        this.message = ResponseCode.EXIST_MESSAGE
+        this.message = ResponseCode.EXIST
     }
 
     fun setUsernameExistData() {
         this.statusCode = HttpStatus.CONFLICT.value()
-        this.message = ResponseCode.USERNAME_EXIST_MESSAGE
+        this.message = ResponseCode.USERNAME_EXIST
     }
 
     fun setInvalidMethod(message: String?) {

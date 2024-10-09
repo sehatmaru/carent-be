@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.validation.annotation.Validated
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
@@ -35,6 +36,13 @@ class AuthApi @Autowired constructor(
     @PostMapping("/register")
     fun register(@RequestBody @Validated request: RegisterRequest): BaseResponse<RegisterResponse> {
         val response: BaseResponse<RegisterResponse> = authService.register(request)
+
+        return response
+    }
+
+    @PostMapping("/otp/verify/{otpCode}")
+    fun verifyOtp(@PathVariable("otpCode") @Validated otpCode: String): BaseResponse<RegisterResponse> {
+        val response: BaseResponse<RegisterResponse> = authService.verifyOtp(otpCode)
 
         return response
     }

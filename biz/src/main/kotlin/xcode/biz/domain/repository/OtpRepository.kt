@@ -4,15 +4,14 @@ import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.query.Param
 import org.springframework.stereotype.Repository
-import xcode.biz.domain.model.Token
+import xcode.biz.domain.model.Otp
 
 @Repository
-interface TokenRepository : JpaRepository<Token, String> {
-    fun findByCode(code: String): Token?
+interface OtpRepository : JpaRepository<Otp?, String?> {
 
     @Query(
-        value = "SELECT * FROM t_token WHERE code = :code AND is_active IS TRUE AND type = 'OTP' LIMIT 1",
+        value = "SELECT * FROM t_otp WHERE code = :code AND verified_at IS NULL LIMIT 1",
         nativeQuery = true,
     )
-    fun getOtpToken(@Param("code") code: String): Token?
+    fun getUnverifiedOtp(@Param("code") code: String): Otp?
 }

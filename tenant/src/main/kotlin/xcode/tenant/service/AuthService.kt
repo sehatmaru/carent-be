@@ -5,9 +5,11 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import xcode.biz.domain.model.Company
 import xcode.biz.domain.model.CurrentAuth
+import xcode.biz.domain.model.Otp
 import xcode.biz.domain.model.Token
 import xcode.biz.domain.model.User
 import xcode.biz.domain.repository.CompanyRepository
+import xcode.biz.domain.repository.OtpRepository
 import xcode.biz.domain.repository.TokenRepository
 import xcode.biz.domain.repository.UserRepository
 import xcode.biz.domain.request.auth.LoginRequest
@@ -15,18 +17,21 @@ import xcode.biz.domain.request.auth.RegisterRequest
 import xcode.biz.domain.response.BaseResponse
 import xcode.biz.domain.response.auth.LoginResponse
 import xcode.biz.domain.response.auth.RegisterResponse
+import xcode.biz.enums.TokenType
 import xcode.biz.enums.UserRole
 import xcode.biz.exception.AppException
 import xcode.biz.service.EmailService
 import xcode.biz.service.JasyptService
 import xcode.biz.service.JwtService
 import xcode.biz.shared.ResponseCode
-import xcode.biz.shared.ResponseCode.AUTH_ERROR_MESSAGE
-import xcode.biz.shared.ResponseCode.PARAMS_ERROR_MESSAGE
-import xcode.biz.shared.ResponseCode.USERNAME_EXIST_MESSAGE
+import xcode.biz.shared.ResponseCode.AUTH_ERROR
+import xcode.biz.shared.ResponseCode.INVALID_OTP_TOKEN
+import xcode.biz.shared.ResponseCode.PARAMS_ERROR
+import xcode.biz.shared.ResponseCode.USERNAME_EXIST
 import xcode.biz.utils.CommonUtil.generateOTP
-import xcode.biz.utils.CommonUtil.getTomorrowDate
-import java.util.*
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.util.Date
 
 @Service
 class AuthService @Autowired constructor(
@@ -34,6 +39,7 @@ class AuthService @Autowired constructor(
     private val userRepository: UserRepository,
     private val companyRepository: CompanyRepository,
     private val tokenRepository: TokenRepository,
+    private val otpRepository: OtpRepository,
     private val jasyptService: JasyptService,
     private val emailService: EmailService,
 ) {
@@ -42,20 +48,25 @@ class AuthService @Autowired constructor(
         val baseResponse = BaseResponse<LoginResponse>()
 
         if (request.username.isEmpty() || request.password.isEmpty()) {
-            throw AppException(PARAMS_ERROR_MESSAGE)
+            throw AppException(PARAMS_ERROR)
         }
 
-        val user = userRepository.getActiveTenantUser(request.username)
+        val user = userRepository.getActiveTenantUserByUsername(request.username)
 
         if (user == null || request.password != jasyptService.encryptor(user.password, false)) {
-            throw AppException(AUTH_ERROR_MESSAGE)
+            throw AppException(AUTH_ERROR)
         }
 
-        val token = jwtService.generateToken(user)
-        tokenRepository.save(Token(token, user.id, getTomorrowDate()))
+        val token = Token()
+        token.code = jwtService.generateToken(user)
+        token.userId = user.id
+        token.type = TokenType.NON_OTP
+        token.expireAt = Date.from(LocalDateTime.now().plusDays(1).atZone(ZoneId.systemDefault()).toInstant())
+
+        tokenRepository.save(token)
 
         val response = LoginResponse()
-        response.accessToken = token
+        response.accessToken = token.code
 
         baseResponse.setSuccess(response)
 
@@ -68,11 +79,11 @@ class AuthService @Autowired constructor(
         if (request.username.isEmpty() || request.password.isEmpty() ||
             request.fullName.isEmpty() || request.email.isEmpty() || request.company == null
         ) {
-            throw AppException(PARAMS_ERROR_MESSAGE)
+            throw AppException(PARAMS_ERROR)
         }
 
-        if (userRepository.getActiveTenantUser(request.username) != null) {
-            throw AppException(USERNAME_EXIST_MESSAGE)
+        if (userRepository.getActiveTenantUser(request.username, request.email) != null) {
+            throw AppException(USERNAME_EXIST)
         }
 
         val company = Company()
@@ -92,21 +103,59 @@ class AuthService @Autowired constructor(
 
         userRepository.save(user)
 
-        val response = RegisterResponse()
-        response.username = user.username
+        val otp = Otp()
+        otp.code = generateOTP()
+        otp.userId = user.id
 
-        emailService.sendOtpEmail(user.email, generateOTP())
+        emailService.sendOtpEmail(user.email, otp.code)
+
+        otpRepository.save(otp)
+
+        val token = Token()
+        token.code = jwtService.generateToken(user)
+        token.userId = user.id
+        token.type = TokenType.OTP
+        token.expireAt = Date.from(LocalDateTime.now().plusMinutes(5).atZone(ZoneId.systemDefault()).toInstant())
+
+        tokenRepository.save(token)
+
+        val response = RegisterResponse()
+        response.otpToken = token.code
 
         baseResponse.setSuccess(response)
 
         return baseResponse
     }
 
+    fun verifyOtp(otpCode: String): BaseResponse<RegisterResponse> {
+        val otp = otpRepository.getUnverifiedOtp(otpCode)
+        val token = tokenRepository.getOtpToken(CurrentAuth.get().code)
+
+        if (otp == null || token == null || !token.isValid()) {
+            throw AppException(INVALID_OTP_TOKEN)
+        }
+
+        val user = userRepository.getInactiveTenantUser(token.userId)
+
+        user!!.verifiedAt = Date()
+        otp.verifiedAt = Date()
+        token.isActive = false
+
+        userRepository.save(user)
+        otpRepository.save(otp)
+        tokenRepository.save(token)
+
+        val result = BaseResponse<RegisterResponse>()
+        result.setSuccess(null)
+
+        return result
+    }
+
     fun logout() {
-        val token = tokenRepository.findByToken(CurrentAuth.get().token)
+        val token = tokenRepository.findByCode(CurrentAuth.get().code)
 
         if (token == null) {
-            throw AppException(ResponseCode.NOT_FOUND_MESSAGE)
+            throw AppException(ResponseCode.NOT_FOUND)
         } else {
             tokenRepository.delete(token)
         }
