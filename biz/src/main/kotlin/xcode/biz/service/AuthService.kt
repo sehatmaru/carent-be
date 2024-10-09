@@ -49,9 +49,9 @@ class AuthService @Autowired constructor(
         }
 
         val user = if (request.role == UserRole.CUSTOMER) {
-            userRepository.getActiveTenantUserByUsername(request.username)
-        } else {
             userRepository.getActiveCustomer(request.username)
+        } else {
+            userRepository.getActiveTenantUserByUsername(request.username)
         }
 
         if (user == null || request.password != jasyptService.encryptor(user.password, false)) {
@@ -62,6 +62,7 @@ class AuthService @Autowired constructor(
         token.code = jwtService.generateToken(user)
         token.userId = user.id
         token.type = TokenType.NON_OTP
+        token.userRole = user.role
         token.expireAt = Date.from(LocalDateTime.now().plusDays(1).atZone(ZoneId.systemDefault()).toInstant())
 
         tokenRepository.save(token)
@@ -119,6 +120,7 @@ class AuthService @Autowired constructor(
         token.type = TokenType.OTP
         token.isActive = true
         token.expireAt = Date.from(LocalDateTime.now().plusMinutes(5).atZone(ZoneId.systemDefault()).toInstant())
+        token.userRole = user.role
 
         tokenRepository.save(token)
 

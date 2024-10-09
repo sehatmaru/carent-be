@@ -1,4 +1,4 @@
-package xcode.biz.domain.request.member
+package xcode.biz.domain.request.admin
 
 class AdminRegisterRequest {
     var fullName = ""

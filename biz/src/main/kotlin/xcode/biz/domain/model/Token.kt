@@ -10,6 +10,7 @@ import jakarta.persistence.Id
 import jakarta.persistence.Table
 import org.hibernate.annotations.DynamicUpdate
 import xcode.biz.enums.TokenType
+import xcode.biz.enums.UserRole
 import java.util.Date
 
 @Entity
@@ -37,11 +38,26 @@ class Token {
     @Column(name = "is_active")
     var isActive = false
 
+    @Column(name = "user_role")
+    var userRole: UserRole? = UserRole.CUSTOMER
+
     @Column(name = "type")
     @Enumerated(EnumType.STRING)
     var type: TokenType? = TokenType.NON_OTP
 
     fun isValid(): Boolean {
         return !expireAt!!.before(Date())
+    }
+
+    fun isManager(): Boolean {
+        return this.userRole == UserRole.TENANT_MANAGER
+    }
+
+    fun isAdmin(): Boolean {
+        return this.userRole == UserRole.TENANT_ADMIN
+    }
+
+    fun isCustomer(): Boolean {
+        return this.userRole == UserRole.CUSTOMER
     }
 }

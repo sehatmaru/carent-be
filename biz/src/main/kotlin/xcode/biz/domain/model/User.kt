@@ -62,4 +62,8 @@ class User {
     fun isVerified(): Boolean {
         return this.verifiedAt != null
     }
+
+    fun isManager(): Boolean {
+        return this.role == UserRole.TENANT_MANAGER
+    }
 }

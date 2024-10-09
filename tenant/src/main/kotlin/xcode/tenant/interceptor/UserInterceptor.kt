@@ -23,11 +23,11 @@ class UserInterceptor @Autowired constructor(
         if (token != null) {
             val tokenModel = tokenRepository.findByCode(token.substring(7))
 
-            if (tokenModel != null && !tokenModel.isValid()) {
+            if (tokenModel == null || !tokenModel.isValid()) {
                 throw AppException(ResponseCode.TOKEN_ERROR)
             }
 
-            CurrentAuth.set(tokenModel!!)
+            CurrentAuth.set(tokenModel)
         }
 
         return true
