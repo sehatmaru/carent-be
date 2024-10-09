@@ -1,8 +1,5 @@
 package xcode.biz.service
 
-import java.time.LocalDateTime
-import java.time.ZoneId
-import java.util.Date
 import org.springframework.beans.BeanUtils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
@@ -29,6 +26,9 @@ import xcode.biz.shared.ResponseCode.INVALID_OTP_TOKEN
 import xcode.biz.shared.ResponseCode.PARAMS_ERROR
 import xcode.biz.shared.ResponseCode.USERNAME_EXIST
 import xcode.biz.utils.CommonUtil.generateOTP
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.util.Date
 
 @Service
 class AuthService @Autowired constructor(
@@ -48,7 +48,11 @@ class AuthService @Autowired constructor(
             throw AppException(PARAMS_ERROR)
         }
 
-        val user = userRepository.getActiveTenantUserByUsername(request.username)
+        val user = if (request.role == UserRole.CUSTOMER) {
+            userRepository.getActiveTenantUserByUsername(request.username)
+        } else {
+            userRepository.getActiveCustomer(request.username)
+        }
 
         if (user == null || request.password != jasyptService.encryptor(user.password, false)) {
             throw AppException(AUTH_ERROR)
@@ -74,12 +78,13 @@ class AuthService @Autowired constructor(
         val baseResponse = BaseResponse<RegisterResponse>()
 
         if (request.username.isEmpty() || request.password.isEmpty() ||
-            request.fullName.isEmpty() || request.email.isEmpty() || request.company == null
+            request.fullName.isEmpty() || request.email.isEmpty() || request.company == null ||
+            request.role == null
         ) {
             throw AppException(PARAMS_ERROR)
         }
 
-        if (userRepository.getActiveTenantUser(request.username, request.email) != null) {
+        if (userRepository.getActiveUser(request.username, request.email) != null) {
             throw AppException(USERNAME_EXIST)
         }
 
@@ -94,7 +99,7 @@ class AuthService @Autowired constructor(
         user.email = request.email
         user.mobile = request.mobile
         user.password = jasyptService.encryptor(request.password, true)
-        user.role = UserRole.TENANT_MANAGER
+        user.role = request.role!!
         user.companyId = company.id
         user.createdAt = Date()
 
@@ -112,6 +117,7 @@ class AuthService @Autowired constructor(
         token.code = jwtService.generateToken(user)
         token.userId = user.id
         token.type = TokenType.OTP
+        token.isActive = true
         token.expireAt = Date.from(LocalDateTime.now().plusMinutes(5).atZone(ZoneId.systemDefault()).toInstant())
 
         tokenRepository.save(token)
@@ -132,7 +138,7 @@ class AuthService @Autowired constructor(
             throw AppException(INVALID_OTP_TOKEN)
         }
 
-        val user = userRepository.getInactiveTenantUser(token.userId)
+        val user = userRepository.getInactiveUser(token.userId)
 
         user!!.verifiedAt = Date()
         otp.verifiedAt = Date()
