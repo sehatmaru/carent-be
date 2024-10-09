@@ -35,6 +35,9 @@ class Company {
     @Column(name = "role")
     var role: UserRole = UserRole.CUSTOMER
 
+    @Column(name = "rating")
+    var rating: Int? = null
+
     @Column(name = "founding_date")
     var foundingDate: Date? = null
 }

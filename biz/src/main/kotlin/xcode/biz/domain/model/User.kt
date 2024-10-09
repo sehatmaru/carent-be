@@ -9,6 +9,7 @@ import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import jakarta.persistence.Table
 import org.hibernate.annotations.DynamicUpdate
+import xcode.biz.enums.CredentialType
 import xcode.biz.enums.UserRole
 import java.util.Date
 
@@ -40,12 +41,21 @@ class User {
     @Column(name = "email")
     var email = ""
 
+    @Column(name = "credential_no")
+    var credentialNo = ""
+
+    @Column(name = "credential_type")
+    var credentialType: CredentialType? = null
+
     @Column(name = "password")
     var password = ""
 
     @Column(name = "role")
     @Enumerated(EnumType.STRING)
     var role: UserRole = UserRole.CUSTOMER
+
+    @Column(name = "rating")
+    var rating: Int? = null
 
     @Column(name = "created_at")
     var createdAt: Date? = null
