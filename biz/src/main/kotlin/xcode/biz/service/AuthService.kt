@@ -129,6 +129,7 @@ class AuthService @Autowired constructor(
     fun verifyOtp(otpCode: String): BaseResponse<RegisterResponse> {
         val otp = otpRepository.getUnverifiedOtp(otpCode)
         val token = tokenRepository.getOtpToken(CurrentUser.get().token)
+        val tokens = CurrentUser.get().token
 
         if (otp == null || token == null || !token.isValid()) {
             throw AppException(INVALID_OTP_TOKEN)

@@ -2,6 +2,8 @@ package xcode.biz.domain.model
 
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
+import jakarta.persistence.EnumType
+import jakarta.persistence.Enumerated
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
@@ -34,9 +36,11 @@ class Bill {
     var totalPaid: Int? = null
 
     @Column(name = "payment_type")
+    @Enumerated(EnumType.STRING)
     var paymentType: PaymentType? = null
 
     @Column(name = "payment_status")
+    @Enumerated(EnumType.STRING)
     var paymentStatus: PaymentStatus? = null
 
     @Column(name = "created_at")

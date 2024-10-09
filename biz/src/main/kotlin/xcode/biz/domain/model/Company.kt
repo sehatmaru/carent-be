@@ -2,6 +2,8 @@ package xcode.biz.domain.model
 
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
+import jakarta.persistence.EnumType
+import jakarta.persistence.Enumerated
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
@@ -31,9 +33,6 @@ class Company {
 
     @Column(name = "mobile")
     var mobile = ""
-
-    @Column(name = "role")
-    var role: UserRole = UserRole.CUSTOMER
 
     @Column(name = "rating")
     var rating: Int? = null

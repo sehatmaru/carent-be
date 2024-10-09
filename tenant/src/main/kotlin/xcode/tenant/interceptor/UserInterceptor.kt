@@ -22,10 +22,11 @@ class UserInterceptor @Autowired constructor(
 ) : HandlerInterceptor {
 
     override fun preHandle(request: HttpServletRequest, response: HttpServletResponse, handler: Any): Boolean {
-        val token = request.getHeader("Authorization") ?: request.getHeader("authorization")
+        var token = request.getHeader("Authorization") ?: request.getHeader("authorization")
 
         if (token != null) {
-            val tokenModel = tokenRepository.findByCode(token.substring(7))
+            token = token.substring(7)
+            val tokenModel = tokenRepository.findByCode(token)
 
             if (tokenModel != null && !tokenModel.isValid()) {
                 throw AppException(ResponseCode.TOKEN_ERROR)
@@ -33,7 +34,7 @@ class UserInterceptor @Autowired constructor(
 
             val userModel = userRepository.getActiveTenantUser(tokenModel!!.userId)
             val userToken = UserToken()
-            BeanUtils.copyProperties(userModel!!, userToken)
+            userModel?.let { BeanUtils.copyProperties(it, userToken) }
             userToken.token = token
 
             CurrentUser.set(userToken)

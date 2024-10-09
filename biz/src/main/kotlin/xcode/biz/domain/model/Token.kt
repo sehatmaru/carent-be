@@ -39,6 +39,7 @@ class Token {
     var isActive = false
 
     @Column(name = "user_role")
+    @Enumerated(EnumType.STRING)
     var userRole: UserRole? = UserRole.CUSTOMER
 
     @Column(name = "type")

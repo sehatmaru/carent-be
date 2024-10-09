@@ -33,7 +33,7 @@ class UserInterceptor @Autowired constructor(
 
             val userModel = userRepository.getActiveTenantUser(tokenModel!!.userId)
             val userToken = UserToken()
-            BeanUtils.copyProperties(userModel!!, userToken)
+            userModel?.let { BeanUtils.copyProperties(it, userToken) }
             userToken.token = token
 
             CurrentUser.set(userToken)
