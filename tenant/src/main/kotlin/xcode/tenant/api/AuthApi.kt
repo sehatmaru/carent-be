@@ -15,7 +15,7 @@ import xcode.biz.domain.request.auth.RegisterRequest
 import xcode.biz.domain.response.BaseResponse
 import xcode.biz.domain.response.auth.LoginResponse
 import xcode.biz.domain.response.auth.RegisterResponse
-import xcode.tenant.service.AuthService
+import xcode.biz.service.AuthService
 
 @RestController
 @RequestMapping(value = ["auth"])

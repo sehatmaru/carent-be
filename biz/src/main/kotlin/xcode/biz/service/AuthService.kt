@@ -1,5 +1,8 @@
-package xcode.tenant.service
+package xcode.biz.service
 
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.util.Date
 import org.springframework.beans.BeanUtils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
@@ -20,18 +23,12 @@ import xcode.biz.domain.response.auth.RegisterResponse
 import xcode.biz.enums.TokenType
 import xcode.biz.enums.UserRole
 import xcode.biz.exception.AppException
-import xcode.biz.service.EmailService
-import xcode.biz.service.JasyptService
-import xcode.biz.service.JwtService
 import xcode.biz.shared.ResponseCode
 import xcode.biz.shared.ResponseCode.AUTH_ERROR
 import xcode.biz.shared.ResponseCode.INVALID_OTP_TOKEN
 import xcode.biz.shared.ResponseCode.PARAMS_ERROR
 import xcode.biz.shared.ResponseCode.USERNAME_EXIST
 import xcode.biz.utils.CommonUtil.generateOTP
-import java.time.LocalDateTime
-import java.time.ZoneId
-import java.util.Date
 
 @Service
 class AuthService @Autowired constructor(
