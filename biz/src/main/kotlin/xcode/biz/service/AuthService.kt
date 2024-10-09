@@ -23,7 +23,6 @@ import xcode.biz.exception.AppException
 import xcode.biz.shared.ResponseCode
 import xcode.biz.shared.ResponseCode.AUTH_ERROR
 import xcode.biz.shared.ResponseCode.INVALID_OTP_TOKEN
-import xcode.biz.shared.ResponseCode.PARAMS_ERROR
 import xcode.biz.shared.ResponseCode.USERNAME_EXIST
 import xcode.biz.utils.CommonUtil.generateOTP
 import java.time.LocalDateTime
@@ -44,9 +43,7 @@ class AuthService @Autowired constructor(
     fun login(request: LoginRequest): BaseResponse<LoginResponse> {
         val baseResponse = BaseResponse<LoginResponse>()
 
-        if (request.username.isEmpty() || request.password.isEmpty()) {
-            throw AppException(PARAMS_ERROR)
-        }
+        request.validate()
 
         val user = if (request.role == UserRole.CUSTOMER) {
             userRepository.getActiveCustomer(request.username)
@@ -78,12 +75,7 @@ class AuthService @Autowired constructor(
     fun register(request: RegisterRequest): BaseResponse<RegisterResponse> {
         val baseResponse = BaseResponse<RegisterResponse>()
 
-        if (request.username.isEmpty() || request.password.isEmpty() ||
-            request.fullName.isEmpty() || request.email.isEmpty() || request.company == null ||
-            request.role == null
-        ) {
-            throw AppException(PARAMS_ERROR)
-        }
+        request.validate()
 
         if (userRepository.getActiveUser(request.username, request.email) != null) {
             throw AppException(USERNAME_EXIST)
@@ -102,6 +94,8 @@ class AuthService @Autowired constructor(
         user.password = jasyptService.encryptor(request.password, true)
         user.role = request.role!!
         user.companyId = company.id
+        user.credentialNo = request.credential!!.credentialNo
+        user.credentialType = request.credential.credentialType
         user.createdAt = Date()
 
         userRepository.save(user)

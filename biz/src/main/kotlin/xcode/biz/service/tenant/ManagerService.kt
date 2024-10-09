@@ -15,7 +15,6 @@ import xcode.biz.enums.UserRole
 import xcode.biz.exception.AppException
 import xcode.biz.service.JasyptService
 import xcode.biz.shared.ResponseCode.NOT_FOUND
-import xcode.biz.shared.ResponseCode.PARAMS_ERROR
 import xcode.biz.shared.ResponseCode.UNAUTHORIZED
 import xcode.biz.shared.ResponseCode.USERNAME_EXIST
 import java.util.Date
@@ -28,12 +27,7 @@ class ManagerService @Autowired constructor(
 
     fun registerAdmin(request: AdminRegisterRequest): BaseResponse<LoginResponse> {
         checkPermission()
-
-        if (request.username.isEmpty() || request.password.isEmpty() ||
-            request.fullName.isEmpty() || request.email.isEmpty()
-        ) {
-            throw AppException(PARAMS_ERROR)
-        }
+        request.validate()
 
         if (userRepository.getActiveUser(request.username, request.email) != null) {
             throw AppException(USERNAME_EXIST)
