@@ -148,13 +148,10 @@ class AuthService @Autowired constructor(
         otpRepository.save(otp)
         tokenRepository.save(token)
 
-        val result = BaseResponse<RegisterResponse>()
-        result.setSuccess(null)
-
-        return result
+        return BaseResponse()
     }
 
-    fun logout() {
+    fun logout(): BaseResponse<RegisterResponse> {
         val token = tokenRepository.findByCode(CurrentAuth.get().code)
 
         if (token == null) {
@@ -162,5 +159,7 @@ class AuthService @Autowired constructor(
         } else {
             tokenRepository.delete(token)
         }
+
+        return BaseResponse()
     }
 }

@@ -16,6 +16,12 @@ interface UserRepository : JpaRepository<User?, String?> {
     fun getActiveTenantUser(@Param("username") username: String, @Param("email") email: String): User?
 
     @Query(
+        value = "SELECT * FROM t_user WHERE id = :id AND deleted_at IS NULL AND verified_at IS NOT NULL AND role = 'TENANT_ADMIN' LIMIT 1",
+        nativeQuery = true,
+    )
+    fun getActiveTenantAdmin(@Param("id") id: Int): User?
+
+    @Query(
         value = "SELECT * FROM t_user WHERE (username = :username OR email = :email) AND deleted_at IS NULL AND verified_at IS NOT NULL LIMIT 1",
         nativeQuery = true,
     )

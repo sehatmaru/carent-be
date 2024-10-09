@@ -1,9 +1,6 @@
 package xcode.tenant.api
 
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.http.HttpStatus
-import org.springframework.http.MediaType
-import org.springframework.http.ResponseEntity
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -24,33 +21,22 @@ class AuthApi @Autowired constructor(
 ) {
 
     @PostMapping("/login")
-    fun login(@RequestBody @Validated request: LoginRequest): ResponseEntity<BaseResponse<LoginResponse>> {
-        val response: BaseResponse<LoginResponse> = authService.login(request)
-
-        return ResponseEntity
-            .status(HttpStatus.OK)
-            .contentType(MediaType.APPLICATION_JSON)
-            .body(response)
+    fun login(@RequestBody @Validated request: LoginRequest): BaseResponse<LoginResponse> {
+        return authService.login(request)
     }
 
     @PostMapping("/register")
     fun register(@RequestBody @Validated request: RegisterRequest): BaseResponse<RegisterResponse> {
-        val response: BaseResponse<RegisterResponse> = authService.register(request)
-
-        return response
+        return authService.register(request)
     }
 
     @PostMapping("/otp/verify/{otpCode}")
     fun verifyOtp(@PathVariable("otpCode") @Validated otpCode: String): BaseResponse<RegisterResponse> {
-        val response: BaseResponse<RegisterResponse> = authService.verifyOtp(otpCode)
-
-        return response
+        return authService.verifyOtp(otpCode)
     }
 
     @PostMapping("/logout")
-    fun logout() {
-        authService.logout()
-
-        return BaseResponse<Boolean>().setSuccess(true)
+    fun logout(): BaseResponse<RegisterResponse> {
+        return authService.logout()
     }
 }

@@ -8,6 +8,10 @@ class BaseResponse<T> {
     var message: String? = null
     var result: T? = null
 
+    init {
+        setSuccess(null)
+    }
+
     fun setSuccess(data: T?) {
         this.statusCode = HttpStatus.OK.value()
         this.message = ResponseCode.SUCCESS
@@ -19,39 +23,19 @@ class BaseResponse<T> {
         this.message = ResponseCode.NOT_FOUND
     }
 
-    fun setFailed(message: String) {
-        this.statusCode = HttpStatus.BAD_REQUEST.value()
-        this.message = ResponseCode.FAILED + ": " + message
-    }
-
-    fun setInvalidToken(message: String) {
+    fun setUnauthorized(message: String) {
         this.statusCode = HttpStatus.UNAUTHORIZED.value()
         this.message = message
     }
 
-    fun setWrongAuth() {
-        this.statusCode = HttpStatus.UNAUTHORIZED.value()
-        this.message = ResponseCode.AUTH_ERROR
-    }
-
-    fun setWrongParams() {
+    fun setBadRequest(message: String) {
         this.statusCode = HttpStatus.BAD_REQUEST.value()
-        this.message = ResponseCode.PARAMS_ERROR
+        this.message = ResponseCode.FAILED + ": " + message
     }
 
-    fun setInvalidPassword() {
-        this.statusCode = HttpStatus.UNAUTHORIZED.value()
-        this.message = ResponseCode.INVALID_PASSWORD
-    }
-
-    fun setExistData() {
+    fun setConflict() {
         this.statusCode = HttpStatus.CONFLICT.value()
         this.message = ResponseCode.EXIST
-    }
-
-    fun setUsernameExistData() {
-        this.statusCode = HttpStatus.CONFLICT.value()
-        this.message = ResponseCode.USERNAME_EXIST
     }
 
     fun setInvalidMethod(message: String?) {

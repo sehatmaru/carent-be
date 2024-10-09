@@ -25,6 +25,9 @@ class User {
     @Column(name = "company_id")
     var companyId: Int? = null
 
+    @Column(name = "created_by")
+    var createdBy: Int? = null
+
     @Column(name = "full_name")
     var fullName = ""
 

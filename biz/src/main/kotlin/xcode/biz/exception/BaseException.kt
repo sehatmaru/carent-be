@@ -19,7 +19,6 @@ import xcode.biz.shared.ResponseCode.EXIST
 import xcode.biz.shared.ResponseCode.INVALID_OTP_TOKEN
 import xcode.biz.shared.ResponseCode.INVALID_PASSWORD
 import xcode.biz.shared.ResponseCode.NOT_FOUND
-import xcode.biz.shared.ResponseCode.PARAMS_ERROR
 import xcode.biz.shared.ResponseCode.TOKEN_ERROR
 import xcode.biz.shared.ResponseCode.USERNAME_EXIST
 
@@ -33,7 +32,7 @@ class BaseException : ResponseEntityExceptionHandler() {
         status: HttpStatus?,
         request: WebRequest?,
     ): ResponseEntity<Any> {
-        ex.message?.let { response.setFailed(it) }
+        ex.message?.let { response.setBadRequest(it) }
 
         return ResponseEntity(response, HttpStatus.OK)
     }
@@ -80,7 +79,7 @@ class BaseException : ResponseEntityExceptionHandler() {
         request: WebRequest?,
     ): ResponseEntity<Any> {
         println(ex)
-        response.setFailed(ex.message)
+        response.setBadRequest(ex.message)
 
         return ResponseEntity(response, HttpStatus.OK)
     }
@@ -92,7 +91,7 @@ class BaseException : ResponseEntityExceptionHandler() {
         request: WebRequest?,
     ): ResponseEntity<Any> {
         println(ex)
-        ex.message?.let { response.setFailed(it) }
+        ex.message?.let { response.setBadRequest(it) }
 
         return ResponseEntity(response, HttpStatus.OK)
     }
@@ -100,39 +99,25 @@ class BaseException : ResponseEntityExceptionHandler() {
     @ExceptionHandler(AppException::class)
     fun exception(ex: AppException): ResponseEntity<BaseResponse<String>> {
         when (ex.message) {
-            TOKEN_ERROR -> {
-                response.setInvalidToken(TOKEN_ERROR)
-            }
-
-            AUTH_ERROR -> {
-                response.setWrongAuth()
+            TOKEN_ERROR,
+            AUTH_ERROR,
+            INVALID_OTP_TOKEN,
+            INVALID_PASSWORD,
+            -> {
+                ex.message?.let { response.setUnauthorized(it) }
             }
 
             NOT_FOUND -> {
                 response.setNotFound()
             }
 
-            EXIST -> {
-                response.setExistData()
+            EXIST,
+            USERNAME_EXIST,
+            -> {
+                response.setConflict()
             }
 
-            USERNAME_EXIST -> {
-                response.setUsernameExistData()
-            }
-
-            PARAMS_ERROR -> {
-                response.setWrongParams()
-            }
-
-            INVALID_PASSWORD -> {
-                response.setInvalidPassword()
-            }
-
-            INVALID_OTP_TOKEN -> {
-                response.setInvalidToken(INVALID_OTP_TOKEN)
-            }
-
-            else -> ex.message?.let { response.setFailed(it) }
+            else -> ex.message?.let { response.setBadRequest(it) }
         }
         return ResponseEntity<BaseResponse<String>>(response, HttpStatus.OK)
     }
