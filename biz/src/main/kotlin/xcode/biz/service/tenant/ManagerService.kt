@@ -69,7 +69,7 @@ class ManagerService @Autowired constructor(
 
         checkPermission()
 
-        val userList = userRepository.getAdminList(CurrentUser.get().id) ?: emptyList()
+        val userList = userRepository.getAdminList(CurrentUser.get().id!!) ?: emptyList()
         val responseList = userList.map { user ->
             AdminResponse().also { response ->
                 BeanUtils.copyProperties(user, response)

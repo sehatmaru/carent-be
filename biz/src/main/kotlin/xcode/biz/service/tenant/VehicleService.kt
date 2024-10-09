@@ -41,7 +41,7 @@ class VehicleService @Autowired constructor(
 
         checkPermission()
 
-        val vehicleList = vehicleRepository.getVehicleList(CurrentUser.get().companyId) ?: emptyList()
+        val vehicleList = vehicleRepository.getVehicleList(CurrentUser.get().companyId!!) ?: emptyList()
         val responseList = vehicleList.map { vehicle ->
             VehicleResponse().also { response ->
                 BeanUtils.copyProperties(vehicle, response)

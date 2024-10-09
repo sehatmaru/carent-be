@@ -1,20 +1,17 @@
 package xcode.biz.domain.dto
 
-import xcode.biz.enums.CredentialType
 import xcode.biz.enums.UserRole
 import java.util.Date
 
 class UserToken {
 
-    var id: Int = 0
-    var companyId: Int = 0
-    var createdBy: Int = 0
+    var id: Int? = null
+    var companyId: Int? = null
+    var createdBy: Int? = null
     var fullName = ""
     var mobile = ""
     var username = ""
     var email = ""
-    var credentialNo = ""
-    var credentialType: CredentialType? = null
     var password = ""
     var role: UserRole = UserRole.CUSTOMER
     var rating: Int? = null

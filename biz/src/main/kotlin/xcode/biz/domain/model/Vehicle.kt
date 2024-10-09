@@ -9,7 +9,9 @@ import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import jakarta.persistence.Table
 import org.hibernate.annotations.DynamicUpdate
+import xcode.biz.enums.EngineType
 import xcode.biz.enums.Transmission
+import xcode.biz.enums.VehicleBrand
 import xcode.biz.enums.VehicleStatus
 import xcode.biz.enums.VehicleType
 import java.util.Date
@@ -50,6 +52,14 @@ class Vehicle {
     @Column(name = "status")
     @Enumerated(EnumType.STRING)
     var status: VehicleStatus? = null
+
+    @Column(name = "engine_type")
+    @Enumerated(EnumType.STRING)
+    var engine: EngineType? = null
+
+    @Column(name = "brand")
+    @Enumerated(EnumType.STRING)
+    var brand: VehicleBrand? = null
 
     @Column(name = "created_by")
     var createdBy: Int? = null
