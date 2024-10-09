@@ -3,7 +3,7 @@ package xcode.biz.service.tenant
 import org.springframework.beans.BeanUtils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
-import xcode.biz.domain.model.CurrentAuth
+import xcode.biz.domain.dto.CurrentUser
 import xcode.biz.domain.model.User
 import xcode.biz.domain.repository.UserRepository
 import xcode.biz.domain.request.admin.AdminRegisterRequest
@@ -33,8 +33,6 @@ class ManagerService @Autowired constructor(
             throw AppException(USERNAME_EXIST)
         }
 
-        val manager = userRepository.getActiveTenantManager(CurrentAuth.get().userId)
-
         val user = User()
         user.username = request.username
         user.fullName = request.fullName
@@ -43,9 +41,9 @@ class ManagerService @Autowired constructor(
         user.password = jasyptService.encryptor(request.password, true)
         user.createdAt = Date()
         user.role = UserRole.TENANT_ADMIN
-        user.createdBy = manager!!.id
+        user.createdBy = CurrentUser.get().id
         user.verifiedAt = Date()
-        user.companyId = manager.companyId
+        user.companyId = CurrentUser.get().companyId
 
         userRepository.save(user)
 
@@ -55,7 +53,7 @@ class ManagerService @Autowired constructor(
     fun deactivateAdmin(userId: Int): BaseResponse<RegisterResponse> {
         val user = userRepository.getActiveTenantAdmin(userId) ?: throw AppException(NOT_FOUND)
 
-        if (user.createdBy != CurrentAuth.get().userId) {
+        if (user.createdBy != CurrentUser.get().id) {
             throw AppException(UNAUTHORIZED)
         }
 
@@ -71,7 +69,7 @@ class ManagerService @Autowired constructor(
 
         checkPermission()
 
-        val userList = userRepository.getAdminList(CurrentAuth.get().userId) ?: emptyList()
+        val userList = userRepository.getAdminList(CurrentUser.get().id) ?: emptyList()
         val responseList = userList.map { user ->
             AdminResponse().also { response ->
                 BeanUtils.copyProperties(user, response)
@@ -84,7 +82,7 @@ class ManagerService @Autowired constructor(
     }
 
     fun checkPermission() {
-        if (!CurrentAuth.get().isManager()) {
+        if (!CurrentUser.get().isManager()) {
             throw AppException(UNAUTHORIZED)
         }
     }

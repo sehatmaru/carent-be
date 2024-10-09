@@ -51,6 +51,9 @@ class Vehicle {
     @Enumerated(EnumType.STRING)
     var status: VehicleStatus? = null
 
+    @Column(name = "created_by")
+    var createdBy: Int? = null
+
     @Column(name = "created_at")
     var createdAt: Date? = null
 

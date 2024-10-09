@@ -3,8 +3,8 @@ package xcode.biz.service
 import org.springframework.beans.BeanUtils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
+import xcode.biz.domain.dto.CurrentUser
 import xcode.biz.domain.model.Company
-import xcode.biz.domain.model.CurrentAuth
 import xcode.biz.domain.model.Otp
 import xcode.biz.domain.model.Token
 import xcode.biz.domain.model.User
@@ -128,7 +128,7 @@ class AuthService @Autowired constructor(
 
     fun verifyOtp(otpCode: String): BaseResponse<RegisterResponse> {
         val otp = otpRepository.getUnverifiedOtp(otpCode)
-        val token = tokenRepository.getOtpToken(CurrentAuth.get().code)
+        val token = tokenRepository.getOtpToken(CurrentUser.get().token)
 
         if (otp == null || token == null || !token.isValid()) {
             throw AppException(INVALID_OTP_TOKEN)
@@ -148,7 +148,7 @@ class AuthService @Autowired constructor(
     }
 
     fun logout(): BaseResponse<RegisterResponse> {
-        val token = tokenRepository.findByCode(CurrentAuth.get().code)
+        val token = tokenRepository.findByCode(CurrentUser.get().token)
 
         if (token == null) {
             throw AppException(ResponseCode.NOT_FOUND)
