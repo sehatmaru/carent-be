@@ -1,4 +1,4 @@
-package xcode.biz.domain.response.admin
+package xcode.biz.domain.response.vehicle
 
 import xcode.biz.enums.Transmission
 import xcode.biz.enums.VehicleType

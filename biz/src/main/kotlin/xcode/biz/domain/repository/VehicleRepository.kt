@@ -14,4 +14,10 @@ interface VehicleRepository : JpaRepository<Vehicle?, String?> {
         nativeQuery = true,
     )
     fun getVehicleList(@Param("companyId") companyId: Int): List<Vehicle>?
+
+    @Query(
+        value = "SELECT * FROM t_vehicle WHERE id = :vehicleId",
+        nativeQuery = true,
+    )
+    fun getVehicle(@Param("vehicleId") vehicleId: Int): Vehicle?
 }

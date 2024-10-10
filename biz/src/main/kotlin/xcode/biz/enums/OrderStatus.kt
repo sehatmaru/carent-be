@@ -2,7 +2,7 @@ package xcode.biz.enums
 
 enum class OrderStatus {
     WAITING_PAYMENT,
-    PAID,
+    WAITING_APPROVAL,
     IN_PROGRESS,
     COMPLETED,
     CANCELED,

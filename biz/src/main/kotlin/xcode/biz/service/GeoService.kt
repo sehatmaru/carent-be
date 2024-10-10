@@ -16,6 +16,15 @@ class GeoService {
 
     private var baseUrl = "https://emsifa.github.io/api-wilayah-indonesia/api"
 
+    fun getProvince(provinceId: Int): BaseResponse<GeoResponse> {
+        val result = BaseResponse<GeoResponse>()
+        val url = "$baseUrl/province/$provinceId.json"
+
+        result.setSuccess(getData(url))
+
+        return result
+    }
+
     fun getProvinces(name: String): BaseResponse<List<GeoResponse>> {
         val result = BaseResponse<List<GeoResponse>>()
         val url = "$baseUrl/provinces.json"
@@ -34,11 +43,29 @@ class GeoService {
         return result
     }
 
+    fun getRegency(regencyId: Int): BaseResponse<GeoResponse> {
+        val result = BaseResponse<GeoResponse>()
+        val url = "$baseUrl/regency/$regencyId.json"
+
+        result.setSuccess(getData(url))
+
+        return result
+    }
+
     fun getDistricts(regencyId: Int, name: String): BaseResponse<List<GeoResponse>> {
         val result = BaseResponse<List<GeoResponse>>()
         val url = "$baseUrl/districts/$regencyId.json"
 
         result.setSuccess(fetchData(url, name))
+
+        return result
+    }
+
+    fun getDistrict(districtId: Int): BaseResponse<GeoResponse> {
+        val result = BaseResponse<GeoResponse>()
+        val url = "$baseUrl/district/$districtId.json"
+
+        result.setSuccess(getData(url))
 
         return result
     }
@@ -61,6 +88,27 @@ class GeoService {
                     result
                 }
             } ?: emptyList()
+        } catch (e: Exception) {
+            throw AppException(e.message)
+        } finally {
+            httpClient.close()
+        }
+    }
+
+    fun getData(url: String): GeoResponse? {
+        val httpClient: CloseableHttpClient = HttpClients.createDefault()
+        val objectMapper = jacksonObjectMapper()
+
+        return try {
+            val httpGet = HttpGet(url)
+            val response = httpClient.execute(httpGet)
+
+            response.entity?.let { entity ->
+                val responseBody = EntityUtils.toString(entity)
+                val result: GeoResponse = objectMapper.readValue(responseBody)
+
+                result
+            }
         } catch (e: Exception) {
             throw AppException(e.message)
         } finally {
