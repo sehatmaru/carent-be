@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import xcode.biz.domain.request.vehicle.VehicleRegisterRequest
 import xcode.biz.domain.response.BaseResponse
-import xcode.biz.domain.response.vehicle.VehicleResponse
 import xcode.biz.domain.response.auth.LoginResponse
+import xcode.biz.domain.response.vehicle.VehicleResponse
 import xcode.biz.service.tenant.VehicleService
 
 @RestController

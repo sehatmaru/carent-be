@@ -16,7 +16,7 @@ import xcode.biz.service.tenant.ProductService
 @RestController
 @RequestMapping(value = ["product"])
 class ProductApi @Autowired constructor(
-    private val productService: ProductService
+    private val productService: ProductService,
 ) {
 
     @PostMapping("/register")

@@ -8,8 +8,8 @@ import xcode.biz.domain.model.Vehicle
 import xcode.biz.domain.repository.VehicleRepository
 import xcode.biz.domain.request.vehicle.VehicleRegisterRequest
 import xcode.biz.domain.response.BaseResponse
-import xcode.biz.domain.response.vehicle.VehicleResponse
 import xcode.biz.domain.response.auth.LoginResponse
+import xcode.biz.domain.response.vehicle.VehicleResponse
 import xcode.biz.exception.AppException
 import xcode.biz.shared.ResponseCode.UNAUTHORIZED
 import java.util.Date

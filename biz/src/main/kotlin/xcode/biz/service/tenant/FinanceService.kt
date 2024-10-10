@@ -13,7 +13,7 @@ import xcode.biz.shared.ResponseCode.UNAUTHORIZED
 @Service
 class FinanceService @Autowired constructor(
     private val orderRepository: OrderRepository,
-    private val billRepository: BillRepository
+    private val billRepository: BillRepository,
 ) {
 
     fun getBalance(): BaseResponse<BalanceResponse> {

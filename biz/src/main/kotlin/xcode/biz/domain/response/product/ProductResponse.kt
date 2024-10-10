@@ -1,8 +1,8 @@
 package xcode.biz.domain.response.product
 
-import java.util.Date
 import xcode.biz.domain.response.vehicle.VehicleResponse
 import xcode.biz.enums.ProductStatus
+import java.util.Date
 
 class ProductResponse {
     var id: Int? = null

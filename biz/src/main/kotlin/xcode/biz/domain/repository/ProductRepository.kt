@@ -11,8 +11,8 @@ interface ProductRepository : JpaRepository<Product?, String?> {
 
     @Query(
         value = "SELECT p.* FROM t_product p " +
-                "JOIN t_vehicle v ON v.id = p.vehicle_id " +
-                "WHERE v.company_id = :companyId",
+            "JOIN t_vehicle v ON v.id = p.vehicle_id " +
+            "WHERE v.company_id = :companyId",
         nativeQuery = true,
     )
     fun getProductList(@Param("companyId") companyId: Int): List<Product>?

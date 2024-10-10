@@ -1,6 +1,5 @@
 package xcode.biz.service.tenant
 
-import java.util.Date
 import org.springframework.beans.BeanUtils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
@@ -16,12 +15,13 @@ import xcode.biz.enums.ProductStatus
 import xcode.biz.exception.AppException
 import xcode.biz.service.GeoService
 import xcode.biz.shared.ResponseCode.UNAUTHORIZED
+import java.util.Date
 
 @Service
 class ProductService @Autowired constructor(
     private val productRepository: ProductRepository,
     private val geoService: GeoService,
-    private val vehicleRepository: VehicleRepository
+    private val vehicleRepository: VehicleRepository,
 ) {
 
     fun registerProduct(request: ProductRegisterRequest): BaseResponse<LoginResponse> {
