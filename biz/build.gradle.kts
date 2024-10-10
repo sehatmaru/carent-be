@@ -34,6 +34,9 @@ dependencies {
     implementation("org.postgresql:postgresql:42.7.4")
     implementation("io.jsonwebtoken:jjwt:0.9.1")
     implementation("org.springframework.boot:spring-boot-starter-mail")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+    implementation("org.apache.httpcomponents:httpclient:4.5.13")
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.15.0")
 }
 
 kotlin {
