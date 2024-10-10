@@ -12,7 +12,6 @@ import org.hibernate.annotations.DynamicUpdate
 import xcode.biz.enums.EngineType
 import xcode.biz.enums.Transmission
 import xcode.biz.enums.VehicleBrand
-import xcode.biz.enums.VehicleStatus
 import xcode.biz.enums.VehicleType
 import java.util.Date
 
@@ -46,12 +45,11 @@ class Vehicle {
     @Column(name = "license_number")
     var licenseNumber = ""
 
+    @Column(name = "seat")
+    var seat: Int? = null
+
     @Column(name = "rating")
     var rating: Int? = null
-
-    @Column(name = "status")
-    @Enumerated(EnumType.STRING)
-    var status: VehicleStatus? = null
 
     @Column(name = "engine_type")
     @Enumerated(EnumType.STRING)

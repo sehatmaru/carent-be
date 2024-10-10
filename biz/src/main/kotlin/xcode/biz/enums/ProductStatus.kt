@@ -1,6 +1,6 @@
 package xcode.biz.enums
 
-enum class VehicleStatus {
+enum class ProductStatus {
     AVAILABLE,
     NOT_AVAILABLE,
 }

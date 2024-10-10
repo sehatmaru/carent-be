@@ -10,7 +10,6 @@ import xcode.biz.domain.request.vehicle.VehicleRegisterRequest
 import xcode.biz.domain.response.BaseResponse
 import xcode.biz.domain.response.admin.VehicleResponse
 import xcode.biz.domain.response.auth.LoginResponse
-import xcode.biz.enums.VehicleStatus
 import xcode.biz.exception.AppException
 import xcode.biz.shared.ResponseCode.UNAUTHORIZED
 import java.util.Date
@@ -26,7 +25,6 @@ class VehicleService @Autowired constructor(
 
         val vehicle = Vehicle()
         BeanUtils.copyProperties(request, vehicle)
-        vehicle.status = VehicleStatus.AVAILABLE
         vehicle.companyId = CurrentUser.get().companyId
         vehicle.createdBy = CurrentUser.get().id
         vehicle.createdAt = Date()

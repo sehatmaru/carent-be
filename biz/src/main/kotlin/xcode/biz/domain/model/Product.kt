@@ -9,7 +9,7 @@ import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import jakarta.persistence.Table
 import org.hibernate.annotations.DynamicUpdate
-import xcode.biz.enums.VehicleStatus
+import xcode.biz.enums.ProductStatus
 import java.util.Date
 
 @Entity
@@ -31,12 +31,27 @@ class Product {
     @Column(name = "price")
     var price: Int? = null
 
-    @Column(name = "seat")
-    var seat: Int? = null
+    @Column(name = "province_id")
+    var provinceId: Int? = null
+
+    @Column(name = "province_name")
+    var provinceName = ""
+
+    @Column(name = "regency_id")
+    var regencyId: Int? = null
+
+    @Column(name = "regency_name")
+    var regencyName = ""
+
+    @Column(name = "district_id")
+    var districtId: Int? = null
+
+    @Column(name = "district_name")
+    var districtName = ""
 
     @Column(name = "status")
     @Enumerated(EnumType.STRING)
-    var status: VehicleStatus? = null
+    var status: ProductStatus? = null
 
     @Column(name = "created_at")
     var createdAt: Date? = null
