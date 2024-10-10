@@ -9,58 +9,45 @@ import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import jakarta.persistence.Table
 import org.hibernate.annotations.DynamicUpdate
-import xcode.biz.enums.ProductStatus
+import xcode.biz.enums.PaymentStatus
+import xcode.biz.enums.PaymentType
 import java.util.Date
 
 @Entity
-@Table(name = "t_product")
+@Table(name = "t_compensation")
 @DynamicUpdate
-class Product {
+class Compensation {
 
     @Id
     @Column(name = "id", length = 36)
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     var id = 0
 
-    @Column(name = "vehicle_id")
-    var vehicleId: Int? = null
+    @Column(name = "customer_id")
+    var customerId: Int? = null
 
-    @Column(name = "name")
-    var name = ""
+    @Column(name = "order_id")
+    var orderId: Int? = null
 
-    @Column(name = "price")
-    var price: Int? = null
+    @Column(name = "total_paid")
+    var totalPaid: Int? = null
 
-    @Column(name = "province_id")
-    var provinceId: Int? = null
-
-    @Column(name = "province_name")
-    var provinceName = ""
-
-    @Column(name = "regency_id")
-    var regencyId: Int? = null
-
-    @Column(name = "regency_name")
-    var regencyName = ""
-
-    @Column(name = "district_id")
-    var districtId: Int? = null
-
-    @Column(name = "district_name")
-    var districtName = ""
-
-    @Column(name = "deliverable")
-    var deliverable = false
-
-    @Column(name = "status")
+    @Column(name = "payment_type")
     @Enumerated(EnumType.STRING)
-    var status: ProductStatus? = null
+    var paymentType: PaymentType? = null
+
+    @Column(name = "payment_status")
+    @Enumerated(EnumType.STRING)
+    var paymentStatus: PaymentStatus? = null
 
     @Column(name = "created_at")
     var createdAt: Date? = null
 
     @Column(name = "updated_at")
     var updatedAt: Date? = null
+
+    @Column(name = "verified_at")
+    var verifiedAt: Date? = null
 
     @Column(name = "deleted_at")
     var deletedAt: Date? = null
