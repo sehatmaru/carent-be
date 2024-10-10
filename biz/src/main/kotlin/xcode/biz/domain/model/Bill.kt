@@ -35,6 +35,9 @@ class Bill {
     @Column(name = "total_paid")
     var totalPaid: Int? = null
 
+    @Column(name = "application_fee")
+    var applicationFee: Double? = null
+
     @Column(name = "payment_type")
     @Enumerated(EnumType.STRING)
     var paymentType: PaymentType? = null
