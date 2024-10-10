@@ -1,4 +1,4 @@
-package xcode.cust.interceptor
+package xcode.admin.interceptor
 
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
@@ -32,7 +32,8 @@ class UserInterceptor @Autowired constructor(
                 throw AppException(ResponseCode.TOKEN_ERROR)
             }
 
-            val userModel = userRepository.getActiveCustomerUser(tokenModel!!.userId) ?: throw AppException(ResponseCode.UNAUTHORIZED)
+            val userModel = userRepository.getActiveAdminUser(tokenModel!!.userId) ?: throw AppException(ResponseCode.UNAUTHORIZED)
+
             val userToken = UserToken()
             userModel.let { BeanUtils.copyProperties(it, userToken) }
             userToken.token = token

@@ -32,9 +32,9 @@ class UserInterceptor @Autowired constructor(
                 throw AppException(ResponseCode.TOKEN_ERROR)
             }
 
-            val userModel = userRepository.getActiveTenantUser(tokenModel!!.userId)
+            val userModel = userRepository.getActiveTenantUser(tokenModel!!.userId) ?: throw AppException(ResponseCode.UNAUTHORIZED)
             val userToken = UserToken()
-            userModel?.let { BeanUtils.copyProperties(it, userToken) }
+            userModel.let { BeanUtils.copyProperties(it, userToken) }
             userToken.token = token
 
             CurrentUser.set(userToken)
