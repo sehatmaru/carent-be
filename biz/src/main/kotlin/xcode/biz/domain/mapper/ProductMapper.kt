@@ -8,7 +8,7 @@ import org.apache.ibatis.annotations.Param
 import org.apache.ibatis.annotations.Select
 import xcode.biz.domain.model.Product
 import xcode.biz.domain.request.product.ProductSearchRequest
-import xcode.biz.domain.response.product.ProductResponse
+import xcode.biz.domain.response.product.ProductListResponse
 
 @Mapper
 interface ProductMapper : BaseMapper<Product> {
@@ -34,7 +34,7 @@ interface ProductMapper : BaseMapper<Product> {
     @Select(
         """
         <script>
-            SELECT p.*, v.name as vehicle_name, v.engine_type, v.transmission, v.vehicle_type, v.year FROM t_product p
+            SELECT p.*, v.name as vehicle_name, v.brand, v.seat, v.transmission, v.vehicle_type FROM t_product p
             JOIN t_vehicle v ON v.id = p.vehicle_id
             LEFT JOIN t_booking b ON b.product_id = p.id
             WHERE (
@@ -72,5 +72,5 @@ interface ProductMapper : BaseMapper<Product> {
         </script>
     """,
     )
-    fun searchProductList(@Param("request") request: ProductSearchRequest): List<ProductResponse>?
+    fun searchProductList(@Param("request") request: ProductSearchRequest): List<ProductListResponse>?
 }

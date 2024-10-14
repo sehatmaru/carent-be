@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController
 import xcode.biz.domain.request.product.ProductRegisterRequest
 import xcode.biz.domain.response.BaseResponse
 import xcode.biz.domain.response.auth.LoginResponse
-import xcode.biz.domain.response.product.ProductResponse
+import xcode.biz.domain.response.product.ProductListResponse
 import xcode.biz.service.tenant.TenantProductService
 
 @RestController
@@ -25,7 +25,7 @@ class ProductApi @Autowired constructor(
     }
 
     @GetMapping("/list")
-    fun getProductList(): BaseResponse<List<ProductResponse>> {
+    fun getProductList(): BaseResponse<List<ProductListResponse>> {
         return tenantProductService.getProductList()
     }
 }
