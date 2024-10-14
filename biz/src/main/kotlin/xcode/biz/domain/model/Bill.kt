@@ -1,60 +1,42 @@
 package xcode.biz.domain.model
 
-import jakarta.persistence.Column
-import jakarta.persistence.Entity
-import jakarta.persistence.EnumType
-import jakarta.persistence.Enumerated
-import jakarta.persistence.GeneratedValue
-import jakarta.persistence.GenerationType
-import jakarta.persistence.Id
-import jakarta.persistence.Table
-import org.hibernate.annotations.DynamicUpdate
+import com.baomidou.mybatisplus.annotation.FieldFill
+import com.baomidou.mybatisplus.annotation.IdType
+import com.baomidou.mybatisplus.annotation.TableField
+import com.baomidou.mybatisplus.annotation.TableId
+import com.baomidou.mybatisplus.annotation.TableName
+import lombok.AllArgsConstructor
+import lombok.Builder
+import lombok.Data
+import lombok.NoArgsConstructor
 import xcode.biz.enums.PaymentStatus
 import xcode.biz.enums.PaymentType
 import java.util.Date
 
-@Entity
-@Table(name = "t_bill")
-@DynamicUpdate
+@Data
+@TableName("t_bill")
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 class Bill {
 
-    @Id
-    @Column(name = "id", length = 36)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @TableId(type = IdType.AUTO)
     var id = 0
 
-    @Column(name = "customer_id")
     var customerId: Int? = null
-
-    @Column(name = "order_id")
     var orderId: Int? = null
-
-    @Column(name = "total_payment")
     var totalPayment: Int? = null
-
-    @Column(name = "total_paid")
     var totalPaid: Int? = null
-
-    @Column(name = "application_fee")
     var applicationFee: Double? = null
-
-    @Column(name = "payment_type")
-    @Enumerated(EnumType.STRING)
     var paymentType: PaymentType? = null
-
-    @Column(name = "payment_status")
-    @Enumerated(EnumType.STRING)
     var paymentStatus: PaymentStatus? = null
 
-    @Column(name = "created_at")
+    @TableField(fill = FieldFill.INSERT)
     var createdAt: Date? = null
 
-    @Column(name = "updated_at")
+    @TableField(fill = FieldFill.INSERT_UPDATE)
     var updatedAt: Date? = null
 
-    @Column(name = "verified_at")
     var verifiedAt: Date? = null
-
-    @Column(name = "deleted_at")
     var deletedAt: Date? = null
 }

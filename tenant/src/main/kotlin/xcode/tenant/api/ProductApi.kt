@@ -11,21 +11,21 @@ import xcode.biz.domain.request.product.ProductRegisterRequest
 import xcode.biz.domain.response.BaseResponse
 import xcode.biz.domain.response.auth.LoginResponse
 import xcode.biz.domain.response.product.ProductResponse
-import xcode.biz.service.tenant.ProductService
+import xcode.biz.service.tenant.TenantProductService
 
 @RestController
 @RequestMapping(value = ["product"])
 class ProductApi @Autowired constructor(
-    private val productService: ProductService,
+    private val tenantProductService: TenantProductService,
 ) {
 
     @PostMapping("/register")
     fun register(@RequestBody @Validated request: ProductRegisterRequest): BaseResponse<LoginResponse> {
-        return productService.registerProduct(request)
+        return tenantProductService.registerProduct(request)
     }
 
     @GetMapping("/list")
     fun getProductList(): BaseResponse<List<ProductResponse>> {
-        return productService.getProductList()
+        return tenantProductService.getProductList()
     }
 }

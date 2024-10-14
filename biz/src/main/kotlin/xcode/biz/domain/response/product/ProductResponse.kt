@@ -1,12 +1,19 @@
 package xcode.biz.domain.response.product
 
-import xcode.biz.domain.response.vehicle.VehicleResponse
+import xcode.biz.enums.EngineType
 import xcode.biz.enums.ProductStatus
+import xcode.biz.enums.Transmission
+import xcode.biz.enums.VehicleType
 import java.util.Date
 
 class ProductResponse {
     var id: Int? = null
-    var vehicle = VehicleResponse()
+    var vehicleName = ""
+    var vehicleType: VehicleType? = null
+    var engineType: EngineType? = null
+    var transmission: Transmission? = null
+    var year = ""
+    var licenseNumber = ""
     var name = ""
     var price: Int? = null
     var provinceId: Int? = null

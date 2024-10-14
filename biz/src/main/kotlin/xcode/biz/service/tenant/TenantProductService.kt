@@ -4,9 +4,9 @@ import org.springframework.beans.BeanUtils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import xcode.biz.domain.dto.CurrentUser
+import xcode.biz.domain.mapper.ProductMapper
+import xcode.biz.domain.mapper.VehicleMapper
 import xcode.biz.domain.model.Product
-import xcode.biz.domain.repository.ProductRepository
-import xcode.biz.domain.repository.VehicleRepository
 import xcode.biz.domain.request.product.ProductRegisterRequest
 import xcode.biz.domain.response.BaseResponse
 import xcode.biz.domain.response.auth.LoginResponse
@@ -18,10 +18,10 @@ import xcode.biz.shared.ResponseCode.UNAUTHORIZED
 import java.util.Date
 
 @Service
-class ProductService @Autowired constructor(
-    private val productRepository: ProductRepository,
+class TenantProductService @Autowired constructor(
+    private val productMapper: ProductMapper,
     private val geoService: GeoService,
-    private val vehicleRepository: VehicleRepository,
+    private val vehicleMapper: VehicleMapper,
 ) {
 
     fun registerProduct(request: ProductRegisterRequest): BaseResponse<LoginResponse> {
@@ -36,7 +36,7 @@ class ProductService @Autowired constructor(
         product.districtName = request.districtId?.let { geoService.getDistrict(it).result?.name ?: "NOT FOUND" }.toString()
         product.createdAt = Date()
 
-        productRepository.save(product)
+        productMapper.insertProduct(product)
 
         return BaseResponse()
     }
@@ -44,14 +44,18 @@ class ProductService @Autowired constructor(
     fun getProductList(): BaseResponse<List<ProductResponse>> {
         val result = BaseResponse<List<ProductResponse>>()
 
-        val productList = productRepository.getProductList(CurrentUser.get().companyId!!) ?: emptyList()
+        val productList = productMapper.getTenantProductList(CurrentUser.get().companyId!!) ?: emptyList()
         val responseList = productList.map { product ->
             ProductResponse().also { response ->
                 BeanUtils.copyProperties(product, response)
-                val vehicle = product.vehicleId?.let { vehicleRepository.getVehicle(it) }
+                val vehicle = product.vehicleId?.let { vehicleMapper.getVehicle(it) }
 
                 if (vehicle != null) {
-                    BeanUtils.copyProperties(vehicle, response.vehicle)
+                    response.vehicleName = vehicle.name
+                    response.vehicleType = vehicle.vehicleType
+                    response.engineType = vehicle.engineType
+                    response.year = vehicle.year
+                    response.transmission = vehicle.transmission
                 }
             }
         }

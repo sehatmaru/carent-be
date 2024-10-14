@@ -1,9 +1,6 @@
 package xcode.cust.api
 
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.http.HttpStatus
-import org.springframework.http.MediaType
-import org.springframework.http.ResponseEntity
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -24,13 +21,8 @@ class AuthApi @Autowired constructor(
 ) {
 
     @PostMapping("/login")
-    fun login(@RequestBody @Validated request: LoginRequest): ResponseEntity<BaseResponse<LoginResponse>> {
-        val response: BaseResponse<LoginResponse> = authService.login(request)
-
-        return ResponseEntity
-            .status(HttpStatus.OK)
-            .contentType(MediaType.APPLICATION_JSON)
-            .body(response)
+    fun login(@RequestBody @Validated request: LoginRequest): BaseResponse<LoginResponse> {
+        return authService.login(request)
     }
 
     @PostMapping("/register")

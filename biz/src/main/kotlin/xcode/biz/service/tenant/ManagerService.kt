@@ -4,8 +4,8 @@ import org.springframework.beans.BeanUtils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import xcode.biz.domain.dto.CurrentUser
+import xcode.biz.domain.mapper.UserMapper
 import xcode.biz.domain.model.User
-import xcode.biz.domain.repository.UserRepository
 import xcode.biz.domain.request.admin.AdminRegisterRequest
 import xcode.biz.domain.response.BaseResponse
 import xcode.biz.domain.response.admin.AdminResponse
@@ -21,7 +21,7 @@ import java.util.Date
 
 @Service
 class ManagerService @Autowired constructor(
-    private val userRepository: UserRepository,
+    private val userMapper: UserMapper,
     private val jasyptService: JasyptService,
 ) {
 
@@ -29,7 +29,7 @@ class ManagerService @Autowired constructor(
         checkPermission()
         request.validate()
 
-        if (userRepository.getActiveUser(request.username, request.email) != null) {
+        if (userMapper.getActiveUser(request.username, request.email) != null) {
             throw AppException(USERNAME_EXIST)
         }
 
@@ -45,13 +45,13 @@ class ManagerService @Autowired constructor(
         user.verifiedAt = Date()
         user.companyId = CurrentUser.get().companyId
 
-        userRepository.save(user)
+        userMapper.insertUser(user)
 
         return BaseResponse()
     }
 
     fun deactivateAdmin(userId: Int): BaseResponse<RegisterResponse> {
-        val user = userRepository.getActiveTenantAdmin(userId) ?: throw AppException(NOT_FOUND)
+        val user = userMapper.getActiveTenantAdmin(userId) ?: throw AppException(NOT_FOUND)
 
         if (user.createdBy != CurrentUser.get().id) {
             throw AppException(UNAUTHORIZED)
@@ -59,7 +59,7 @@ class ManagerService @Autowired constructor(
 
         user.deletedAt = Date()
 
-        userRepository.save(user)
+        userMapper.insertUser(user)
 
         return BaseResponse()
     }
@@ -69,7 +69,7 @@ class ManagerService @Autowired constructor(
 
         checkPermission()
 
-        val userList = userRepository.getAdminList(CurrentUser.get().id!!) ?: emptyList()
+        val userList = userMapper.getAdminList(CurrentUser.get().id!!) ?: emptyList()
         val responseList = userList.map { user ->
             AdminResponse().also { response ->
                 BeanUtils.copyProperties(user, response)

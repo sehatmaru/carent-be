@@ -9,16 +9,16 @@ import org.springframework.stereotype.Component
 import org.springframework.web.servlet.HandlerInterceptor
 import xcode.biz.domain.dto.CurrentUser
 import xcode.biz.domain.dto.UserToken
-import xcode.biz.domain.repository.TokenRepository
-import xcode.biz.domain.repository.UserRepository
+import xcode.biz.domain.mapper.TokenMapper
+import xcode.biz.domain.mapper.UserMapper
 import xcode.biz.exception.AppException
 import xcode.biz.shared.ResponseCode
 
 @Component
 @EnableAsync
 class UserInterceptor @Autowired constructor(
-    private val tokenRepository: TokenRepository,
-    private val userRepository: UserRepository,
+    private val tokenMapper: TokenMapper,
+    private val userMapper: UserMapper,
 ) : HandlerInterceptor {
 
     override fun preHandle(request: HttpServletRequest, response: HttpServletResponse, handler: Any): Boolean {
@@ -26,13 +26,13 @@ class UserInterceptor @Autowired constructor(
 
         if (token != null) {
             token = token.substring(7)
-            val tokenModel = tokenRepository.findByCode(token)
+            val tokenModel = tokenMapper.getToken(token)
 
             if (tokenModel != null && !tokenModel.isValid()) {
                 throw AppException(ResponseCode.TOKEN_ERROR)
             }
 
-            val userModel = userRepository.getActiveAdminUser(tokenModel!!.userId) ?: throw AppException(ResponseCode.UNAUTHORIZED)
+            val userModel = userMapper.getActiveAdminUser(tokenModel!!.userId) ?: throw AppException(ResponseCode.UNAUTHORIZED)
 
             val userToken = UserToken()
             userModel.let { BeanUtils.copyProperties(it, userToken) }

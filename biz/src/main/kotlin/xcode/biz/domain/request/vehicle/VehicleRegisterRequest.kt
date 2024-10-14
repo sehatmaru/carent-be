@@ -11,7 +11,7 @@ class VehicleRegisterRequest {
     var name = ""
     var vehicleType: VehicleType? = null
     var transmission: Transmission? = null
-    var engine: EngineType? = null
+    var engineType: EngineType? = null
     var brand: VehicleBrand? = null
     var year = ""
     var licenseNumber = ""

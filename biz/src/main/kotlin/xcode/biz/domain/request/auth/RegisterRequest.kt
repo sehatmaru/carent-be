@@ -16,9 +16,13 @@ class RegisterRequest {
 
     fun validate() {
         if (username.isEmpty() || password.isEmpty() ||
-            fullName.isEmpty() || email.isEmpty() || mobile.isEmpty() || company == null ||
+            fullName.isEmpty() || email.isEmpty() || mobile.isEmpty() ||
             role == null || credential == null
         ) {
+            throw AppException(PARAMS_ERROR)
+        }
+
+        if (role == UserRole.TENANT_MANAGER && company == null) {
             throw AppException(PARAMS_ERROR)
         }
     }

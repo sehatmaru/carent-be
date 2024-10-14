@@ -1,51 +1,37 @@
 package xcode.biz.domain.model
 
-import jakarta.persistence.Column
-import jakarta.persistence.Entity
-import jakarta.persistence.EnumType
-import jakarta.persistence.Enumerated
-import jakarta.persistence.GeneratedValue
-import jakarta.persistence.GenerationType
-import jakarta.persistence.Id
-import jakarta.persistence.Table
-import org.hibernate.annotations.DynamicUpdate
+import com.baomidou.mybatisplus.annotation.FieldFill
+import com.baomidou.mybatisplus.annotation.IdType
+import com.baomidou.mybatisplus.annotation.TableField
+import com.baomidou.mybatisplus.annotation.TableId
+import com.baomidou.mybatisplus.annotation.TableName
+import lombok.AllArgsConstructor
+import lombok.Builder
+import lombok.Data
+import lombok.NoArgsConstructor
 import xcode.biz.enums.OrderStatus
-import xcode.biz.enums.PickupType
 import java.util.Date
 
-@Entity
-@Table(name = "t_order")
-@DynamicUpdate
+@Data
+@TableName("t_order")
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 class Order {
 
-    @Id
-    @Column(name = "id", length = 36)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @TableId(type = IdType.AUTO)
     var id = 0
 
-    @Column(name = "customer_id")
     var customerId: Int? = null
-
-    @Column(name = "product_id")
     var productId: Int? = null
-
-    @Column(name = "price")
-    var price: Int? = null
-
-    @Column(name = "status")
-    @Enumerated(EnumType.STRING)
     var status: OrderStatus? = null
-
-    @Column(name = "pickup_type")
-    @Enumerated(EnumType.STRING)
-    var pickupType: PickupType? = null
-
-    @Column(name = "rating")
     var rating: Int? = null
 
-    @Column(name = "created_at")
+    @TableField(fill = FieldFill.INSERT)
     var createdAt: Date? = null
 
-    @Column(name = "canceled_at")
-    var canceledAt: Date? = null
+    @TableField(fill = FieldFill.INSERT_UPDATE)
+    var updatedAt: Date? = null
+
+    var deletedAt: Date? = null
 }

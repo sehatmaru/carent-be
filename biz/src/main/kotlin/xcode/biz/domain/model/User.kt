@@ -1,72 +1,47 @@
 package xcode.biz.domain.model
 
-import jakarta.persistence.Column
-import jakarta.persistence.Entity
-import jakarta.persistence.EnumType
-import jakarta.persistence.Enumerated
-import jakarta.persistence.GeneratedValue
-import jakarta.persistence.GenerationType
-import jakarta.persistence.Id
-import jakarta.persistence.Table
-import org.hibernate.annotations.DynamicUpdate
+import com.baomidou.mybatisplus.annotation.FieldFill
+import com.baomidou.mybatisplus.annotation.IdType
+import com.baomidou.mybatisplus.annotation.TableField
+import com.baomidou.mybatisplus.annotation.TableId
+import com.baomidou.mybatisplus.annotation.TableName
+import lombok.AllArgsConstructor
+import lombok.Builder
+import lombok.Data
+import lombok.NoArgsConstructor
 import xcode.biz.enums.CredentialType
 import xcode.biz.enums.UserRole
 import java.util.Date
 
-@Entity
-@Table(name = "t_user")
-@DynamicUpdate
+@Data
+@TableName("t_user")
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 class User {
 
-    @Id
-    @Column(name = "id", length = 36)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @TableId(type = IdType.AUTO)
     var id = 0
 
-    @Column(name = "company_id")
     var companyId: Int? = null
-
-    @Column(name = "created_by")
     var createdBy: Int? = null
-
-    @Column(name = "full_name")
     var fullName = ""
-
-    @Column(name = "mobile")
     var mobile = ""
-
-    @Column(name = "username")
     var username = ""
-
-    @Column(name = "email")
     var email = ""
-
-    @Column(name = "credential_no")
     var credentialNo = ""
-
-    @Column(name = "credential_type")
     var credentialType: CredentialType? = null
-
-    @Column(name = "password")
     var password = ""
-
-    @Column(name = "role")
-    @Enumerated(EnumType.STRING)
     var role: UserRole = UserRole.CUSTOMER
-
-    @Column(name = "rating")
     var rating: Int? = null
 
-    @Column(name = "created_at")
+    @TableField(fill = FieldFill.INSERT)
     var createdAt: Date? = null
 
-    @Column(name = "updated_at")
+    @TableField(fill = FieldFill.INSERT_UPDATE)
     var updatedAt: Date? = null
 
-    @Column(name = "verified_at")
     var verifiedAt: Date? = null
-
-    @Column(name = "deleted_at")
     var deletedAt: Date? = null
 
     fun isVerified(): Boolean {

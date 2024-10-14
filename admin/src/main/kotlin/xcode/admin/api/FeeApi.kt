@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import xcode.biz.domain.response.BaseResponse
 import xcode.biz.domain.response.FeeResponse
-import xcode.biz.service.tenant.FeeService
+import xcode.biz.service.FeeService
 
 @RestController
 @RequestMapping(value = ["fee"])

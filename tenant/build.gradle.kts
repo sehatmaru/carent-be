@@ -20,7 +20,6 @@ repositories {
 
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-actuator")
-    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
@@ -33,6 +32,9 @@ dependencies {
     implementation("javax.xml.bind:jaxb-api:2.3.1")
     implementation("org.postgresql:postgresql:42.7.4")
     implementation("io.jsonwebtoken:jjwt:0.9.1")
+    implementation("com.baomidou:mybatis-plus-boot-starter:3.5.0")
+    implementation("org.mybatis.spring.boot:mybatis-spring-boot-starter:2.2.0")
+    implementation("org.mybatis:mybatis-spring:3.0.3")
     implementation(project(":biz")) {
         exclude("io.springfox")
     }

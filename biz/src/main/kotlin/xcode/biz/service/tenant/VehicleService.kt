@@ -4,8 +4,8 @@ import org.springframework.beans.BeanUtils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import xcode.biz.domain.dto.CurrentUser
+import xcode.biz.domain.mapper.VehicleMapper
 import xcode.biz.domain.model.Vehicle
-import xcode.biz.domain.repository.VehicleRepository
 import xcode.biz.domain.request.vehicle.VehicleRegisterRequest
 import xcode.biz.domain.response.BaseResponse
 import xcode.biz.domain.response.auth.LoginResponse
@@ -16,7 +16,7 @@ import java.util.Date
 
 @Service
 class VehicleService @Autowired constructor(
-    private val vehicleRepository: VehicleRepository,
+    private val vehicleMapper: VehicleMapper,
 ) {
 
     fun registerVehicle(request: VehicleRegisterRequest): BaseResponse<LoginResponse> {
@@ -29,7 +29,7 @@ class VehicleService @Autowired constructor(
         vehicle.createdBy = CurrentUser.get().id
         vehicle.createdAt = Date()
 
-        vehicleRepository.save(vehicle)
+        vehicleMapper.insertVehicle(vehicle)
 
         return BaseResponse()
     }
@@ -39,7 +39,7 @@ class VehicleService @Autowired constructor(
 
         checkPermission()
 
-        val vehicleList = vehicleRepository.getVehicleList(CurrentUser.get().companyId!!) ?: emptyList()
+        val vehicleList = vehicleMapper.getVehicleList(CurrentUser.get().companyId!!) ?: emptyList()
         val responseList = vehicleList.map { vehicle ->
             VehicleResponse().also { response ->
                 BeanUtils.copyProperties(vehicle, response)
