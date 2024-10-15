@@ -26,8 +26,6 @@ class CustomerProductService @Autowired constructor(
     fun getProductDetail(productId: Int): BaseResponse<ProductListResponse> {
         val result = BaseResponse<ProductListResponse>()
 
-
-
         return result
     }
 }

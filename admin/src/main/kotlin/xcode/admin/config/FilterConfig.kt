@@ -10,7 +10,7 @@ class FilterConfig {
     @Bean
     fun jwtFilter(): FilterRegistrationBean<WebFilter> {
         val filter = FilterRegistrationBean(WebFilter())
-        filter.addUrlPatterns("/v1/*")
+        filter.addUrlPatterns("/*")
         filter.order = 1
 
         return filter

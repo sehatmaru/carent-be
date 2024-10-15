@@ -65,7 +65,19 @@ interface UserMapper : BaseMapper<User> {
         LIMIT 1
     """,
     )
-    fun getActiveTenantUserByUsername(@Param("username") username: String): User?
+    fun getActiveTenantByUsername(@Param("username") username: String): User?
+
+    @Select(
+        """
+        SELECT * FROM t_user
+        WHERE username = #{username}
+        AND deleted_at IS NULL
+        AND verified_at IS NOT NULL
+        AND role = 'ADMIN'
+        LIMIT 1
+    """,
+    )
+    fun getActiveAdminByUsername(@Param("username") username: String): User?
 
     @Select("""SELECT * FROM t_user WHERE username = #{username} AND deleted_at IS NULL AND verified_at IS NOT NULL AND role = 'CUSTOMER' LIMIT 1""")
     fun getActiveCustomer(@Param("username") username: String): User?

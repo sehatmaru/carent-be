@@ -45,10 +45,16 @@ class AuthService @Autowired constructor(
 
         request.validate()
 
-        val user = if (request.role == UserRole.CUSTOMER) {
-            userMapper.getActiveCustomer(request.username)
-        } else {
-            userMapper.getActiveTenantUserByUsername(request.username)
+        val user = when (request.role) {
+            UserRole.CUSTOMER -> {
+                userMapper.getActiveCustomer(request.username)
+            }
+            UserRole.ADMIN -> {
+                userMapper.getActiveAdminByUsername(request.username)
+            }
+            else -> {
+                userMapper.getActiveTenantByUsername(request.username)
+            }
         }
 
         if (user == null || request.password != jasyptService.encryptor(user.password, false)) {
@@ -65,6 +71,8 @@ class AuthService @Autowired constructor(
 
         val response = LoginResponse()
         response.accessToken = token.code
+        response.username = user.username
+        response.role = user.role
 
         baseResponse.setSuccess(response)
 
