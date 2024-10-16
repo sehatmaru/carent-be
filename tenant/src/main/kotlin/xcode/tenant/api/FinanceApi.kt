@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import xcode.biz.domain.response.BaseResponse
+import xcode.biz.domain.response.finance.BalanceReportResponse
 import xcode.biz.domain.response.finance.BalanceResponse
 import xcode.biz.service.tenant.FinanceService
 
@@ -17,5 +18,10 @@ class FinanceApi @Autowired constructor(
     @GetMapping("/balance")
     fun getBalance(): BaseResponse<BalanceResponse> {
         return financeService.getBalance()
+    }
+
+    @GetMapping("/balance/report")
+    fun getBalanceReport(): BaseResponse<BalanceReportResponse> {
+        return financeService.getBalanceReport()
     }
 }
