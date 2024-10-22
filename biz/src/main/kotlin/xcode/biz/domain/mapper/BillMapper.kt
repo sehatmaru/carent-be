@@ -27,6 +27,7 @@ interface BillMapper : BaseMapper<Bill> {
         JOIN t_product p ON p.id = o.product_id
         JOIN t_vehicle v ON v.id = p.vehicle_id
         WHERE v.company_id = #{companyId}
+        AND b.payment_status = 'PAID'
         AND EXTRACT(MONTH FROM o.created_at) = EXTRACT(MONTH FROM CURRENT_DATE)
         AND EXTRACT(YEAR FROM o.created_at) = EXTRACT(YEAR FROM CURRENT_DATE)
     """,
@@ -40,6 +41,7 @@ interface BillMapper : BaseMapper<Bill> {
         JOIN t_product p ON p.id = o.product_id
         JOIN t_vehicle v ON v.id = p.vehicle_id
         WHERE v.company_id = #{companyId}
+        AND b.payment_status = 'PAID'
         AND EXTRACT(MONTH FROM o.created_at) = #{month}
         AND EXTRACT(YEAR FROM o.created_at) = #{year}
     """,
@@ -68,6 +70,7 @@ interface BillMapper : BaseMapper<Bill> {
         JOIN t_product p ON p.id = o.product_id
         JOIN t_vehicle v ON v.id = p.vehicle_id
         WHERE v.company_id = #{companyId}
+        AND b.payment_status = 'PAID'
         AND EXTRACT(MONTH FROM o.created_at) = EXTRACT(MONTH FROM CURRENT_DATE)
         AND EXTRACT(YEAR FROM o.created_at) = EXTRACT(YEAR FROM CURRENT_DATE)
     """,
@@ -81,6 +84,7 @@ interface BillMapper : BaseMapper<Bill> {
         JOIN t_product p ON p.id = o.product_id
         JOIN t_vehicle v ON v.id = p.vehicle_id
         WHERE v.company_id = #{companyId}
+        AND b.payment_status = 'PAID'
         AND EXTRACT(MONTH FROM o.created_at) = #{month}
         AND EXTRACT(YEAR FROM o.created_at) = #{year}
     """,

@@ -5,6 +5,7 @@ import org.apache.ibatis.annotations.Mapper
 import org.apache.ibatis.annotations.Param
 import org.apache.ibatis.annotations.Select
 import xcode.biz.domain.model.Order
+import xcode.biz.domain.response.order.OrderHistoryResponse
 
 @Mapper
 interface OrderMapper : BaseMapper<Order> {
@@ -84,4 +85,20 @@ interface OrderMapper : BaseMapper<Order> {
         @Param("month") month: Int,
         @Param("year") year: Int,
     ): Int
+
+    @Select(
+        """
+        SELECT o.*, p.name AS "product_name", u.full_name AS "customer_name", v.brand, v.vehicle_type, v.transmission, bill.total_payment, book.start_at, book.end_at
+        FROM t_order o
+        JOIN t_product p ON p.id = o.product_id
+        JOIN t_vehicle v ON v.id = p.vehicle_id
+        JOIN t_user u ON u.id = o.customer_id
+        LEFT JOIN t_bill bill ON bill.order_id = o.id
+        LEFT JOIN t_booking book ON book.order_id = o.id
+        WHERE v.company_id = #{companyId}
+        ORDER BY o.created_at DESC
+        LIMIT 5
+    """,
+    )
+    fun getDashboardOrderHistory(@Param("companyId") companyId: Int): List<OrderHistoryResponse>
 }
