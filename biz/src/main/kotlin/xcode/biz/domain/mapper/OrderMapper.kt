@@ -88,7 +88,9 @@ interface OrderMapper : BaseMapper<Order> {
 
     @Select(
         """
-        SELECT o.*, p.name AS "product_name", u.full_name AS "customer_name", v.brand, v.vehicle_type, v.transmission, bill.total_payment, book.start_at, book.end_at
+        SELECT o.*, o.status AS "order_status", o.created_at AS "ordered_at", p.name AS "product_name", u.full_name AS "customer_name", v.brand, v.vehicle_type,
+        v.transmission, bill.total_payment, bill.payment_status AS "payment_status", book.start_at, book.end_at,
+        EXTRACT(DAY FROM (book.end_at - book.start_at)) AS "duration"
         FROM t_order o
         JOIN t_product p ON p.id = o.product_id
         JOIN t_vehicle v ON v.id = p.vehicle_id

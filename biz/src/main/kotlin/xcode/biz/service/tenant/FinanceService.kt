@@ -14,6 +14,7 @@ import xcode.biz.shared.ResponseCode.UNAUTHORIZED
 import java.time.LocalDate
 import java.time.format.TextStyle
 import java.util.Locale
+import kotlin.math.round
 
 @Service
 class FinanceService @Autowired constructor(
@@ -80,9 +81,26 @@ class FinanceService @Autowired constructor(
             response.revenueHistory.add(revenueHistory)
         }
 
+        response.orderChangeInValue = calculatePercentage(response.orderHistory[5].value, response.orderHistory[6].value)
+        response.customerChangeInValue = calculatePercentage(response.customerHistory[5].value, response.customerHistory[6].value)
+        response.incomeChangeInValue = calculatePercentage(response.incomeHistory[5].value, response.incomeHistory[6].value)
+        response.revenueChangeInValue = calculatePercentage(response.revenueHistory[5].value, response.revenueHistory[6].value)
+
         result.setSuccess(response)
 
         return result
+    }
+
+    fun calculatePercentage(oldValue: Double, newValue: Double): Int {
+        return if (oldValue != 0.0) {
+            round(((newValue - oldValue) / oldValue) * 100).toInt()
+        } else {
+            when {
+                newValue == 0.0 -> 0
+                newValue > 0 -> 100
+                else -> -100
+            }
+        }
     }
 
     fun checkPermission() {
