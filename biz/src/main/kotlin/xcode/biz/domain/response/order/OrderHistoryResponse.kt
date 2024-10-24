@@ -1,11 +1,11 @@
 package xcode.biz.domain.response.order
 
 import xcode.biz.enums.OrderStatus
+import xcode.biz.enums.PaymentStatus
 import xcode.biz.enums.Transmission
 import xcode.biz.enums.VehicleBrand
 import xcode.biz.enums.VehicleType
 import java.util.Date
-import xcode.biz.enums.PaymentStatus
 
 class OrderHistoryResponse {
     var id: Int? = null

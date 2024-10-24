@@ -9,10 +9,12 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import xcode.biz.domain.request.admin.AdminRegisterRequest
+import xcode.biz.domain.request.customer.CustomerFilterRequest
 import xcode.biz.domain.response.BaseResponse
 import xcode.biz.domain.response.admin.AdminResponse
 import xcode.biz.domain.response.auth.LoginResponse
 import xcode.biz.domain.response.auth.RegisterResponse
+import xcode.biz.domain.response.customer.TenantCustomerResponse
 import xcode.biz.service.tenant.ManagerService
 
 @RestController
@@ -34,5 +36,10 @@ class ManagerApi @Autowired constructor(
     @GetMapping("/admin/list")
     fun getAdminList(): BaseResponse<List<AdminResponse>> {
         return managerService.getAdminList()
+    }
+
+    @PostMapping("/customer/list")
+    fun getCustomerList(@RequestBody request: CustomerFilterRequest): BaseResponse<List<TenantCustomerResponse>> {
+        return managerService.getTenantCustomerList(request)
     }
 }

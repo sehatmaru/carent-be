@@ -4,13 +4,16 @@ import org.springframework.beans.BeanUtils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import xcode.biz.domain.dto.CurrentUser
+import xcode.biz.domain.mapper.OrderMapper
 import xcode.biz.domain.mapper.UserMapper
 import xcode.biz.domain.model.User
 import xcode.biz.domain.request.admin.AdminRegisterRequest
+import xcode.biz.domain.request.customer.CustomerFilterRequest
 import xcode.biz.domain.response.BaseResponse
 import xcode.biz.domain.response.admin.AdminResponse
 import xcode.biz.domain.response.auth.LoginResponse
 import xcode.biz.domain.response.auth.RegisterResponse
+import xcode.biz.domain.response.customer.TenantCustomerResponse
 import xcode.biz.enums.UserRole
 import xcode.biz.exception.AppException
 import xcode.biz.service.JasyptService
@@ -23,6 +26,7 @@ import java.util.Date
 class ManagerService @Autowired constructor(
     private val userMapper: UserMapper,
     private val jasyptService: JasyptService,
+    private val orderMapper: OrderMapper,
 ) {
 
     fun registerAdmin(request: AdminRegisterRequest): BaseResponse<LoginResponse> {
@@ -77,6 +81,14 @@ class ManagerService @Autowired constructor(
         }
 
         result.setSuccess(responseList)
+
+        return result
+    }
+
+    fun getTenantCustomerList(request: CustomerFilterRequest): BaseResponse<List<TenantCustomerResponse>> {
+        val result = BaseResponse<List<TenantCustomerResponse>>()
+
+        result.setSuccess(orderMapper.getTenantCustomerList(CurrentUser.get().companyId!!, request))
 
         return result
     }
