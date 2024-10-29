@@ -8,6 +8,8 @@ import org.apache.ibatis.annotations.Param
 import org.apache.ibatis.annotations.Select
 import org.apache.ibatis.annotations.Update
 import xcode.biz.domain.model.User
+import xcode.biz.domain.request.customer.CustomerFilterRequest
+import xcode.biz.domain.response.admin.AdminResponse
 
 @Mapper
 interface UserMapper : BaseMapper<User> {
@@ -85,6 +87,26 @@ interface UserMapper : BaseMapper<User> {
     @Select("""SELECT * FROM t_user WHERE id = #{id} AND deleted_at IS NULL AND verified_at IS NULL LIMIT 1""")
     fun getInactiveUser(@Param("id") id: Int): User?
 
-    @Select("""SELECT * FROM t_user WHERE created_by = #{id}""")
-    fun getAdminList(@Param("id") id: Int): List<User>?
+    @Select(
+        """
+        <script>
+            SELECT u.id, u.full_name as "name", u.username, u.mobile, u.email, u.verified_at as "join_date"
+            FROM t_user u
+            WHERE u.role = 'TENANT_ADMIN' AND u.verified_at IS NOT NULL
+            <if test="request.name != null">
+                AND u.full_name LIKE CONCAT('%', #{request.name}, '%')
+            </if>
+            <if test="request.mobile != null">
+                AND u.mobile LIKE CONCAT('%', #{request.mobile}, '%')
+            </if>
+            <if test="request.username != null">
+                AND u.username LIKE CONCAT('%', #{request.username}, '%')
+            </if>
+        </script>
+    """,
+    )
+    fun getAdminList(
+        @Param("companyId") companyId: Int,
+        @Param("request") request: CustomerFilterRequest,
+    ): List<AdminResponse>
 }

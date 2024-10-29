@@ -1,6 +1,5 @@
 package xcode.biz.service.tenant
 
-import org.springframework.beans.BeanUtils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import xcode.biz.domain.dto.CurrentUser
@@ -68,19 +67,12 @@ class ManagerService @Autowired constructor(
         return BaseResponse()
     }
 
-    fun getAdminList(): BaseResponse<List<AdminResponse>> {
+    fun getAdminList(request: CustomerFilterRequest): BaseResponse<List<AdminResponse>> {
         val result = BaseResponse<List<AdminResponse>>()
 
         checkPermission()
 
-        val userList = userMapper.getAdminList(CurrentUser.get().id!!) ?: emptyList()
-        val responseList = userList.map { user ->
-            AdminResponse().also { response ->
-                BeanUtils.copyProperties(user, response)
-            }
-        }
-
-        result.setSuccess(responseList)
+        result.setSuccess(userMapper.getAdminList(CurrentUser.get().companyId!!, request))
 
         return result
     }
