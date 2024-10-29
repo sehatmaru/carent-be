@@ -8,9 +8,10 @@ import xcode.biz.domain.mapper.ProductMapper
 import xcode.biz.domain.mapper.VehicleMapper
 import xcode.biz.domain.model.Product
 import xcode.biz.domain.request.product.ProductRegisterRequest
+import xcode.biz.domain.request.product.ProductSearchRequest
 import xcode.biz.domain.response.BaseResponse
 import xcode.biz.domain.response.auth.LoginResponse
-import xcode.biz.domain.response.product.ProductListResponse
+import xcode.biz.domain.response.product.TenantProductListResponse
 import xcode.biz.enums.ProductStatus
 import xcode.biz.exception.AppException
 import xcode.biz.service.GeoService
@@ -41,25 +42,10 @@ class TenantProductService @Autowired constructor(
         return BaseResponse()
     }
 
-    fun getProductList(): BaseResponse<List<ProductListResponse>> {
-        val result = BaseResponse<List<ProductListResponse>>()
+    fun getProductList(request: ProductSearchRequest): BaseResponse<List<TenantProductListResponse>> {
+        val result = BaseResponse<List<TenantProductListResponse>>()
 
-        val productList = productMapper.getTenantProductList(CurrentUser.get().companyId!!) ?: emptyList()
-        val responseList = productList.map { product ->
-            ProductListResponse().also { response ->
-                BeanUtils.copyProperties(product, response)
-                val vehicle = product.vehicleId?.let { vehicleMapper.getVehicle(it) }
-
-                if (vehicle != null) {
-                    response.vehicleName = vehicle.name
-                    response.vehicleType = vehicle.vehicleType
-                    response.seat = vehicle.seat
-                    response.transmission = vehicle.transmission
-                }
-            }
-        }
-
-        result.setSuccess(responseList)
+        result.setSuccess(productMapper.getTenantProductList(CurrentUser.get().companyId!!, request))
 
         return result
     }

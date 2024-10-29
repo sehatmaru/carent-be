@@ -16,9 +16,7 @@ class CustomerProductService @Autowired constructor(
         val result = BaseResponse<List<ProductListResponse>>()
         request.validate()
 
-        val productList = productMapper.searchProductList(request)
-
-        result.setSuccess(productList)
+        result.setSuccess(productMapper.searchProductList(request))
 
         return result
     }
