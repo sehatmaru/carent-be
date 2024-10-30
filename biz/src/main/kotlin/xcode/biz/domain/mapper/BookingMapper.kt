@@ -15,7 +15,10 @@ interface BookingMapper : BaseMapper<Booking> {
         """
         <script>
             SELECT EXTRACT(DAY FROM (book.end_date - book.start_date)) AS "duration",
-            u.id AS "customer_id", u.full_name AS "customer_name", bill.invoice_number, p.name AS "product_name", book.* FROM t_booking book
+            u.id AS "customer_id", u.full_name AS "customer_name", bill.invoice_number, p.name AS "product_name",
+            o.status AS "order_status", o.rating,
+            book.* 
+            FROM t_booking book
             LEFT JOIN t_order o ON o.id = book.order_id
             LEFT JOIN t_product p ON p.id = book.product_id
             LEFT JOIN t_user u ON u.id = o.customer_id
