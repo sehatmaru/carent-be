@@ -8,10 +8,11 @@ class TenantBookingListResponse {
     var customerId: Int? = null
     var customerName = ""
     var orderId: Int? = null
-    var billIid: Int? = null
+    var billId: Int? = null
     var invoiceNumber = ""
     var productId: Int? = null
     var productName = ""
+    var duration: Int? = null
     var pickupType: PickupType? = null
     var startDate: Date? = null
     var endDate: Date? = null

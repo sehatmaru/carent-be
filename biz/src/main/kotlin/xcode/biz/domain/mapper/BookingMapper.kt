@@ -14,7 +14,8 @@ interface BookingMapper : BaseMapper<Booking> {
     @Select(
         """
         <script>
-            SELECT u.id AS "customer_id", u.full_name AS "customer_name", bill.invoice_number, p.name AS "product_name", book.* FROM t_booking book
+            SELECT EXTRACT(DAY FROM (book.end_date - book.start_date)) AS "duration",
+            u.id AS "customer_id", u.full_name AS "customer_name", bill.invoice_number, p.name AS "product_name", book.* FROM t_booking book
             LEFT JOIN t_order o ON o.id = book.order_id
             LEFT JOIN t_product p ON p.id = book.product_id
             LEFT JOIN t_user u ON u.id = o.customer_id
@@ -25,15 +26,6 @@ interface BookingMapper : BaseMapper<Booking> {
             </if>
             <if test="request.customerId != null">
                 AND u.id = #{request.customerId}
-            </if>
-            <if test="request.productId != null">
-                AND book.product_id = #{request.productId}
-            </if>
-            <if test="request.orderId != null">
-                AND book.order_id = #{request.orderId}
-            </if>
-            <if test="request.billId != null">
-                AND book.bill_id = #{request.billId}
             </if>
             <if test="request.invoiceNumber != null">
                 AND bill.invoice_number = #{request.invoiceNumber}
