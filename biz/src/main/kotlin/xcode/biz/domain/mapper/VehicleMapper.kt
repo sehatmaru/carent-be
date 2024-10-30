@@ -52,6 +52,7 @@ interface VehicleMapper : BaseMapper<Vehicle> {
             <if test="request.brand != null">
                 AND p.brand = #{request.brand}
             </if>
+            ORDER BY v.created_date DESC
         </script>
     """,
     )
