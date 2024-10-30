@@ -14,8 +14,7 @@ interface BillMapper : BaseMapper<Bill> {
         SELECT SUM(b.total_paid) FROM t_bill b
         JOIN t_order o ON o.id = b.order_id
         JOIN t_product p ON p.id = o.product_id
-        JOIN t_vehicle v ON v.id = p.vehicle_id
-        WHERE v.company_id = #{companyId}
+        WHERE p.company_id = #{companyId}
     """,
     )
     fun getTotalIncome(@Param("companyId") companyId: Int): Double?
@@ -25,11 +24,10 @@ interface BillMapper : BaseMapper<Bill> {
         SELECT SUM(b.total_paid) FROM t_bill b
         JOIN t_order o ON o.id = b.order_id
         JOIN t_product p ON p.id = o.product_id
-        JOIN t_vehicle v ON v.id = p.vehicle_id
-        WHERE v.company_id = #{companyId}
+        WHERE p.company_id = #{companyId}
         AND b.payment_status = 'PAID'
-        AND EXTRACT(MONTH FROM o.created_at) = EXTRACT(MONTH FROM CURRENT_DATE)
-        AND EXTRACT(YEAR FROM o.created_at) = EXTRACT(YEAR FROM CURRENT_DATE)
+        AND EXTRACT(MONTH FROM o.created_date) = EXTRACT(MONTH FROM CURRENT_DATE)
+        AND EXTRACT(YEAR FROM o.created_date) = EXTRACT(YEAR FROM CURRENT_DATE)
     """,
     )
     fun getCurrentMonthTotalIncome(@Param("companyId") companyId: Int): Double?
@@ -39,11 +37,10 @@ interface BillMapper : BaseMapper<Bill> {
         SELECT SUM(b.total_paid) FROM t_bill b
         JOIN t_order o ON o.id = b.order_id
         JOIN t_product p ON p.id = o.product_id
-        JOIN t_vehicle v ON v.id = p.vehicle_id
-        WHERE v.company_id = #{companyId}
+        WHERE p.company_id = #{companyId}
         AND b.payment_status = 'PAID'
-        AND EXTRACT(MONTH FROM o.created_at) = #{month}
-        AND EXTRACT(YEAR FROM o.created_at) = #{year}
+        AND EXTRACT(MONTH FROM o.created_date) = #{month}
+        AND EXTRACT(YEAR FROM o.created_date) = #{year}
     """,
     )
     fun getTotalIncomeHistory(
@@ -57,8 +54,7 @@ interface BillMapper : BaseMapper<Bill> {
         SELECT SUM(b.application_fee) FROM t_bill b
         JOIN t_order o ON o.id = b.order_id
         JOIN t_product p ON p.id = o.product_id
-        JOIN t_vehicle v ON v.id = p.vehicle_id
-        WHERE v.company_id = #{companyId}
+        WHERE p.company_id = #{companyId}
     """,
     )
     fun getTotalApplicationFee(@Param("companyId") companyId: Int): Double?
@@ -68,11 +64,10 @@ interface BillMapper : BaseMapper<Bill> {
         SELECT SUM(b.application_fee) FROM t_bill b
         JOIN t_order o ON o.id = b.order_id
         JOIN t_product p ON p.id = o.product_id
-        JOIN t_vehicle v ON v.id = p.vehicle_id
-        WHERE v.company_id = #{companyId}
+        WHERE p.company_id = #{companyId}
         AND b.payment_status = 'PAID'
-        AND EXTRACT(MONTH FROM o.created_at) = EXTRACT(MONTH FROM CURRENT_DATE)
-        AND EXTRACT(YEAR FROM o.created_at) = EXTRACT(YEAR FROM CURRENT_DATE)
+        AND EXTRACT(MONTH FROM o.created_date) = EXTRACT(MONTH FROM CURRENT_DATE)
+        AND EXTRACT(YEAR FROM o.created_date) = EXTRACT(YEAR FROM CURRENT_DATE)
     """,
     )
     fun getCurrentMonthTotalApplicationFee(@Param("companyId") companyId: Int): Double?
@@ -82,11 +77,10 @@ interface BillMapper : BaseMapper<Bill> {
         SELECT SUM(b.application_fee) FROM t_bill b
         JOIN t_order o ON o.id = b.order_id
         JOIN t_product p ON p.id = o.product_id
-        JOIN t_vehicle v ON v.id = p.vehicle_id
-        WHERE v.company_id = #{companyId}
+        WHERE p.company_id = #{companyId}
         AND b.payment_status = 'PAID'
-        AND EXTRACT(MONTH FROM o.created_at) = #{month}
-        AND EXTRACT(YEAR FROM o.created_at) = #{year}
+        AND EXTRACT(MONTH FROM o.created_date) = #{month}
+        AND EXTRACT(YEAR FROM o.created_date) = #{year}
     """,
     )
     fun getTotalApplicationFeeHistory(

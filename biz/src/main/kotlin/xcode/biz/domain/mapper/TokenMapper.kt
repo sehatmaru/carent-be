@@ -14,7 +14,7 @@ interface TokenMapper : BaseMapper<Token> {
 
     @Insert(
         """
-        INSERT INTO t_token (user_id, code, type, is_active, expire_at)
+        INSERT INTO t_token (user_id, code, type, is_active, expire_date)
         VALUES (#{data.userId}, #{data.code}, #{data.type}, true, #{data.expireAt})
     """,
     )

@@ -18,12 +18,12 @@ class Token {
 
     var userId = 0
     var code = ""
-    var createdAt: Date? = null
-    var expireAt: Date? = null
+    var createdDate: Date? = null
+    var expireDate: Date? = null
     var isActive = false
     var type: TokenType? = TokenType.NON_OTP
 
     fun isValid(): Boolean {
-        return !expireAt!!.before(Date())
+        return !expireDate!!.before(Date())
     }
 }

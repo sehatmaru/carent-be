@@ -65,7 +65,7 @@ class AuthService @Autowired constructor(
         token.code = jwtService.generateToken(user)
         token.userId = user.id
         token.type = TokenType.NON_OTP
-        token.expireAt = Date.from(LocalDateTime.now().plusDays(1).atZone(ZoneId.systemDefault()).toInstant())
+        token.expireDate = Date.from(LocalDateTime.now().plusDays(1).atZone(ZoneId.systemDefault()).toInstant())
 
         tokenMapper.insertToken(token)
 
@@ -97,7 +97,7 @@ class AuthService @Autowired constructor(
         user.role = request.role!!
         user.credentialNo = request.credential!!.credentialNo
         user.credentialType = request.credential.credentialType
-        user.createdAt = Date()
+        user.createdDate = Date()
 
         if (request.role == UserRole.TENANT_MANAGER) {
             val company = Company()
@@ -122,7 +122,7 @@ class AuthService @Autowired constructor(
         token.code = jwtService.generateToken(user)
         token.userId = user.id
         token.type = TokenType.OTP
-        token.expireAt = Date.from(LocalDateTime.now().plusMinutes(5).atZone(ZoneId.systemDefault()).toInstant())
+        token.expireDate = Date.from(LocalDateTime.now().plusMinutes(5).atZone(ZoneId.systemDefault()).toInstant())
 
         tokenMapper.insertToken(token)
 

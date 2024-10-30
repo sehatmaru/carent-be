@@ -15,14 +15,14 @@ class UserToken {
     var password = ""
     var role: UserRole = UserRole.CUSTOMER
     var rating: Int? = null
-    var createdAt: Date? = null
-    var updatedAt: Date? = null
-    var verifiedAt: Date? = null
-    var deletedAt: Date? = null
+    var createdDate: Date? = null
+    var updatedDate: Date? = null
+    var verifiedDate: Date? = null
+    var deletedDate: Date? = null
     var token = ""
 
     fun isVerified(): Boolean {
-        return this.verifiedAt != null
+        return this.verifiedDate != null
     }
 
     fun isManager(): Boolean {

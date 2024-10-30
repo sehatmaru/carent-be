@@ -23,11 +23,11 @@ interface OtpMapper : BaseMapper<Otp> {
 
     @Update(
         """
-        UPDATE t_otp SET verified_at = NOW() WHERE id = #{id}
+        UPDATE t_otp SET verified_date = NOW() WHERE id = #{id}
     """,
     )
     fun deactivateOtp(@Param("id") id: Int)
 
-    @Select("""SELECT * FROM t_otp WHERE code = #{code} AND verified_at IS NULL LIMIT 1""")
+    @Select("""SELECT * FROM t_otp WHERE code = #{code} AND verified_date IS NULL LIMIT 1""")
     fun getUnverifiedOtp(@Param("code") code: String): Otp?
 }

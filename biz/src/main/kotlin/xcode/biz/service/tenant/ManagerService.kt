@@ -42,10 +42,10 @@ class ManagerService @Autowired constructor(
         user.email = request.email
         user.mobile = request.mobile
         user.password = jasyptService.encryptor(request.password, true)
-        user.createdAt = Date()
+        user.createdDate = Date()
         user.role = UserRole.TENANT_ADMIN
         user.createdBy = CurrentUser.get().id
-        user.verifiedAt = Date()
+        user.verifiedDate = Date()
         user.companyId = CurrentUser.get().companyId
 
         userMapper.insertUser(user)
@@ -60,7 +60,7 @@ class ManagerService @Autowired constructor(
             throw AppException(UNAUTHORIZED)
         }
 
-        user.deletedAt = Date()
+        user.deletedDate = Date()
 
         userMapper.insertUser(user)
 

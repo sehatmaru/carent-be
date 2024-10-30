@@ -36,16 +36,16 @@ class User {
     var rating: Int? = null
 
     @TableField(fill = FieldFill.INSERT)
-    var createdAt: Date? = null
+    var createdDate: Date? = null
 
     @TableField(fill = FieldFill.INSERT_UPDATE)
-    var updatedAt: Date? = null
+    var updatedDate: Date? = null
 
-    var verifiedAt: Date? = null
-    var deletedAt: Date? = null
+    var verifiedDate: Date? = null
+    var deletedDate: Date? = null
 
     fun isVerified(): Boolean {
-        return this.verifiedAt != null
+        return this.verifiedDate != null
     }
 
     fun isManager(): Boolean {

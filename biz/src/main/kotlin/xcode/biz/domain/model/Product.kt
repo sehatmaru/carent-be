@@ -9,7 +9,10 @@ import lombok.AllArgsConstructor
 import lombok.Builder
 import lombok.Data
 import lombok.NoArgsConstructor
+import xcode.biz.enums.EngineType
 import xcode.biz.enums.ProductStatus
+import xcode.biz.enums.Transmission
+import xcode.biz.enums.VehicleBrand
 import java.util.Date
 
 @Data
@@ -22,9 +25,11 @@ class Product {
     @TableId(type = IdType.AUTO)
     var id = 0
 
-    var vehicleId: Int? = null
+    var companyId: Int? = null
     var name = ""
     var price: Int? = null
+    var quantity: Int? = null
+    var available: Int? = null
     var provinceId: Int? = null
     var provinceName = ""
     var regencyId: Int? = null
@@ -32,13 +37,17 @@ class Product {
     var districtId: Int? = null
     var districtName = ""
     var deliverable = false
+    var transmission: Transmission? = null
+    var seat: Int? = null
+    var engineType: EngineType? = null
+    var brand: VehicleBrand? = null
     var status: ProductStatus? = null
 
     @TableField(fill = FieldFill.INSERT)
-    var createdAt: Date? = null
+    var createdDate: Date? = null
 
     @TableField(fill = FieldFill.INSERT_UPDATE)
-    var updatedAt: Date? = null
+    var updatedDate: Date? = null
 
-    var deletedAt: Date? = null
+    var deletedDate: Date? = null
 }

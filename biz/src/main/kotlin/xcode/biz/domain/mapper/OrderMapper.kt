@@ -16,8 +16,7 @@ interface OrderMapper : BaseMapper<Order> {
         """
         SELECT COUNT(o) FROM t_order o
         JOIN t_product p ON p.id = o.product_id
-        JOIN t_vehicle v ON v.id = p.vehicle_id
-        WHERE v.company_id = #{companyId}
+        WHERE p.company_id = #{companyId}
     """,
     )
     fun countOrder(@Param("companyId") companyId: Int): Int?
@@ -26,10 +25,9 @@ interface OrderMapper : BaseMapper<Order> {
         """
         SELECT COUNT(o) FROM t_order o
         JOIN t_product p ON p.id = o.product_id
-        JOIN t_vehicle v ON v.id = p.vehicle_id
-        WHERE v.company_id = #{companyId}
-        AND EXTRACT(MONTH FROM o.created_at) = EXTRACT(MONTH FROM CURRENT_DATE)
-        AND EXTRACT(YEAR FROM o.created_at) = EXTRACT(YEAR FROM CURRENT_DATE)
+        WHERE p.company_id = #{companyId}
+        AND EXTRACT(MONTH FROM o.created_date) = EXTRACT(MONTH FROM CURRENT_DATE)
+        AND EXTRACT(YEAR FROM o.created_date) = EXTRACT(YEAR FROM CURRENT_DATE)
     """,
     )
     fun countCurrentMonthOrder(@Param("companyId") companyId: Int): Int
@@ -38,10 +36,9 @@ interface OrderMapper : BaseMapper<Order> {
         """
         SELECT COUNT(o) FROM t_order o
         JOIN t_product p ON p.id = o.product_id
-        JOIN t_vehicle v ON v.id = p.vehicle_id
-        WHERE v.company_id = #{companyId}
-        AND EXTRACT(MONTH FROM o.created_at) = #{month}
-        AND EXTRACT(YEAR FROM o.created_at) = #{year}
+        WHERE p.company_id = #{companyId}
+        AND EXTRACT(MONTH FROM o.created_date) = #{month}
+        AND EXTRACT(YEAR FROM o.created_date) = #{year}
     """,
     )
     fun countOrderHistory(
@@ -54,8 +51,7 @@ interface OrderMapper : BaseMapper<Order> {
         """
         SELECT COUNT(DISTINCT o.customer_id) FROM t_order o
         JOIN t_product p ON p.id = o.product_id
-        JOIN t_vehicle v ON v.id = p.vehicle_id
-        WHERE v.company_id = #{companyId}
+        WHERE p.company_id = #{companyId}
     """,
     )
     fun countUniqueCustomer(@Param("companyId") companyId: Int): Int?
@@ -64,10 +60,9 @@ interface OrderMapper : BaseMapper<Order> {
         """
         SELECT COUNT(DISTINCT o.customer_id) FROM t_order o
         JOIN t_product p ON p.id = o.product_id
-        JOIN t_vehicle v ON v.id = p.vehicle_id
-        WHERE v.company_id = #{companyId}
-        AND EXTRACT(MONTH FROM o.created_at) = EXTRACT(MONTH FROM CURRENT_DATE)
-        AND EXTRACT(YEAR FROM o.created_at) = EXTRACT(YEAR FROM CURRENT_DATE)
+        WHERE p.company_id = #{companyId}
+        AND EXTRACT(MONTH FROM o.created_date) = EXTRACT(MONTH FROM CURRENT_DATE)
+        AND EXTRACT(YEAR FROM o.created_date) = EXTRACT(YEAR FROM CURRENT_DATE)
     """,
     )
     fun countCurrentMonthUniqueCustomer(@Param("companyId") companyId: Int): Int
@@ -76,10 +71,9 @@ interface OrderMapper : BaseMapper<Order> {
         """
         SELECT COUNT(DISTINCT o.customer_id) FROM t_order o
         JOIN t_product p ON p.id = o.product_id
-        JOIN t_vehicle v ON v.id = p.vehicle_id
-        WHERE v.company_id = #{companyId}
-        AND EXTRACT(MONTH FROM o.created_at) = #{month}
-        AND EXTRACT(YEAR FROM o.created_at) = #{year}
+        WHERE p.company_id = #{companyId}
+        AND EXTRACT(MONTH FROM o.created_date) = #{month}
+        AND EXTRACT(YEAR FROM o.created_date) = #{year}
     """,
     )
     fun countUniqueCustomerHistory(
@@ -90,17 +84,16 @@ interface OrderMapper : BaseMapper<Order> {
 
     @Select(
         """
-        SELECT o.*, o.status AS "order_status", o.created_at AS "ordered_at", p.name AS "product_name", u.full_name AS "customer_name", v.brand, v.vehicle_type,
-        v.transmission, bill.total_payment, bill.payment_status AS "payment_status", book.start_at, book.end_at,
-        EXTRACT(DAY FROM (book.end_at - book.start_at)) AS "duration"
+        SELECT o.*, o.status AS "order_status", o.created_date AS "ordered_date", p.name AS "product_name", u.full_name AS "customer_name", p.brand,
+        p.transmission, bill.total_payment, bill.payment_status AS "payment_status", book.start_date, book.end_date,
+        EXTRACT(DAY FROM (book.end_date - book.start_date)) AS "duration"
         FROM t_order o
         JOIN t_product p ON p.id = o.product_id
-        JOIN t_vehicle v ON v.id = p.vehicle_id
         JOIN t_user u ON u.id = o.customer_id
         LEFT JOIN t_bill bill ON bill.order_id = o.id
         LEFT JOIN t_booking book ON book.order_id = o.id
-        WHERE v.company_id = #{companyId}
-        ORDER BY o.created_at DESC
+        WHERE p.company_id = #{companyId}
+        ORDER BY o.created_date DESC
         LIMIT 5
     """,
     )
@@ -110,15 +103,14 @@ interface OrderMapper : BaseMapper<Order> {
         """
         <script>
             SELECT u.full_name as "name", u.username, u.mobile, 
-                (SELECT created_at FROM t_order WHERE customer_id = u.id ORDER BY created_at DESC LIMIT 1) AS "last_order",
+                (SELECT created_date FROM t_order WHERE customer_id = u.id ORDER BY created_date DESC LIMIT 1) AS "last_order",
                 (SELECT COUNT(id) FROM t_order WHERE customer_id = u.id AND status IN ('IN_PROGRESS', 'COMPLETED')) AS "total_order"
             FROM t_user u
             WHERE u.id IN (
                 SELECT DISTINCT o.customer_id
                 FROM t_order o
                 JOIN t_product p ON p.id = o.product_id
-                JOIN t_vehicle v ON v.id = p.vehicle_id
-                WHERE v.company_id = #{companyId}
+                WHERE p.company_id = #{companyId}
                 AND o.status IN ('IN_PROGRESS', 'COMPLETED')
             )
             <if test="request.name != null">

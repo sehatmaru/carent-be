@@ -29,6 +29,6 @@ class Booking {
     var customerNotes = ""
     var adminNotes = ""
     var rating: Int? = null
-    var startAt: Date? = null
-    var endAt: Date? = null
+    var startDate: Date? = null
+    var endDate: Date? = null
 }

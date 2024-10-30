@@ -24,14 +24,15 @@ class Order {
 
     var customerId: Int? = null
     var productId: Int? = null
+    var vehicleId: Int? = null
     var status: OrderStatus? = null
     var rating: Int? = null
 
     @TableField(fill = FieldFill.INSERT)
-    var createdAt: Date? = null
+    var createdDate: Date? = null
 
     @TableField(fill = FieldFill.INSERT_UPDATE)
-    var updatedAt: Date? = null
+    var updatedDate: Date? = null
 
-    var deletedAt: Date? = null
+    var deletedDate: Date? = null
 }

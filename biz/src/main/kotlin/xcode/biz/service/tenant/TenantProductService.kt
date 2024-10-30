@@ -35,7 +35,7 @@ class TenantProductService @Autowired constructor(
         product.provinceName = request.provinceId?.let { geoService.getProvince(it).result?.name ?: "NOT FOUND" }.toString()
         product.regencyName = request.regencyId?.let { geoService.getRegency(it).result?.name ?: "NOT FOUND" }.toString()
         product.districtName = request.districtId?.let { geoService.getDistrict(it).result?.name ?: "NOT FOUND" }.toString()
-        product.createdAt = Date()
+        product.createdDate = Date()
 
         productMapper.insertProduct(product)
 

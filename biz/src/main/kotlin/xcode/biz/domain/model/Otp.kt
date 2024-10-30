@@ -21,6 +21,6 @@ class Otp {
 
     var code = ""
     var userId: Int? = null
-    var verifiedAt: Date? = null
-    var deletedAt: Date? = null
+    var verifiedDate: Date? = null
+    var deletedDate: Date? = null
 }

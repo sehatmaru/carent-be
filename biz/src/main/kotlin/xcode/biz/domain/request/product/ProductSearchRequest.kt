@@ -4,7 +4,6 @@ import xcode.biz.enums.EngineType
 import xcode.biz.enums.ProductStatus
 import xcode.biz.enums.Transmission
 import xcode.biz.enums.VehicleBrand
-import xcode.biz.enums.VehicleType
 import xcode.biz.exception.AppException
 import xcode.biz.shared.ResponseCode.PARAMS_ERROR
 import java.util.Date
@@ -17,10 +16,9 @@ class ProductSearchRequest {
     var provinceId: Int? = null
     var regencyId: Int? = null
     var districtId: Int? = null
-    var startAt: Date? = null
-    var endAt: Date? = null
+    var startDate: Date? = null
+    var endDate: Date? = null
     var deliverable: Boolean? = null
-    var vehicleType: VehicleType? = null
     var transmission: Transmission? = null
     var engineType: EngineType? = null
     var brand: VehicleBrand? = null
@@ -39,7 +37,7 @@ class ProductSearchRequest {
             }
         }
 
-        if (startAt == null || endAt == null) {
+        if (startDate == null || endDate == null) {
             throw AppException(PARAMS_ERROR)
         }
     }

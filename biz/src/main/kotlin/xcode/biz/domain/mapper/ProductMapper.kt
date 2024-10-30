@@ -26,13 +26,12 @@ interface ProductMapper : BaseMapper<Product> {
     @Select(
         """
         <script>
-            SELECT p.*, v.name as vehicle_name, v.brand, v.seat, v.transmission, v.vehicle_type FROM t_product p
-            JOIN t_vehicle v ON v.id = p.vehicle_id
+            SELECT p.*, p.brand, p.seat, p.transmission FROM t_product p
             LEFT JOIN t_booking b ON b.product_id = p.id
             WHERE (
-                (b.start_at IS NULL OR b.start_at NOT BETWEEN #{request.startAt} AND #{request.endAt})
+                (b.start_date IS NULL OR b.start_date NOT BETWEEN #{request.startAt} AND #{request.endAt})
                 AND
-                (b.end_at IS NULL OR b.end_at NOT BETWEEN #{request.startAt} AND #{request.endAt})
+                (b.end_date IS NULL OR b.end_date NOT BETWEEN #{request.startAt} AND #{request.endAt})
             )
             <if test="request.priceStart != null and request.priceEnd != null">
                 AND p.price BETWEEN #{request.priceStart} AND #{request.priceEnd}
@@ -49,17 +48,14 @@ interface ProductMapper : BaseMapper<Product> {
             <if test="request.deliverable != null">
                 AND p.deliverable = #{request.deliverable}
             </if>
-            <if test="request.vehicleType != null">
-                AND v.vehicle_type = #{request.vehicleType}
-            </if>
             <if test="request.transmission != null">
-                AND v.transmission = #{request.transmission}
+                AND p.transmission = #{request.transmission}
             </if>
             <if test="request.engineType != null">
-                AND v.engine_type = #{request.engineType}
+                AND p.engine_type = #{request.engineType}
             </if>
             <if test="request.brand != null">
-                AND v.brand = #{request.brand}
+                AND p.brand = #{request.brand}
             </if>
         </script>
     """,
@@ -69,9 +65,8 @@ interface ProductMapper : BaseMapper<Product> {
     @Select(
         """
         <script>
-            SELECT p.id, p.name, p.price, p.deliverable, p.status, v.brand, v.seat, v.transmission, v.vehicle_type, v.seat FROM t_product p
-            JOIN t_vehicle v ON v.id = p.vehicle_id
-            WHERE v.company_id = #{companyId}
+            SELECT p.id, p.name, p.price, p.deliverable, p.status, p.brand, p.seat, p.transmission, p.seat FROM t_product p
+            WHERE p.company_id = #{companyId}
             <if test="request.id != null">
                 AND p.id = #{request.id}
             </if>
@@ -81,17 +76,14 @@ interface ProductMapper : BaseMapper<Product> {
             <if test="request.deliverable != null">
                 AND p.deliverable = #{request.deliverable}
             </if>
-            <if test="request.vehicleType != null">
-                AND v.vehicle_type = #{request.vehicleType}
-            </if>
             <if test="request.transmission != null">
-                AND v.transmission = #{request.transmission}
+                AND p.transmission = #{request.transmission}
             </if>
             <if test="request.engineType != null">
-                AND v.engine_type = #{request.engineType}
+                AND p.engine_type = #{request.engineType}
             </if>
             <if test="request.brand != null">
-                AND v.brand = #{request.brand}
+                AND p.brand = #{request.brand}
             </if>
             <if test="request.status != null">
                 AND p.status = #{request.status}

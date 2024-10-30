@@ -25,9 +25,9 @@ class VehicleService @Autowired constructor(
 
         val vehicle = Vehicle()
         BeanUtils.copyProperties(request, vehicle)
-        vehicle.companyId = CurrentUser.get().companyId
+//        vehicle.companyId = CurrentUser.get().companyId
         vehicle.createdBy = CurrentUser.get().id
-        vehicle.createdAt = Date()
+        vehicle.createdDate = Date()
 
         vehicleMapper.insertVehicle(vehicle)
 
