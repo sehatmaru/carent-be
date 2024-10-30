@@ -5,6 +5,8 @@ import org.apache.ibatis.annotations.Mapper
 import org.apache.ibatis.annotations.Param
 import org.apache.ibatis.annotations.Select
 import xcode.biz.domain.model.Bill
+import xcode.biz.domain.request.bill.BillFilterRequest
+import xcode.biz.domain.response.bill.BillListResponse
 
 @Mapper
 interface BillMapper : BaseMapper<Bill> {
@@ -88,4 +90,44 @@ interface BillMapper : BaseMapper<Bill> {
         @Param("month") month: Int,
         @Param("year") year: Int,
     ): Double?
+
+    @Select(
+        """
+        <script>
+            SELECT u.id AS "customer_id", u.full_name AS "customer_name", o.status AS "order_status", o.rating,
+            bill.* 
+            FROM t_bill bill
+            LEFT JOIN t_order o ON o.id = bill.order_id
+            LEFT JOIN t_product p ON p.id = o.product_id
+            LEFT JOIN t_user u ON u.id = o.customer_id
+            WHERE p.company_id = #{companyId}
+            <if test="request.id != null">
+                AND bill.id = #{request.id}
+            </if>
+            <if test="request.customerId != null">
+                AND u.id = #{request.customerId}
+            </if>
+            <if test="request.invoiceNumber != null">
+                AND bill.invoice_number = #{request.invoiceNumber}
+            </if>
+            <if test="request.orderId != null">
+                AND bill.order_id = #{request.orderId}
+            </if>
+            <if test="request.paymentType != null">
+                AND bill.payment_type = #{request.paymentType}
+            </if>
+            <if test="request.orderStatus != null">
+                AND o.status = #{request.orderStatus}
+            </if>
+            <if test="request.paymentStatus != null">
+                AND bill.payment_status = #{request.paymentStatus}
+            </if>
+            ORDER BY bill.created_date DESC
+        </script>
+    """,
+    )
+    fun getTenantBillList(
+        @Param("companyId") companyId: Int,
+        @Param("request") request: BillFilterRequest,
+    ): List<BillListResponse>?
 }

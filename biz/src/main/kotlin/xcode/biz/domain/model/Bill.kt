@@ -30,7 +30,7 @@ class Bill {
     var applicationFee: Double? = null
     var paymentType: PaymentType? = null
     var paymentStatus: PaymentStatus? = null
-    var invoiceNumber: Int? = null
+    var invoiceNumber = ""
 
     @TableField(fill = FieldFill.INSERT)
     var createdDate: Date? = null

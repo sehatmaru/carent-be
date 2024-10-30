@@ -1,8 +1,8 @@
 package xcode.biz.domain.response.booking
 
+import xcode.biz.enums.OrderStatus
 import xcode.biz.enums.PickupType
 import java.util.Date
-import xcode.biz.enums.OrderStatus
 
 class TenantBookingListResponse {
     var id: Int? = null

@@ -8,5 +8,8 @@ enum class VehicleBrand {
     YAMAHA,
     HYUNDAI,
     BYD,
+    MITSUBISHI,
+    DAIHATSU,
+    NISSAN,
     OTHER,
 }

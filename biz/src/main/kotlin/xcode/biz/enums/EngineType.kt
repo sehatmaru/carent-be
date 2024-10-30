@@ -4,4 +4,5 @@ enum class EngineType {
     GASOLINE,
     HYBRID,
     ELECTRIC,
+    DIESEL,
 }
