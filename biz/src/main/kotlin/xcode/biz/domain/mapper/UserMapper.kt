@@ -94,13 +94,13 @@ interface UserMapper : BaseMapper<User> {
             FROM t_user u
             WHERE u.role = 'TENANT_ADMIN' AND u.verified_date IS NOT NULL
             <if test="request.name != null">
-                AND u.full_name LIKE CONCAT('%', #{request.name}, '%')
+                AND u.full_name ILIKE CONCAT('%', #{request.name}, '%')
             </if>
             <if test="request.mobile != null">
-                AND u.mobile LIKE CONCAT('%', #{request.mobile}, '%')
+                AND u.mobile ILIKE CONCAT('%', #{request.mobile}, '%')
             </if>
             <if test="request.username != null">
-                AND u.username LIKE CONCAT('%', #{request.username}, '%')
+                AND u.username ILIKE CONCAT('%', #{request.username}, '%')
             </if>
         </script>
     """,

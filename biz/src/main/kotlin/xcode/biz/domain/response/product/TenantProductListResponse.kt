@@ -1,5 +1,6 @@
 package xcode.biz.domain.response.product
 
+import xcode.biz.enums.EngineType
 import xcode.biz.enums.ProductStatus
 import xcode.biz.enums.Transmission
 import xcode.biz.enums.VehicleBrand
@@ -11,6 +12,7 @@ class TenantProductListResponse {
     var name = ""
     var price: Int? = null
     var deliverable = false
+    var engineType: EngineType? = null
     var brand: VehicleBrand? = null
     var status: ProductStatus? = null
 }

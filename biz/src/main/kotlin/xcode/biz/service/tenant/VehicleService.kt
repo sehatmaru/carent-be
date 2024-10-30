@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service
 import xcode.biz.domain.dto.CurrentUser
 import xcode.biz.domain.mapper.VehicleMapper
 import xcode.biz.domain.model.Vehicle
+import xcode.biz.domain.request.vehicle.VehicleFilterRequest
 import xcode.biz.domain.request.vehicle.VehicleRegisterRequest
 import xcode.biz.domain.response.BaseResponse
 import xcode.biz.domain.response.auth.LoginResponse
@@ -34,19 +35,12 @@ class VehicleService @Autowired constructor(
         return BaseResponse()
     }
 
-    fun getVehicleList(): BaseResponse<List<VehicleResponse>> {
+    fun getVehicleList(request: VehicleFilterRequest): BaseResponse<List<VehicleResponse>> {
         val result = BaseResponse<List<VehicleResponse>>()
 
         checkPermission()
 
-        val vehicleList = vehicleMapper.getVehicleList(CurrentUser.get().companyId!!) ?: emptyList()
-        val responseList = vehicleList.map { vehicle ->
-            VehicleResponse().also { response ->
-                BeanUtils.copyProperties(vehicle, response)
-            }
-        }
-
-        result.setSuccess(responseList)
+        result.setSuccess(vehicleMapper.getVehicleList(CurrentUser.get().companyId!!, request))
 
         return result
     }

@@ -1,19 +1,16 @@
-package xcode.biz.domain.response.vehicle
+package xcode.biz.domain.request.vehicle
 
 import xcode.biz.enums.EngineType
 import xcode.biz.enums.Transmission
 import xcode.biz.enums.VehicleBrand
-import java.util.Date
 
-class VehicleResponse {
+class VehicleFilterRequest {
     var id: Int? = null
     var productId: Int? = null
-    var productName: String? = null
-    var name = ""
+    var name: String? = null
     var engineType: EngineType? = null
     var transmission: Transmission? = null
     var brand: VehicleBrand? = null
-    var year = ""
-    var licenseNumber = ""
-    var createdDate: Date? = null
+    var year: String? = null
+    var licenseNumber: String? = null
 }

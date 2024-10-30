@@ -2,11 +2,11 @@ package xcode.tenant.api
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.validation.annotation.Validated
-import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
+import xcode.biz.domain.request.vehicle.VehicleFilterRequest
 import xcode.biz.domain.request.vehicle.VehicleRegisterRequest
 import xcode.biz.domain.response.BaseResponse
 import xcode.biz.domain.response.auth.LoginResponse
@@ -24,8 +24,8 @@ class VehicleApi @Autowired constructor(
         return vehicleService.registerVehicle(request)
     }
 
-    @GetMapping("/list")
-    fun getVehicleList(): BaseResponse<List<VehicleResponse>> {
-        return vehicleService.getVehicleList()
+    @PostMapping("/list")
+    fun getVehicleList(@RequestBody @Validated request: VehicleFilterRequest): BaseResponse<List<VehicleResponse>> {
+        return vehicleService.getVehicleList(request)
     }
 }

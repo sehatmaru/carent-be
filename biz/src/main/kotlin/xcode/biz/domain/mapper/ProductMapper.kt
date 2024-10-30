@@ -65,13 +65,13 @@ interface ProductMapper : BaseMapper<Product> {
     @Select(
         """
         <script>
-            SELECT p.id, p.name, p.price, p.deliverable, p.status, p.brand, p.seat, p.transmission, p.seat FROM t_product p
+            SELECT p.id, p.name, p.price, p.deliverable, p.status, p.brand, p.seat, p.transmission, p.engine_type, p.seat FROM t_product p
             WHERE p.company_id = #{companyId}
             <if test="request.id != null">
                 AND p.id = #{request.id}
             </if>
             <if test="request.name != null">
-                AND p.name LIKE CONCAT('%', #{request.name}, '%')
+                AND p.name ILIKE CONCAT('%', #{request.name}, '%')
             </if>
             <if test="request.deliverable != null">
                 AND p.deliverable = #{request.deliverable}
