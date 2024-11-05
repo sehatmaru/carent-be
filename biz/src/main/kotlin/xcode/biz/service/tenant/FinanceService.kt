@@ -1,5 +1,8 @@
 package xcode.biz.service.tenant
 
+import java.time.LocalDate
+import java.time.format.TextStyle
+import java.util.Locale
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import xcode.biz.domain.dto.CurrentUser
@@ -11,9 +14,6 @@ import xcode.biz.domain.response.finance.BalanceReportResponse
 import xcode.biz.domain.response.finance.BalanceResponse
 import xcode.biz.exception.AppException
 import xcode.biz.shared.ResponseCode.UNAUTHORIZED
-import java.time.LocalDate
-import java.time.format.TextStyle
-import java.util.Locale
 import kotlin.math.round
 
 @Service
@@ -47,7 +47,8 @@ class FinanceService @Autowired constructor(
         response.currentOrder = orderMapper.countCurrentMonthOrder(companyId)
         response.currentCustomer = orderMapper.countCurrentMonthUniqueCustomer(companyId)
         response.currentIncome = billMapper.getCurrentMonthTotalIncome(companyId) ?: 0.0
-        response.currentRevenue = response.currentIncome - (billMapper.getCurrentMonthTotalApplicationFee(companyId) ?: 0.0)
+        response.currentRevenue =
+            response.currentIncome - (billMapper.getCurrentMonthTotalApplicationFee(companyId) ?: 0.0)
 
         val currentDate = LocalDate.now()
         for (i in 6 downTo 0) {
@@ -81,10 +82,14 @@ class FinanceService @Autowired constructor(
             response.revenueHistory.add(revenueHistory)
         }
 
-        response.orderChangeInValue = calculatePercentage(response.orderHistory[5].value, response.orderHistory[6].value)
-        response.customerChangeInValue = calculatePercentage(response.customerHistory[5].value, response.customerHistory[6].value)
-        response.incomeChangeInValue = calculatePercentage(response.incomeHistory[5].value, response.incomeHistory[6].value)
-        response.revenueChangeInValue = calculatePercentage(response.revenueHistory[5].value, response.revenueHistory[6].value)
+        response.orderChangeInValue =
+            calculatePercentage(response.orderHistory[5].value, response.orderHistory[6].value)
+        response.customerChangeInValue =
+            calculatePercentage(response.customerHistory[5].value, response.customerHistory[6].value)
+        response.incomeChangeInValue =
+            calculatePercentage(response.incomeHistory[5].value, response.incomeHistory[6].value)
+        response.revenueChangeInValue =
+            calculatePercentage(response.revenueHistory[5].value, response.revenueHistory[6].value)
 
         result.setSuccess(response)
 

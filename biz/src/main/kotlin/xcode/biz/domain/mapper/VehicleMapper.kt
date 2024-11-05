@@ -26,7 +26,7 @@ interface VehicleMapper : BaseMapper<Vehicle> {
         """
         <script>
             SELECT v.*, p.id AS "product_id", p.name AS "product_name", p.brand, p.engine_type, p.transmission FROM t_product p
-            LEFT JOIN t_vehicle v ON v.product_id = p.id
+            JOIN t_vehicle v ON v.product_id = p.id
             WHERE p.company_id = #{companyId}
             <if test="request.id != null">
                 AND v.id = #{request.id}
@@ -44,13 +44,13 @@ interface VehicleMapper : BaseMapper<Vehicle> {
                 AND v.license_number ILIKE CONCAT('%', #{request.licenseNumber}, '%')
             </if>
             <if test="request.transmission != null">
-                AND p.transmission = #{request.transmission}
+                AND p.transmission = #{request.transmission}::transmission
             </if>
             <if test="request.engineType != null">
-                AND p.engine_type = #{request.engineType}
+                AND p.engine_type = #{request.engineType}::engine_type
             </if>
             <if test="request.brand != null">
-                AND p.brand = #{request.brand}
+                AND p.brand = #{request.brand}::vehicle_brand
             </if>
             ORDER BY v.created_date DESC
         </script>

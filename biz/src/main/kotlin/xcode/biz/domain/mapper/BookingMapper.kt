@@ -34,7 +34,7 @@ interface BookingMapper : BaseMapper<Booking> {
                 AND bill.invoice_number = #{request.invoiceNumber}
             </if>
             <if test="request.pickupType != null">
-                AND book.pickup_type = #{request.pickupType}
+                AND book.pickup_type = #{request.pickupType}::pickup_type
             </if>
             ORDER BY o.created_date DESC
         </script>

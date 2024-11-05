@@ -41,6 +41,7 @@ dependencies {
     implementation("com.baomidou:mybatis-plus-boot-starter:3.5.0")
     implementation("com.baomidou:mybatis-plus-core:3.5.1")
     implementation("org.mybatis.spring.boot:mybatis-spring-boot-starter:2.2.0")
+    implementation("com.github.pagehelper:pagehelper-spring-boot-starter:1.4.7")
 }
 
 kotlin {

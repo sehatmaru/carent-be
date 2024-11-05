@@ -1,5 +1,7 @@
 package xcode.biz.service.cust
 
+import com.github.pagehelper.PageHelper
+import com.github.pagehelper.PageInfo
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import xcode.biz.domain.mapper.ProductMapper
@@ -12,11 +14,16 @@ class CustomerProductService @Autowired constructor(
     private val productMapper: ProductMapper,
 ) {
 
-    fun searchProduct(request: ProductSearchRequest): BaseResponse<List<ProductListResponse>> {
-        val result = BaseResponse<List<ProductListResponse>>()
+    fun searchProduct(
+        request: ProductSearchRequest,
+        pageNum: Int,
+        pageSize: Int
+    ): BaseResponse<PageInfo<ProductListResponse>> {
+        val result = BaseResponse<PageInfo<ProductListResponse>>()
         request.validate()
 
-        result.setSuccess(productMapper.searchProductList(request))
+        PageHelper.startPage<ProductListResponse>(pageNum, pageSize)
+        result.setSuccess(PageInfo(productMapper.searchProductList(request)))
 
         return result
     }

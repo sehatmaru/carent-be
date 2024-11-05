@@ -17,7 +17,7 @@ interface UserMapper : BaseMapper<User> {
     @Insert(
         """
         INSERT INTO t_user (company_id, created_by, full_name, mobile, username, email, credential_no, credential_type, password, role, rating)
-        VALUES (#{data.companyId}, #{data.createdBy}, #{data.fullName}, #{data.mobile}, #{data.username}, #{data.email}, #{data.credentialNo}, #{data.credentialType}, #{data.password}, #{data.role}, 0)
+        VALUES (#{data.companyId}, #{data.createdBy}, #{data.fullName}, #{data.mobile}, #{data.username}, #{data.email}, #{data.credentialNo}, #{data.credentialType}::credential_type, #{data.password}, #{data.role}::user_role, 0)
     """,
     )
     @Options(useGeneratedKeys = true, keyProperty = "data.id")

@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Options
 import org.apache.ibatis.annotations.Param
 import org.apache.ibatis.annotations.Select
 import xcode.biz.domain.model.Product
+import xcode.biz.domain.request.product.ProductRegisterRequest
 import xcode.biz.domain.request.product.ProductSearchRequest
 import xcode.biz.domain.response.product.ProductListResponse
 import xcode.biz.domain.response.product.TenantProductListResponse
@@ -16,12 +17,12 @@ interface ProductMapper : BaseMapper<Product> {
 
     @Insert(
         """
-        INSERT INTO t_product (name, price, status, vehicle_id, district_id, district_name, province_id, province_name, regency_id, regency_name, deliverable)
-        VALUES (#{data.name}, #{data.price}, #{data.status}, #{data.vehicleId}, #{data.districtId}, #{data.districtName}, #{data.provinceId}, #{data.provinceName}, #{data.regencyId}, #{data.regencyName}, #{data.deliverable})
+        INSERT INTO t_product(company_id, name, price, quantity, available, province_id, province_name, regency_id, regency_name, district_id, district_name, deliverable, transmission, seat, engine_type, brand, status) 
+        VALUES (#{data.companyId}, #{data.name}, #{data.price}, 0, #{data.available}, #{data.provinceId}, #{data.provinceName}, #{data.regencyId}, #{data.regencyName}, #{data.districtId}, #{data.districtName}, #{data.deliverable}, #{data.transmission}::transmission, #{data.seat}, #{data.engineType}::engine_type, #{data.brand}::vehicle_brand, 'AVAILABLE'::product_status)
     """,
     )
     @Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "id")
-    fun insertProduct(@Param("data") data: Product)
+    fun insertProduct(@Param("data") data: ProductRegisterRequest)
 
     @Select(
         """
@@ -49,18 +50,18 @@ interface ProductMapper : BaseMapper<Product> {
                 AND p.deliverable = #{request.deliverable}
             </if>
             <if test="request.transmission != null">
-                AND p.transmission = #{request.transmission}
+                AND p.transmission = #{request.transmission}::transmission
             </if>
             <if test="request.engineType != null">
-                AND p.engine_type = #{request.engineType}
+                AND p.engine_type = #{request.engineType}::engine_type
             </if>
             <if test="request.brand != null">
-                AND p.brand = #{request.brand}
+                AND p.brand = #{request.brand}::vehicle_brand
             </if>
         </script>
     """,
     )
-    fun searchProductList(@Param("request") request: ProductSearchRequest): List<ProductListResponse>?
+    fun searchProductList(@Param("request") request: ProductSearchRequest): List<ProductListResponse>
 
     @Select(
         """
@@ -77,16 +78,16 @@ interface ProductMapper : BaseMapper<Product> {
                 AND p.deliverable = #{request.deliverable}
             </if>
             <if test="request.transmission != null">
-                AND p.transmission = #{request.transmission}
+                AND p.transmission = #{request.transmission}::transmission
             </if>
             <if test="request.engineType != null">
-                AND p.engine_type = #{request.engineType}
+                AND p.engine_type = #{request.engineType}::engine_type
             </if>
             <if test="request.brand != null">
-                AND p.brand = #{request.brand}
+                AND p.brand = #{request.brand}::vehicle_brand
             </if>
             <if test="request.status != null">
-                AND p.status = #{request.status}
+                AND p.status = #{request.status}::product_status
             </if>
         </script>
     """,

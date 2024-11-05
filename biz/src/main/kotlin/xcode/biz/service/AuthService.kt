@@ -1,5 +1,8 @@
 package xcode.biz.service
 
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.util.Date
 import org.springframework.beans.BeanUtils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
@@ -25,9 +28,6 @@ import xcode.biz.shared.ResponseCode.AUTH_ERROR
 import xcode.biz.shared.ResponseCode.INVALID_OTP_TOKEN
 import xcode.biz.shared.ResponseCode.USERNAME_EXIST
 import xcode.biz.utils.CommonUtil.generateOTP
-import java.time.LocalDateTime
-import java.time.ZoneId
-import java.util.Date
 
 @Service
 class AuthService @Autowired constructor(
@@ -49,9 +49,11 @@ class AuthService @Autowired constructor(
             UserRole.CUSTOMER -> {
                 userMapper.getActiveCustomer(request.username)
             }
+
             UserRole.ADMIN -> {
                 userMapper.getActiveAdminByUsername(request.username)
             }
+
             else -> {
                 userMapper.getActiveTenantByUsername(request.username)
             }

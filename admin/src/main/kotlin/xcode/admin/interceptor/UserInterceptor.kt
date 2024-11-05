@@ -32,7 +32,8 @@ class UserInterceptor @Autowired constructor(
                 throw AppException(ResponseCode.TOKEN_ERROR)
             }
 
-            val userModel = userMapper.getActiveAdminUser(tokenModel!!.userId) ?: throw AppException(ResponseCode.UNAUTHORIZED)
+            val userModel =
+                userMapper.getActiveAdminUser(tokenModel!!.userId) ?: throw AppException(ResponseCode.UNAUTHORIZED)
 
             val userToken = UserToken()
             userModel.let { BeanUtils.copyProperties(it, userToken) }
@@ -44,7 +45,12 @@ class UserInterceptor @Autowired constructor(
         return true
     }
 
-    override fun afterCompletion(request: HttpServletRequest, response: HttpServletResponse, handler: Any, ex: Exception?) {
+    override fun afterCompletion(
+        request: HttpServletRequest,
+        response: HttpServletResponse,
+        handler: Any,
+        ex: Exception?
+    ) {
         CurrentUser.remove()
     }
 }

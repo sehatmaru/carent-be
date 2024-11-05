@@ -114,13 +114,13 @@ interface BillMapper : BaseMapper<Bill> {
                 AND bill.order_id = #{request.orderId}
             </if>
             <if test="request.paymentType != null">
-                AND bill.payment_type = #{request.paymentType}
+                AND bill.payment_type = #{request.paymentType}::payment_type
             </if>
             <if test="request.orderStatus != null">
-                AND o.status = #{request.orderStatus}
+                AND o.status = #{request.orderStatus}::order_status
             </if>
             <if test="request.paymentStatus != null">
-                AND bill.payment_status = #{request.paymentStatus}
+                AND bill.payment_status = #{request.paymentStatus}::payment_status
             </if>
             ORDER BY bill.created_date DESC
         </script>

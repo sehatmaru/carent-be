@@ -34,6 +34,7 @@ dependencies {
     implementation("com.baomidou:mybatis-plus-boot-starter:3.5.0")
     implementation("org.mybatis.spring.boot:mybatis-spring-boot-starter:2.2.0")
     implementation("org.mybatis:mybatis-spring:3.0.3")
+    implementation("com.github.pagehelper:pagehelper-spring-boot-starter:1.4.7")
 
     implementation(project(":biz")) {
         exclude("io.springfox")
