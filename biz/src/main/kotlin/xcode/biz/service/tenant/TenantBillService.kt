@@ -1,5 +1,6 @@
 package xcode.biz.service.tenant
 
+import com.github.pagehelper.PageInfo
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import xcode.biz.domain.dto.CurrentUser
@@ -15,12 +16,16 @@ class TenantBillService @Autowired constructor(
     private val billMapper: BillMapper,
 ) {
 
-    fun getBillList(request: BillFilterRequest): BaseResponse<List<BillListResponse>> {
-        val result = BaseResponse<List<BillListResponse>>()
+    fun getBillList(
+        request: BillFilterRequest,
+        pageNum: Int,
+        pageSize: Int
+    ): BaseResponse<PageInfo<BillListResponse>> {
+        val result = BaseResponse<PageInfo<BillListResponse>>()
 
         checkPermission()
 
-        result.setSuccess(billMapper.getTenantBillList(CurrentUser.get().companyId!!, request))
+        result.setSuccess(PageInfo(billMapper.getTenantBillList(CurrentUser.get().companyId!!, request)))
 
         return result
     }

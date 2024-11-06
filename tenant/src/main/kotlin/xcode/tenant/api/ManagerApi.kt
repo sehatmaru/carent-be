@@ -1,11 +1,13 @@
 package xcode.tenant.api
 
+import com.github.pagehelper.PageInfo
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import xcode.biz.domain.request.admin.AdminRegisterRequest
 import xcode.biz.domain.request.customer.CustomerFilterRequest
@@ -33,12 +35,20 @@ class ManagerApi @Autowired constructor(
     }
 
     @PostMapping("/admin/list")
-    fun getAdminList(@RequestBody request: CustomerFilterRequest): BaseResponse<List<AdminResponse>> {
-        return managerService.getAdminList(request)
+    fun getAdminList(
+        @RequestBody request: CustomerFilterRequest,
+        @RequestParam("pageNum") pageNumber: Int,
+        @RequestParam("pageSize") pageSize: Int
+    ): BaseResponse<PageInfo<AdminResponse>> {
+        return managerService.getAdminList(request, pageNumber, pageSize)
     }
 
     @PostMapping("/customer/list")
-    fun getCustomerList(@RequestBody request: CustomerFilterRequest): BaseResponse<List<TenantCustomerResponse>> {
-        return managerService.getTenantCustomerList(request)
+    fun getCustomerList(
+        @RequestBody request: CustomerFilterRequest,
+        @RequestParam("pageNum") pageNumber: Int,
+        @RequestParam("pageSize") pageSize: Int
+    ): BaseResponse<PageInfo<TenantCustomerResponse>> {
+        return managerService.getTenantCustomerList(request, pageNumber, pageSize)
     }
 }

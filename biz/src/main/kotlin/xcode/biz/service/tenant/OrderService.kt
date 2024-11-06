@@ -1,5 +1,6 @@
 package xcode.biz.service.tenant
 
+import com.github.pagehelper.PageInfo
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import xcode.biz.domain.dto.CurrentUser
@@ -14,10 +15,13 @@ class OrderService @Autowired constructor(
     private val orderMapper: OrderMapper,
 ) {
 
-    fun getDashboardOrderHistoryList(): BaseResponse<List<OrderHistoryResponse>> {
-        val result = BaseResponse<List<OrderHistoryResponse>>()
+    fun getDashboardOrderHistoryList(
+        pageNum: Int,
+        pageSize: Int
+    ): BaseResponse<PageInfo<OrderHistoryResponse>> {
+        val result = BaseResponse<PageInfo<OrderHistoryResponse>>()
 
-        result.setSuccess(orderMapper.getDashboardOrderHistory(CurrentUser.get().companyId!!))
+        result.setSuccess(PageInfo(orderMapper.getDashboardOrderHistory(CurrentUser.get().companyId!!)))
 
         return result
     }

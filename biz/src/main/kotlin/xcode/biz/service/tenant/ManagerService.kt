@@ -1,5 +1,6 @@
 package xcode.biz.service.tenant
 
+import com.github.pagehelper.PageInfo
 import java.util.Date
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
@@ -67,20 +68,28 @@ class ManagerService @Autowired constructor(
         return BaseResponse()
     }
 
-    fun getAdminList(request: CustomerFilterRequest): BaseResponse<List<AdminResponse>> {
-        val result = BaseResponse<List<AdminResponse>>()
+    fun getAdminList(
+        request: CustomerFilterRequest,
+        pageNum: Int,
+        pageSize: Int
+    ): BaseResponse<PageInfo<AdminResponse>> {
+        val result = BaseResponse<PageInfo<AdminResponse>>()
 
         checkPermission()
 
-        result.setSuccess(userMapper.getAdminList(CurrentUser.get().companyId!!, request))
+        result.setSuccess(PageInfo(userMapper.getAdminList(CurrentUser.get().companyId!!, request)))
 
         return result
     }
 
-    fun getTenantCustomerList(request: CustomerFilterRequest): BaseResponse<List<TenantCustomerResponse>> {
-        val result = BaseResponse<List<TenantCustomerResponse>>()
+    fun getTenantCustomerList(
+        request: CustomerFilterRequest,
+        pageNum: Int,
+        pageSize: Int
+    ): BaseResponse<PageInfo<TenantCustomerResponse>> {
+        val result = BaseResponse<PageInfo<TenantCustomerResponse>>()
 
-        result.setSuccess(orderMapper.getTenantCustomerList(CurrentUser.get().companyId!!, request))
+        result.setSuccess(PageInfo(orderMapper.getTenantCustomerList(CurrentUser.get().companyId!!, request)))
 
         return result
     }

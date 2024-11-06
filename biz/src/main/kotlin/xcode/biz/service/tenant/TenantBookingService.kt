@@ -1,5 +1,6 @@
 package xcode.biz.service.tenant
 
+import com.github.pagehelper.PageInfo
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import xcode.biz.domain.dto.CurrentUser
@@ -13,10 +14,14 @@ class TenantBookingService @Autowired constructor(
     private val bookingMapper: BookingMapper,
 ) {
 
-    fun getBookingList(request: BookingFilterRequest): BaseResponse<List<TenantBookingListResponse>> {
-        val result = BaseResponse<List<TenantBookingListResponse>>()
+    fun getBookingList(
+        request: BookingFilterRequest,
+        pageNum: Int,
+        pageSize: Int
+    ): BaseResponse<PageInfo<TenantBookingListResponse>> {
+        val result = BaseResponse<PageInfo<TenantBookingListResponse>>()
 
-        result.setSuccess(bookingMapper.getTenantBookingList(CurrentUser.get().companyId!!, request))
+        result.setSuccess(PageInfo(bookingMapper.getTenantBookingList(CurrentUser.get().companyId!!, request)))
 
         return result
     }

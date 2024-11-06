@@ -1,5 +1,6 @@
 package xcode.biz.service.tenant
 
+import com.github.pagehelper.PageInfo
 import java.util.Date
 import org.springframework.beans.BeanUtils
 import org.springframework.beans.factory.annotation.Autowired
@@ -35,12 +36,16 @@ class VehicleService @Autowired constructor(
         return BaseResponse()
     }
 
-    fun getVehicleList(request: VehicleFilterRequest): BaseResponse<List<VehicleResponse>> {
-        val result = BaseResponse<List<VehicleResponse>>()
+    fun getVehicleList(
+        request: VehicleFilterRequest,
+        pageNum: Int,
+        pageSize: Int
+    ): BaseResponse<PageInfo<VehicleResponse>> {
+        val result = BaseResponse<PageInfo<VehicleResponse>>()
 
         checkPermission()
 
-        result.setSuccess(vehicleMapper.getVehicleList(CurrentUser.get().companyId!!, request))
+        result.setSuccess(PageInfo(vehicleMapper.getVehicleList(CurrentUser.get().companyId!!, request)))
 
         return result
     }
