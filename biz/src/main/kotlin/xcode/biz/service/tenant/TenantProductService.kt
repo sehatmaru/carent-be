@@ -46,6 +46,14 @@ class TenantProductService @Autowired constructor(
         return BaseResponse()
     }
 
+    fun deleteProduct(productId: Int): BaseResponse<Int> {
+        checkPermission()
+
+        productMapper.deleteProduct(productId)
+
+        return BaseResponse()
+    }
+
     fun getProductList(
         request: ProductSearchRequest,
         pageNum: Int,

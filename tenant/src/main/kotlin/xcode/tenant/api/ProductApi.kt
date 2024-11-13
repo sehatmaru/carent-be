@@ -35,6 +35,11 @@ class ProductApi @Autowired constructor(
         return tenantProductService.updateProduct(productId, request)
     }
 
+    @PostMapping("/delete/{productId}")
+    fun register(@PathVariable("productId") productId: Int): BaseResponse<Int> {
+        return tenantProductService.deleteProduct(productId)
+    }
+
     @PostMapping("/list")
     fun getProductList(
         @RequestBody @Validated request: ProductSearchRequest,

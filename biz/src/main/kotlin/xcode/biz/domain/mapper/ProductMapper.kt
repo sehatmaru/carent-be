@@ -34,6 +34,13 @@ interface ProductMapper : BaseMapper<Product> {
     )
     fun updateProduct(@Param("id") productId: Int, @Param("data") data: ProductUpdateRequest)
 
+    @Update(
+        """
+        UPDATE t_product SET deleted_date = NOW() WHERE id = #{id}
+    """,
+    )
+    fun deleteProduct(@Param("id") productId: Int)
+
     @Select(
         """
         <script>
@@ -78,6 +85,7 @@ interface ProductMapper : BaseMapper<Product> {
         <script>
             SELECT p.id, p.name, p.price, p.deliverable, p.status, p.quantity, p.available, p.brand, p.seat, p.transmission, p.engine_type, p.seat FROM t_product p
             WHERE p.company_id = #{companyId}
+            AND p.deleted_date IS NULL
             <if test="request.id != null">
                 AND p.id = #{request.id}
             </if>
