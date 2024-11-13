@@ -6,9 +6,11 @@ import org.apache.ibatis.annotations.Mapper
 import org.apache.ibatis.annotations.Options
 import org.apache.ibatis.annotations.Param
 import org.apache.ibatis.annotations.Select
+import org.apache.ibatis.annotations.Update
 import xcode.biz.domain.model.Product
 import xcode.biz.domain.request.product.ProductRegisterRequest
 import xcode.biz.domain.request.product.ProductSearchRequest
+import xcode.biz.domain.request.product.ProductUpdateRequest
 import xcode.biz.domain.response.product.ProductListResponse
 import xcode.biz.domain.response.product.TenantProductListResponse
 
@@ -18,11 +20,19 @@ interface ProductMapper : BaseMapper<Product> {
     @Insert(
         """
         INSERT INTO t_product(company_id, name, price, quantity, available, province_id, province_name, regency_id, regency_name, district_id, district_name, deliverable, transmission, seat, engine_type, brand, status) 
-        VALUES (#{data.companyId}, #{data.name}, #{data.price}, 0, #{data.available}, #{data.provinceId}, #{data.provinceName}, #{data.regencyId}, #{data.regencyName}, #{data.districtId}, #{data.districtName}, #{data.deliverable}, #{data.transmission}::transmission, #{data.seat}, #{data.engineType}::engine_type, #{data.brand}::vehicle_brand, 'AVAILABLE'::product_status)
+        VALUES (#{data.companyId}, #{data.name}, #{data.price}, #{data.quantity}, #{data.available}, #{data.provinceId}, #{data.provinceName}, #{data.regencyId}, #{data.regencyName}, #{data.districtId}, #{data.districtName}, #{data.deliverable}, #{data.transmission}::transmission, #{data.seat}, #{data.engineType}::engine_type, #{data.brand}::vehicle_brand, 'AVAILABLE'::product_status)
     """,
     )
     @Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "id")
     fun insertProduct(@Param("data") data: ProductRegisterRequest)
+
+    @Update(
+        """
+        UPDATE t_product SET name = #{data.name}, price = #{data.price}, quantity = #{data.quantity}, available = #{data.available}, deliverable = #{data.deliverable}, transmission = #{data.transmission}::transmission, seat = #{data.seat}, engine_type = #{data.engineType}::engine_type, brand = #{data.brand}::vehicle_brand
+        WHERE id = #{id}
+    """,
+    )
+    fun updateProduct(@Param("id") productId: Int, @Param("data") data: ProductUpdateRequest)
 
     @Select(
         """
@@ -66,7 +76,7 @@ interface ProductMapper : BaseMapper<Product> {
     @Select(
         """
         <script>
-            SELECT p.id, p.name, p.price, p.deliverable, p.status, p.brand, p.seat, p.transmission, p.engine_type, p.seat FROM t_product p
+            SELECT p.id, p.name, p.price, p.deliverable, p.status, p.quantity, p.available, p.brand, p.seat, p.transmission, p.engine_type, p.seat FROM t_product p
             WHERE p.company_id = #{companyId}
             <if test="request.id != null">
                 AND p.id = #{request.id}
@@ -89,8 +99,12 @@ interface ProductMapper : BaseMapper<Product> {
             <if test="request.status != null">
                 AND p.status = #{request.status}::product_status
             </if>
+            ORDER BY p.created_date DESC
         </script>
     """,
     )
-    fun getTenantProductList(@Param("companyId") companyId: Int, @Param("request") request: ProductSearchRequest): List<TenantProductListResponse>?
+    fun getTenantProductList(
+        @Param("companyId") companyId: Int,
+        @Param("request") request: ProductSearchRequest
+    ): List<TenantProductListResponse>?
 }

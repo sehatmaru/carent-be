@@ -8,8 +8,8 @@ import xcode.biz.domain.dto.CurrentUser
 import xcode.biz.domain.mapper.ProductMapper
 import xcode.biz.domain.request.product.ProductRegisterRequest
 import xcode.biz.domain.request.product.ProductSearchRequest
+import xcode.biz.domain.request.product.ProductUpdateRequest
 import xcode.biz.domain.response.BaseResponse
-import xcode.biz.domain.response.auth.LoginResponse
 import xcode.biz.domain.response.product.TenantProductListResponse
 import xcode.biz.exception.AppException
 import xcode.biz.service.GeoService
@@ -21,7 +21,7 @@ class TenantProductService @Autowired constructor(
     private val geoService: GeoService
 ) {
 
-    fun registerProduct(request: ProductRegisterRequest): BaseResponse<LoginResponse> {
+    fun registerProduct(request: ProductRegisterRequest): BaseResponse<Int> {
         checkPermission()
         request.validate()
 
@@ -34,6 +34,14 @@ class TenantProductService @Autowired constructor(
         request.companyId = CurrentUser.get().companyId
 
         productMapper.insertProduct(request)
+
+        return BaseResponse()
+    }
+
+    fun updateProduct(productId: Int, request: ProductUpdateRequest): BaseResponse<Int> {
+        checkPermission()
+
+        productMapper.updateProduct(productId, request)
 
         return BaseResponse()
     }

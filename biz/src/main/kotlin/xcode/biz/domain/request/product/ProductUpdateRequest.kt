@@ -1,20 +1,18 @@
-package xcode.biz.domain.response.product
+package xcode.biz.domain.request.product
 
 import xcode.biz.enums.EngineType
-import xcode.biz.enums.ProductStatus
 import xcode.biz.enums.Transmission
 import xcode.biz.enums.VehicleBrand
 
-class TenantProductListResponse {
-    var id: Int? = null
-    var transmission: Transmission? = null
-    var seat: Int? = 0
+class ProductUpdateRequest {
+    var id = 0
     var name = ""
     var price: Int? = null
+    var deliverable = false
     var quantity: Int? = null
     var available: Int? = null
-    var deliverable = false
+    var transmission: Transmission? = null
+    var seat: Int? = null
     var engineType: EngineType? = null
     var brand: VehicleBrand? = null
-    var status: ProductStatus? = null
 }
