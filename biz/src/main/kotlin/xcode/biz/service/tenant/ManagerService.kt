@@ -5,16 +5,19 @@ import java.util.Date
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import xcode.biz.domain.dto.CurrentUser
+import xcode.biz.domain.mapper.CompanyMapper
 import xcode.biz.domain.mapper.OrderMapper
 import xcode.biz.domain.mapper.UserMapper
 import xcode.biz.domain.model.User
 import xcode.biz.domain.request.admin.AdminRegisterRequest
 import xcode.biz.domain.request.admin.AdminUpdateRequest
+import xcode.biz.domain.request.company.CompanyUpdateRequest
 import xcode.biz.domain.request.customer.CustomerFilterRequest
 import xcode.biz.domain.response.BaseResponse
 import xcode.biz.domain.response.admin.AdminResponse
 import xcode.biz.domain.response.auth.LoginResponse
 import xcode.biz.domain.response.auth.RegisterResponse
+import xcode.biz.domain.response.company.CompanyResponse
 import xcode.biz.domain.response.customer.TenantCustomerResponse
 import xcode.biz.enums.UserRole
 import xcode.biz.exception.AppException
@@ -28,6 +31,7 @@ class ManagerService @Autowired constructor(
     private val userMapper: UserMapper,
     private val jasyptService: JasyptService,
     private val orderMapper: OrderMapper,
+    private val companyMapper: CompanyMapper,
 ) {
 
     fun registerAdmin(request: AdminRegisterRequest): BaseResponse<LoginResponse> {
@@ -123,6 +127,24 @@ class ManagerService @Autowired constructor(
         result.setSuccess(PageInfo(orderMapper.getTenantCustomerList(CurrentUser.get().companyId!!, request)))
 
         return result
+    }
+
+    fun getCompanyDetail(): BaseResponse<CompanyResponse> {
+        val result = BaseResponse<CompanyResponse>()
+
+        checkPermission()
+
+        result.setSuccess(companyMapper.getCompany(CurrentUser.get().companyId!!))
+
+        return result
+    }
+
+    fun updateCompany(request: CompanyUpdateRequest): BaseResponse<Boolean> {
+        checkPermission()
+
+        companyMapper.updateCompany(request)
+
+        return BaseResponse()
     }
 
     fun checkPermission() {

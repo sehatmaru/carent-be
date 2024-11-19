@@ -3,6 +3,7 @@ package xcode.tenant.api
 import com.github.pagehelper.PageInfo
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.validation.annotation.Validated
+import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -11,11 +12,13 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import xcode.biz.domain.request.admin.AdminRegisterRequest
 import xcode.biz.domain.request.admin.AdminUpdateRequest
+import xcode.biz.domain.request.company.CompanyUpdateRequest
 import xcode.biz.domain.request.customer.CustomerFilterRequest
 import xcode.biz.domain.response.BaseResponse
 import xcode.biz.domain.response.admin.AdminResponse
 import xcode.biz.domain.response.auth.LoginResponse
 import xcode.biz.domain.response.auth.RegisterResponse
+import xcode.biz.domain.response.company.CompanyResponse
 import xcode.biz.domain.response.customer.TenantCustomerResponse
 import xcode.biz.service.tenant.ManagerService
 
@@ -64,5 +67,17 @@ class ManagerApi @Autowired constructor(
     @PostMapping("/admin/delete/{adminId}")
     fun deleteAdmin(@PathVariable("adminId") adminId: Int): BaseResponse<Int> {
         return managerService.deleteAdmin(adminId)
+    }
+
+    @GetMapping("/company/detail")
+    fun getCompanyDetail(): BaseResponse<CompanyResponse> {
+        return managerService.getCompanyDetail()
+    }
+
+    @PostMapping("/company/update")
+    fun updateCompany(
+        @RequestBody @Validated request: CompanyUpdateRequest
+    ): BaseResponse<Boolean> {
+        return managerService.updateCompany(request)
     }
 }
