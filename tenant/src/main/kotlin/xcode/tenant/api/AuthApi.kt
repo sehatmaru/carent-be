@@ -36,7 +36,7 @@ class AuthApi @Autowired constructor(
     }
 
     @PostMapping("/logout")
-    fun logout(): BaseResponse<RegisterResponse> {
+    fun logout(): BaseResponse<Boolean> {
         return authService.logout()
     }
 }

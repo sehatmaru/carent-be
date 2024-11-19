@@ -153,13 +153,13 @@ class AuthService @Autowired constructor(
         return BaseResponse()
     }
 
-    fun logout(): BaseResponse<RegisterResponse> {
+    fun logout(): BaseResponse<Boolean> {
         val token = tokenMapper.getToken(CurrentUser.get().token)
 
         if (token == null) {
             throw AppException(ResponseCode.NOT_FOUND)
         } else {
-            // tokenMapper.delete(token)
+            tokenMapper.deleteToken(token.code)
         }
 
         return BaseResponse()

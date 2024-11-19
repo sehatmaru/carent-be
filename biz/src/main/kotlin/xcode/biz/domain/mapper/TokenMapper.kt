@@ -1,6 +1,7 @@
 package xcode.biz.domain.mapper
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper
+import org.apache.ibatis.annotations.Delete
 import org.apache.ibatis.annotations.Insert
 import org.apache.ibatis.annotations.Mapper
 import org.apache.ibatis.annotations.Options
@@ -33,4 +34,7 @@ interface TokenMapper : BaseMapper<Token> {
 
     @Select("""SELECT * FROM t_token WHERE code = #{code} AND is_active IS TRUE AND type = 'OTP' LIMIT 1""")
     fun getOtpToken(@Param("code") code: String): Token?
+
+    @Delete("""DELETE FROM t_token WHERE code = #{code}""")
+    fun deleteToken(@Param("code") code: String)
 }
