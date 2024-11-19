@@ -19,8 +19,8 @@ interface ProductMapper : BaseMapper<Product> {
 
     @Insert(
         """
-        INSERT INTO t_product(company_id, name, price, quantity, available, province_id, province_name, regency_id, regency_name, district_id, district_name, deliverable, transmission, seat, engine_type, brand, status) 
-        VALUES (#{data.companyId}, #{data.name}, #{data.price}, #{data.quantity}, #{data.available}, #{data.provinceId}, #{data.provinceName}, #{data.regencyId}, #{data.regencyName}, #{data.districtId}, #{data.districtName}, #{data.deliverable}, #{data.transmission}::transmission, #{data.seat}, #{data.engineType}::engine_type, #{data.brand}::vehicle_brand, 'AVAILABLE'::product_status)
+        INSERT INTO t_product(company_id, name, price, province_id, province_name, regency_id, regency_name, district_id, district_name, deliverable, transmission, seat, engine_type, brand, status) 
+        VALUES (#{data.companyId}, #{data.name}, #{data.price}, #{data.provinceId}, #{data.provinceName}, #{data.regencyId}, #{data.regencyName}, #{data.districtId}, #{data.districtName}, #{data.deliverable}, #{data.transmission}::transmission, #{data.seat}, #{data.engineType}::engine_type, #{data.brand}::vehicle_brand, 'AVAILABLE'::product_status)
     """,
     )
     @Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "id")
@@ -28,7 +28,7 @@ interface ProductMapper : BaseMapper<Product> {
 
     @Update(
         """
-        UPDATE t_product SET name = #{data.name}, price = #{data.price}, quantity = #{data.quantity}, available = #{data.available}, deliverable = #{data.deliverable}, transmission = #{data.transmission}::transmission, seat = #{data.seat}, engine_type = #{data.engineType}::engine_type, brand = #{data.brand}::vehicle_brand, updated_date = NOW()
+        UPDATE t_product SET name = #{data.name}, price = #{data.price}, deliverable = #{data.deliverable}, transmission = #{data.transmission}::transmission, seat = #{data.seat}, engine_type = #{data.engineType}::engine_type, brand = #{data.brand}::vehicle_brand, updated_date = NOW()
         WHERE id = #{id}
     """,
     )

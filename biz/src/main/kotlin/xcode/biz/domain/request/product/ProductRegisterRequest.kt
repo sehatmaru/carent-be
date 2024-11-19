@@ -16,8 +16,6 @@ class ProductRegisterRequest {
     var districtId: Int? = null
     var deliverable = false
     var companyId: Int? = null
-    var quantity: Int? = null
-    var available: Int? = null
     var provinceName = ""
     var regencyName = ""
     var districtName = ""

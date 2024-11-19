@@ -9,8 +9,6 @@ class ProductUpdateRequest {
     var name = ""
     var price: Int? = null
     var deliverable = false
-    var quantity: Int? = null
-    var available: Int? = null
     var transmission: Transmission? = null
     var seat: Int? = null
     var engineType: EngineType? = null
