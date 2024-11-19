@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import xcode.biz.domain.request.admin.AdminRegisterRequest
+import xcode.biz.domain.request.admin.AdminUpdateRequest
 import xcode.biz.domain.request.customer.CustomerFilterRequest
 import xcode.biz.domain.response.BaseResponse
 import xcode.biz.domain.response.admin.AdminResponse
@@ -50,5 +51,18 @@ class ManagerApi @Autowired constructor(
         @RequestParam("pageSize") pageSize: Int
     ): BaseResponse<PageInfo<TenantCustomerResponse>> {
         return managerService.getTenantCustomerList(request, pageNumber, pageSize)
+    }
+
+    @PostMapping("/admin/update/{adminId}")
+    fun updateAdmin(
+        @PathVariable("adminId") adminId: Int,
+        @RequestBody @Validated request: AdminUpdateRequest
+    ): BaseResponse<Int> {
+        return managerService.updateAdmin(adminId, request)
+    }
+
+    @PostMapping("/admin/delete/{adminId}")
+    fun deleteAdmin(@PathVariable("adminId") adminId: Int): BaseResponse<Int> {
+        return managerService.deleteAdmin(adminId)
     }
 }

@@ -28,7 +28,7 @@ interface ProductMapper : BaseMapper<Product> {
 
     @Update(
         """
-        UPDATE t_product SET name = #{data.name}, price = #{data.price}, quantity = #{data.quantity}, available = #{data.available}, deliverable = #{data.deliverable}, transmission = #{data.transmission}::transmission, seat = #{data.seat}, engine_type = #{data.engineType}::engine_type, brand = #{data.brand}::vehicle_brand
+        UPDATE t_product SET name = #{data.name}, price = #{data.price}, quantity = #{data.quantity}, available = #{data.available}, deliverable = #{data.deliverable}, transmission = #{data.transmission}::transmission, seat = #{data.seat}, engine_type = #{data.engineType}::engine_type, brand = #{data.brand}::vehicle_brand, updated_date = NOW()
         WHERE id = #{id}
     """,
     )
@@ -107,7 +107,7 @@ interface ProductMapper : BaseMapper<Product> {
             <if test="request.status != null">
                 AND p.status = #{request.status}::product_status
             </if>
-            ORDER BY p.created_date DESC
+            ORDER BY p.updated_date DESC
         </script>
     """,
     )

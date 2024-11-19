@@ -33,9 +33,9 @@ class BaseResponse<T> {
         this.message = ResponseCode.FAILED + ": " + message
     }
 
-    fun setConflict() {
+    fun setConflict(message: String) {
         this.statusCode = HttpStatus.CONFLICT.value()
-        this.message = ResponseCode.EXIST
+        this.message = message
     }
 
     fun setInvalidMethod(message: String?) {

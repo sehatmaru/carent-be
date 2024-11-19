@@ -9,6 +9,7 @@ import xcode.biz.domain.mapper.OrderMapper
 import xcode.biz.domain.mapper.UserMapper
 import xcode.biz.domain.model.User
 import xcode.biz.domain.request.admin.AdminRegisterRequest
+import xcode.biz.domain.request.admin.AdminUpdateRequest
 import xcode.biz.domain.request.customer.CustomerFilterRequest
 import xcode.biz.domain.response.BaseResponse
 import xcode.biz.domain.response.admin.AdminResponse
@@ -33,7 +34,7 @@ class ManagerService @Autowired constructor(
         checkPermission()
         request.validate()
 
-        if (userMapper.getActiveUser(request.username, request.email) != null) {
+        userMapper.getActiveUser(request.username, request.email)?.let {
             throw AppException(USERNAME_EXIST)
         }
 
@@ -64,6 +65,36 @@ class ManagerService @Autowired constructor(
         user.deletedDate = Date()
 
         userMapper.insertUser(user)
+
+        return BaseResponse()
+    }
+
+    fun updateAdmin(adminId: Int, request: AdminUpdateRequest): BaseResponse<Int> {
+        val user = userMapper.getActiveTenantAdmin(adminId) ?: throw AppException(NOT_FOUND)
+
+        if (user.createdBy != CurrentUser.get().id) {
+            throw AppException(UNAUTHORIZED)
+        }
+
+        if (user.email != request.email || user.username != request.username) {
+            userMapper.getActiveUser(request.username, request.email)?.let {
+                throw AppException(USERNAME_EXIST)
+            }
+        }
+
+        userMapper.updateAdmin(adminId, request)
+
+        return BaseResponse()
+    }
+
+    fun deleteAdmin(adminId: Int): BaseResponse<Int> {
+        val user = userMapper.getActiveTenantAdmin(adminId) ?: throw AppException(NOT_FOUND)
+
+        if (user.createdBy != CurrentUser.get().id) {
+            throw AppException(UNAUTHORIZED)
+        }
+
+        userMapper.deleteAdmin(adminId)
 
         return BaseResponse()
     }

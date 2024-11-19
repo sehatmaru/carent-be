@@ -28,7 +28,7 @@ class ProductApi @Autowired constructor(
     }
 
     @PostMapping("/update/{productId}")
-    fun register(
+    fun updateProduct(
         @PathVariable("productId") productId: Int,
         @RequestBody @Validated request: ProductUpdateRequest
     ): BaseResponse<Int> {
@@ -36,7 +36,7 @@ class ProductApi @Autowired constructor(
     }
 
     @PostMapping("/delete/{productId}")
-    fun register(@PathVariable("productId") productId: Int): BaseResponse<Int> {
+    fun deleteProduct(@PathVariable("productId") productId: Int): BaseResponse<Int> {
         return tenantProductService.deleteProduct(productId)
     }
 

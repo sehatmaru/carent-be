@@ -114,7 +114,7 @@ class BaseException : ResponseEntityExceptionHandler() {
             EXIST,
             USERNAME_EXIST,
             -> {
-                response.setConflict()
+                ex.message?.let { response.setConflict(it) }
             }
 
             else -> ex.message?.let { response.setBadRequest(it) }

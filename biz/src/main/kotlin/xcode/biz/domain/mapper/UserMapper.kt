@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Param
 import org.apache.ibatis.annotations.Select
 import org.apache.ibatis.annotations.Update
 import xcode.biz.domain.model.User
+import xcode.biz.domain.request.admin.AdminUpdateRequest
 import xcode.biz.domain.request.customer.CustomerFilterRequest
 import xcode.biz.domain.response.admin.AdminResponse
 
@@ -16,8 +17,8 @@ interface UserMapper : BaseMapper<User> {
 
     @Insert(
         """
-        INSERT INTO t_user (company_id, created_by, full_name, mobile, username, email, credential_no, credential_type, password, role, rating)
-        VALUES (#{data.companyId}, #{data.createdBy}, #{data.fullName}, #{data.mobile}, #{data.username}, #{data.email}, #{data.credentialNo}, #{data.credentialType}::credential_type, #{data.password}, #{data.role}::user_role, 0)
+        INSERT INTO t_user (company_id, created_by, full_name, mobile, username, email, credential_no, credential_type, password, role, rating, verified_date)
+        VALUES (#{data.companyId}, #{data.createdBy}, #{data.fullName}, #{data.mobile}, #{data.username}, #{data.email}, #{data.credentialNo}, #{data.credentialType}::credential_type, #{data.password}, #{data.role}::user_role, 0, #{data.verifiedDate})
     """,
     )
     @Options(useGeneratedKeys = true, keyProperty = "data.id")
@@ -93,6 +94,7 @@ interface UserMapper : BaseMapper<User> {
             SELECT u.id, u.full_name as "name", u.username, u.mobile, u.email, u.verified_date as "join_date"
             FROM t_user u
             WHERE u.role = 'TENANT_ADMIN' AND u.verified_date IS NOT NULL
+            AND u.deleted_date IS NULL
             <if test="request.name != null">
                 AND u.full_name ILIKE CONCAT('%', #{request.name}, '%')
             </if>
@@ -102,6 +104,7 @@ interface UserMapper : BaseMapper<User> {
             <if test="request.username != null">
                 AND u.username ILIKE CONCAT('%', #{request.username}, '%')
             </if>
+            ORDER BY u.updated_date DESC
         </script>
     """,
     )
@@ -109,4 +112,19 @@ interface UserMapper : BaseMapper<User> {
         @Param("companyId") companyId: Int,
         @Param("request") request: CustomerFilterRequest,
     ): List<AdminResponse>
+
+    @Update(
+        """
+        UPDATE t_user SET full_name = #{data.fullName}, username = #{data.username}, email = #{data.email}, mobile = #{data.mobile}, updated_date = NOW()
+        WHERE id = #{id}
+    """,
+    )
+    fun updateAdmin(@Param("id") productId: Int, @Param("data") data: AdminUpdateRequest)
+
+    @Update(
+        """
+        UPDATE t_user SET deleted_date = NOW() WHERE id = #{id}
+    """,
+    )
+    fun deleteAdmin(@Param("id") productId: Int)
 }
