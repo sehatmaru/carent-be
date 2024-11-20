@@ -3,6 +3,7 @@ package xcode.tenant.api
 import com.github.pagehelper.PageInfo
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.validation.annotation.Validated
+import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -13,6 +14,7 @@ import xcode.biz.domain.request.product.ProductRegisterRequest
 import xcode.biz.domain.request.product.ProductSearchRequest
 import xcode.biz.domain.request.product.ProductUpdateRequest
 import xcode.biz.domain.response.BaseResponse
+import xcode.biz.domain.response.product.ProductOptionListResponse
 import xcode.biz.domain.response.product.TenantProductListResponse
 import xcode.biz.service.tenant.TenantProductService
 
@@ -47,5 +49,12 @@ class ProductApi @Autowired constructor(
         @RequestParam("pageSize") pageSize: Int
     ): BaseResponse<PageInfo<TenantProductListResponse>> {
         return tenantProductService.getProductList(request, pageNumber, pageSize)
+    }
+
+    @GetMapping("/list/option")
+    fun getRegencies(
+        @RequestParam("name", required = false) name: String,
+    ): BaseResponse<List<ProductOptionListResponse>> {
+        return tenantProductService.getProductOptionList(name)
     }
 }

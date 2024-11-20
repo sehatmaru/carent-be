@@ -10,6 +10,7 @@ import xcode.biz.domain.request.product.ProductRegisterRequest
 import xcode.biz.domain.request.product.ProductSearchRequest
 import xcode.biz.domain.request.product.ProductUpdateRequest
 import xcode.biz.domain.response.BaseResponse
+import xcode.biz.domain.response.product.ProductOptionListResponse
 import xcode.biz.domain.response.product.TenantProductListResponse
 import xcode.biz.exception.AppException
 import xcode.biz.service.GeoService
@@ -70,6 +71,14 @@ class TenantProductService @Autowired constructor(
 
         PageHelper.startPage<TenantProductListResponse>(pageNum, pageSize)
         result.setSuccess(PageInfo(productMapper.getTenantProductList(CurrentUser.get().companyId!!, request)))
+
+        return result
+    }
+
+    fun getProductOptionList(name: String): BaseResponse<List<ProductOptionListResponse>> {
+        val result = BaseResponse<List<ProductOptionListResponse>>()
+
+        result.setSuccess(productMapper.getTenantProductOptionList(CurrentUser.get().companyId!!, name))
 
         return result
     }

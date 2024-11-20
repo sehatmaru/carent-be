@@ -7,7 +7,6 @@ import xcode.biz.enums.VehicleBrand
 class VehicleFilterRequest {
     var id: Int? = null
     var productId: Int? = null
-    var name: String? = null
     var engineType: EngineType? = null
     var transmission: Transmission? = null
     var brand: VehicleBrand? = null

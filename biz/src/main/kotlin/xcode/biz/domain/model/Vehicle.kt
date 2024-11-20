@@ -5,11 +5,12 @@ import com.baomidou.mybatisplus.annotation.IdType
 import com.baomidou.mybatisplus.annotation.TableField
 import com.baomidou.mybatisplus.annotation.TableId
 import com.baomidou.mybatisplus.annotation.TableName
+import java.util.Date
 import lombok.AllArgsConstructor
 import lombok.Builder
 import lombok.Data
 import lombok.NoArgsConstructor
-import java.util.Date
+import xcode.biz.enums.VehicleStatus
 
 @Data
 @TableName("t_vehicle")
@@ -26,7 +27,7 @@ class Vehicle {
     var year = ""
     var licenseNumber = ""
     var rating: Int? = null
-    var createdBy: Int? = null
+    var status: VehicleStatus? = null
 
     @TableField(fill = FieldFill.INSERT)
     var createdDate: Date? = null

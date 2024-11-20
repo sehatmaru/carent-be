@@ -12,6 +12,7 @@ import xcode.biz.domain.request.product.ProductRegisterRequest
 import xcode.biz.domain.request.product.ProductSearchRequest
 import xcode.biz.domain.request.product.ProductUpdateRequest
 import xcode.biz.domain.response.product.ProductListResponse
+import xcode.biz.domain.response.product.ProductOptionListResponse
 import xcode.biz.domain.response.product.TenantProductListResponse
 
 @Mapper
@@ -127,4 +128,33 @@ interface ProductMapper : BaseMapper<Product> {
         @Param("companyId") companyId: Int,
         @Param("request") request: ProductSearchRequest
     ): List<TenantProductListResponse>?
+
+    @Select(
+        """
+        <script>
+            SELECT p.id, p.name FROM t_product p
+            WHERE p.company_id = #{companyId}
+            AND p.deleted_date IS NULL
+            <if test="name != null">
+                AND p.name ILIKE CONCAT('%', #{name}, '%')
+            </if>
+            ORDER BY p.name
+        </script>
+    """,
+    )
+    fun getTenantProductOptionList(
+        @Param("companyId") companyId: Int,
+        @Param("name") name: String
+    ): List<ProductOptionListResponse>?
+
+    @Select("""SELECT p.* FROM t_product p WHERE p.id = #{id} AND p.deleted_date IS NULL""")
+    fun getProductById(
+        @Param("id") id: Int
+    ): Product?
+
+    @Update("""UPDATE t_product SET quantity = quantity+1, available = available+1, updated_date = NOW() WHERE id = #{id}""")
+    fun increaseProductQuantity(@Param("id") productId: Int)
+
+    @Update("""UPDATE t_product SET quantity = quantity-1, available = available-1, updated_date = NOW() WHERE id = #{id}""")
+    fun decreaseProductQuantity(@Param("id") productId: Int)
 }

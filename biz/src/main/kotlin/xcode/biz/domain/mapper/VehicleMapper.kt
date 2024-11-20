@@ -6,8 +6,11 @@ import org.apache.ibatis.annotations.Mapper
 import org.apache.ibatis.annotations.Options
 import org.apache.ibatis.annotations.Param
 import org.apache.ibatis.annotations.Select
+import org.apache.ibatis.annotations.Update
 import xcode.biz.domain.model.Vehicle
 import xcode.biz.domain.request.vehicle.VehicleFilterRequest
+import xcode.biz.domain.request.vehicle.VehicleRegisterRequest
+import xcode.biz.domain.request.vehicle.VehicleUpdateRequest
 import xcode.biz.domain.response.vehicle.VehicleResponse
 
 @Mapper
@@ -15,12 +18,28 @@ interface VehicleMapper : BaseMapper<Vehicle> {
 
     @Insert(
         """
-        INSERT INTO t_vehicle (status, product_id, created_by, license_number, name, rating, year)
-        VALUES (#{data.status}, #{data.productId}, #{data.createdBy}, #{data.licenseNumber}, #{data.name}, #{data.rating}, #{data.year})
+        INSERT INTO t_vehicle (product_id, license_number, year)
+        VALUES (#{data.productId}, #{data.licenseNumber}, #{data.year})
     """,
     )
     @Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "id")
-    fun insertVehicle(@Param("data") data: Vehicle)
+    fun insertVehicle(@Param("data") data: VehicleRegisterRequest)
+
+
+    @Update(
+        """
+        UPDATE t_vehicle SET product_id = #{data.productId}, license_number = #{data.licenseNumber}, year = #{data.year}, updated_date = NOW()
+        WHERE id = #{id}
+    """,
+    )
+    fun updateVehicle(@Param("id") vehicleId: Int, @Param("data") data: VehicleUpdateRequest)
+
+    @Update(
+        """
+        UPDATE t_vehicle SET deleted_date = NOW() WHERE id = #{id}
+    """,
+    )
+    fun deleteVehicle(@Param("id") vehicleId: Int)
 
     @Select(
         """
@@ -28,11 +47,9 @@ interface VehicleMapper : BaseMapper<Vehicle> {
             SELECT v.*, p.id AS "product_id", p.name AS "product_name", p.brand, p.engine_type, p.transmission FROM t_product p
             JOIN t_vehicle v ON v.product_id = p.id
             WHERE p.company_id = #{companyId}
+            AND v.deleted_date IS NULL
             <if test="request.id != null">
                 AND v.id = #{request.id}
-            </if>
-            <if test="request.name != null">
-                AND v.name ILIKE CONCAT('%', #{request.name}, '%')
             </if>
             <if test="request.productId != null">
                 AND p.id = #{request.productId}
