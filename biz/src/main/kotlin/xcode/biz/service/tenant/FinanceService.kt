@@ -40,7 +40,6 @@ class FinanceService @Autowired constructor(
 
     fun getBalanceReport(): BaseResponse<BalanceReportResponse> {
         val result = BaseResponse<BalanceReportResponse>()
-        checkPermission()
 
         val response = BalanceReportResponse()
         val companyId = CurrentUser.get().companyId!!

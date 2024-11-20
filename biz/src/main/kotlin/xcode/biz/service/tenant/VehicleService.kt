@@ -60,8 +60,6 @@ class VehicleService @Autowired constructor(
     ): BaseResponse<PageInfo<VehicleResponse>> {
         val result = BaseResponse<PageInfo<VehicleResponse>>()
 
-        checkPermission()
-
         result.setSuccess(PageInfo(vehicleMapper.getVehicleList(CurrentUser.get().companyId!!, request)))
 
         return result

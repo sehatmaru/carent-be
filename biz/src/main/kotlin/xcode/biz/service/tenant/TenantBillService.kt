@@ -23,8 +23,6 @@ class TenantBillService @Autowired constructor(
     ): BaseResponse<PageInfo<BillListResponse>> {
         val result = BaseResponse<PageInfo<BillListResponse>>()
 
-        checkPermission()
-
         result.setSuccess(PageInfo(billMapper.getTenantBillList(CurrentUser.get().companyId!!, request)))
 
         return result
