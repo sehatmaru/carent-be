@@ -41,6 +41,13 @@ class TenantProductService @Autowired constructor(
     fun updateProduct(productId: Int, request: ProductUpdateRequest): BaseResponse<Int> {
         checkPermission()
 
+        request.provinceName =
+            request.provinceId?.let { geoService.getProvince(it).result?.name ?: "NOT FOUND" }.toString()
+        request.regencyName =
+            request.regencyId?.let { geoService.getRegency(it).result?.name ?: "NOT FOUND" }.toString()
+        request.districtName =
+            request.districtId?.let { geoService.getDistrict(it).result?.name ?: "NOT FOUND" }.toString()
+
         productMapper.updateProduct(productId, request)
 
         return BaseResponse()

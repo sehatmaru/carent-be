@@ -8,6 +8,12 @@ class ProductUpdateRequest {
     var id = 0
     var name = ""
     var price: Int? = null
+    var provinceId: Int? = null
+    var regencyId: Int? = null
+    var districtId: Int? = null
+    var provinceName = ""
+    var regencyName = ""
+    var districtName = ""
     var deliverable = false
     var transmission: Transmission? = null
     var seat: Int? = null

@@ -19,8 +19,8 @@ interface ProductMapper : BaseMapper<Product> {
 
     @Insert(
         """
-        INSERT INTO t_product(company_id, name, price, province_id, province_name, regency_id, regency_name, district_id, district_name, deliverable, transmission, seat, engine_type, brand, status) 
-        VALUES (#{data.companyId}, #{data.name}, #{data.price}, #{data.provinceId}, #{data.provinceName}, #{data.regencyId}, #{data.regencyName}, #{data.districtId}, #{data.districtName}, #{data.deliverable}, #{data.transmission}::transmission, #{data.seat}, #{data.engineType}::engine_type, #{data.brand}::vehicle_brand, 'AVAILABLE'::product_status)
+        INSERT INTO t_product(name, company_id, price, province_id, province_name, regency_id, regency_name, district_id, district_name, deliverable, transmission, seat, engine_type, brand, status) 
+        VALUES (#{data.name}, #{data.companyId} #{data.price}, #{data.provinceId}, #{data.provinceName}, #{data.regencyId}, #{data.regencyName}, #{data.districtId}, #{data.districtName}, #{data.deliverable}, #{data.transmission}::transmission, #{data.seat}, #{data.engineType}::engine_type, #{data.brand}::vehicle_brand, 'AVAILABLE'::product_status)
     """,
     )
     @Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "id")
@@ -28,7 +28,10 @@ interface ProductMapper : BaseMapper<Product> {
 
     @Update(
         """
-        UPDATE t_product SET name = #{data.name}, price = #{data.price}, deliverable = #{data.deliverable}, transmission = #{data.transmission}::transmission, seat = #{data.seat}, engine_type = #{data.engineType}::engine_type, brand = #{data.brand}::vehicle_brand, updated_date = NOW()
+        UPDATE t_product SET name = #{data.name}, price = #{data.price}, deliverable = #{data.deliverable}, transmission = #{data.transmission}::transmission,
+        province_id = #{data.provinceId}, province_name = #{data.provinceName}, regency_id = #{data.regencyId}, regency_name = #{data.regencyName},
+        district_id = #{data.districtId}, district_name = #{data.districtName}, seat = #{data.seat}, engine_type = #{data.engineType}::engine_type,
+        brand = #{data.brand}::vehicle_brand, updated_date = NOW()
         WHERE id = #{id}
     """,
     )
@@ -83,7 +86,7 @@ interface ProductMapper : BaseMapper<Product> {
     @Select(
         """
         <script>
-            SELECT p.id, p.name, p.price, p.deliverable, p.status, p.quantity, p.available, p.brand, p.seat, p.transmission, p.engine_type, p.seat FROM t_product p
+            SELECT p.* FROM t_product p
             WHERE p.company_id = #{companyId}
             AND p.deleted_date IS NULL
             <if test="request.id != null">
@@ -106,6 +109,15 @@ interface ProductMapper : BaseMapper<Product> {
             </if>
             <if test="request.status != null">
                 AND p.status = #{request.status}::product_status
+            </if>
+            <if test="request.provinceId != null">
+                AND p.province_id = #{request.provinceId}
+            </if>
+            <if test="request.regencyId != null">
+                AND p.regency_id = #{request.regencyId}
+            </if>
+            <if test="request.districtId != null">
+                AND p.district_id = #{request.districtId}
             </if>
             ORDER BY p.updated_date DESC
         </script>

@@ -12,6 +12,12 @@ class TenantProductListResponse {
     var name = ""
     var price: Int? = null
     var quantity: Int? = null
+    var provinceId: Int? = null
+    var provinceName = ""
+    var regencyId: Int? = null
+    var regencyName = ""
+    var districtId: Int? = null
+    var districtName = ""
     var available: Int? = null
     var deliverable = false
     var engineType: EngineType? = null
