@@ -19,6 +19,7 @@ class WebConfig(
                 "http://localhost:8007",
                 "https://tenant.xcodeid.uk/",
                 "https://tenant-admin.xcodeid.uk/",
+                "https://carent-admin.onrender.com/",
             )
             .allowedMethods("*")
             .allowedHeaders("*")
