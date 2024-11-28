@@ -157,4 +157,14 @@ interface ProductMapper : BaseMapper<Product> {
 
     @Update("""UPDATE t_product SET quantity = quantity-1, available = available-1, updated_date = NOW() WHERE id = #{id}""")
     fun decreaseProductQuantity(@Param("id") productId: Int)
+
+    @Select(
+        """
+            SELECT p.* FROM t_product p
+            WHERE p.deleted_date IS NULL
+            ORDER BY p.rating
+            LIMIT 5
+    """,
+    )
+    fun getPopularProductList(): List<ProductListResponse>
 }

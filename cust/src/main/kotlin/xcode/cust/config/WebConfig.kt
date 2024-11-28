@@ -16,6 +16,7 @@ class WebConfig(
             .allowedOrigins(
                 "http://localhost:4200",
                 "http://localhost:4300",
+                "http://localhost:64626/",
                 "http://localhost:8007",
                 "https://tenant.xcodeid.uk/",
                 "https://tenant-admin.xcodeid.uk/",

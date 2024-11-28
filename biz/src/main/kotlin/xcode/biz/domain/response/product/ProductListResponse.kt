@@ -9,6 +9,7 @@ class ProductListResponse {
     var seat: Int? = 0
     var name = ""
     var price: Int? = null
+    var rating: Int? = null
     var deliverable = false
     var brand: VehicleBrand? = null
 }

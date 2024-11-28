@@ -3,6 +3,7 @@ package xcode.cust.api
 import com.github.pagehelper.PageInfo
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.validation.annotation.Validated
+import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
@@ -26,5 +27,17 @@ class ProductApi @Autowired constructor(
         @RequestParam("pageSize") pageSize: Int
     ): BaseResponse<PageInfo<ProductListResponse>> {
         return customerProductService.searchProduct(request, pageNumber, pageSize)
+    }
+
+    @GetMapping("/popular/list")
+    fun getPopularList(
+    ): BaseResponse<List<ProductListResponse>> {
+        return customerProductService.getPopularProductList()
+    }
+
+    @GetMapping("/recommendation/list")
+    fun getRecommendationList(
+    ): BaseResponse<List<ProductListResponse>> {
+        return customerProductService.getRecommendationProductList()
     }
 }

@@ -23,6 +23,8 @@ class ProductSearchRequest {
     var engineType: EngineType? = null
     var brand: VehicleBrand? = null
     var status: ProductStatus? = null
+    var duration: Int? = null
+    var time: Date? = null
 
     fun validate() {
         if (priceStart != null) {
