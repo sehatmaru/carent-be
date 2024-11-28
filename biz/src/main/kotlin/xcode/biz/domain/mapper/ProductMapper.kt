@@ -21,7 +21,7 @@ interface ProductMapper : BaseMapper<Product> {
     @Insert(
         """
         INSERT INTO t_product(name, company_id, price, province_id, province_name, regency_id, regency_name, district_id, district_name, deliverable, transmission, seat, engine_type, brand, status) 
-        VALUES (#{data.name}, #{data.companyId} #{data.price}, #{data.provinceId}, #{data.provinceName}, #{data.regencyId}, #{data.regencyName}, #{data.districtId}, #{data.districtName}, #{data.deliverable}, #{data.transmission}::transmission, #{data.seat}, #{data.engineType}::engine_type, #{data.brand}::vehicle_brand, 'AVAILABLE'::product_status)
+        VALUES (#{data.name}, #{data.companyId}, #{data.price}, #{data.provinceId}, #{data.provinceName}, #{data.regencyId}, #{data.regencyName}, #{data.districtId}, #{data.districtName}, #{data.deliverable}, #{data.transmission}::transmission, #{data.seat}, #{data.engineType}::engine_type, #{data.brand}::vehicle_brand, 'AVAILABLE'::product_status)
     """,
     )
     @Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "id")
@@ -162,7 +162,7 @@ interface ProductMapper : BaseMapper<Product> {
         """
             SELECT p.* FROM t_product p
             WHERE p.deleted_date IS NULL
-            ORDER BY p.rating
+            ORDER BY p.rating DESC
             LIMIT 5
     """,
     )
