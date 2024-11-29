@@ -39,7 +39,7 @@ class CustomerProductService @Autowired constructor(
     fun getRecommendationProductList():BaseResponse<List<ProductListResponse>> {
         val result = BaseResponse<List<ProductListResponse>>()
 
-        result.setSuccess(productMapper.getPopularProductList())
+        result.setSuccess(productMapper.getRecommendationProductList())
 
         return result
     }

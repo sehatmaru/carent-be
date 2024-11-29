@@ -51,9 +51,9 @@ interface ProductMapper : BaseMapper<Product> {
             SELECT p.*, p.brand, p.seat, p.transmission FROM t_product p
             LEFT JOIN t_booking b ON b.product_id = p.id
             WHERE (
-                (b.start_date IS NULL OR b.start_date NOT BETWEEN #{request.startAt} AND #{request.endAt})
+                (b.start_date IS NULL OR b.start_date NOT BETWEEN #{request.startDate} AND #{request.endDate})
                 AND
-                (b.end_date IS NULL OR b.end_date NOT BETWEEN #{request.startAt} AND #{request.endAt})
+                (b.end_date IS NULL OR b.end_date NOT BETWEEN #{request.startDate} AND #{request.endDate})
             )
             <if test="request.priceStart != null and request.priceEnd != null">
                 AND p.price BETWEEN #{request.priceStart} AND #{request.priceEnd}
@@ -167,4 +167,14 @@ interface ProductMapper : BaseMapper<Product> {
     """,
     )
     fun getPopularProductList(): List<ProductListResponse>
+
+    @Select(
+        """
+            SELECT p.* FROM t_product p
+            WHERE p.deleted_date IS NULL
+            ORDER BY p.rating DESC
+            LIMIT 10
+    """,
+    )
+    fun getRecommendationProductList(): List<ProductListResponse>
 }
