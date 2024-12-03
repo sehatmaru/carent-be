@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import xcode.biz.domain.request.product.ProductSearchRequest
 import xcode.biz.domain.response.BaseResponse
+import xcode.biz.domain.response.product.ProductFilterCountListResponse
 import xcode.biz.domain.response.product.ProductListResponse
 import xcode.biz.domain.response.product.ProductSearchListResponse
 import xcode.biz.service.cust.CustomerProductService
@@ -45,4 +46,12 @@ class ProductApi @Autowired constructor(
     fun getTotalProduct(): BaseResponse<Int> {
         return customerProductService.getTotalProduct()
     }
+
+    @PostMapping("/filter/count")
+    fun getProductFilterCount(
+        @RequestBody @Validated request: ProductSearchRequest
+    ): BaseResponse<ProductFilterCountListResponse> {
+        return customerProductService.getProductFilterCount(request)
+    }
+
 }
