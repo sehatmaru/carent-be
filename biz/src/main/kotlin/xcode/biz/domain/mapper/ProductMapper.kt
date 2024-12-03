@@ -173,8 +173,12 @@ interface ProductMapper : BaseMapper<Product> {
             SELECT p.* FROM t_product p
             WHERE p.deleted_date IS NULL
             ORDER BY p.rating DESC
-            LIMIT 10
+            LIMIT #{limit}
     """,
     )
-    fun getRecommendationProductList(): List<ProductListResponse>
+    fun getRecommendationProductList(@Param("limit") limit: Int): List<ProductListResponse>
+
+
+    @Select("""SELECT COUNT(p.id) FROM t_product p WHERE p.deleted_date IS NULL""")
+    fun getTotalProduct(): Int
 }

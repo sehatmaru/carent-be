@@ -28,7 +28,7 @@ class CustomerProductService @Autowired constructor(
         return result
     }
 
-    fun getPopularProductList():BaseResponse<List<ProductListResponse>> {
+    fun getPopularProductList(): BaseResponse<List<ProductListResponse>> {
         val result = BaseResponse<List<ProductListResponse>>()
 
         result.setSuccess(productMapper.getPopularProductList())
@@ -36,10 +36,18 @@ class CustomerProductService @Autowired constructor(
         return result
     }
 
-    fun getRecommendationProductList():BaseResponse<List<ProductListResponse>> {
+    fun getRecommendationProductList(limit: Int): BaseResponse<List<ProductListResponse>> {
         val result = BaseResponse<List<ProductListResponse>>()
 
-        result.setSuccess(productMapper.getRecommendationProductList())
+        result.setSuccess(productMapper.getRecommendationProductList(limit))
+
+        return result
+    }
+
+    fun getTotalProduct(): BaseResponse<Int> {
+        val result = BaseResponse<Int>()
+
+        result.setSuccess(productMapper.getTotalProduct())
 
         return result
     }

@@ -37,7 +37,13 @@ class ProductApi @Autowired constructor(
 
     @GetMapping("/recommendation/list")
     fun getRecommendationList(
+        @RequestParam("limit") limit: Int
     ): BaseResponse<List<ProductListResponse>> {
-        return customerProductService.getRecommendationProductList()
+        return customerProductService.getRecommendationProductList(limit)
+    }
+
+    @GetMapping("/total")
+    fun getTotalProduct(): BaseResponse<Int> {
+        return customerProductService.getTotalProduct()
     }
 }
