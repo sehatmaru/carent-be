@@ -79,10 +79,55 @@ interface ProductMapper : BaseMapper<Product> {
             <if test="request.brand != null">
                 AND p.brand = #{request.brand}::vehicle_brand
             </if>
+            LIMIT #{limit}
         </script>
     """,
     )
-    fun searchProductList(@Param("request") request: ProductSearchRequest): List<ProductListResponse>
+    fun searchProductList(
+        @Param("request") request: ProductSearchRequest,
+        @Param("limit") limit: Int
+    ): List<ProductListResponse>
+
+    @Select(
+        """
+        <script>
+            SELECT COUNT(p.id) FROM t_product p
+            LEFT JOIN t_booking b ON b.product_id = p.id
+            WHERE (
+                (b.start_date IS NULL OR b.start_date NOT BETWEEN #{request.startDate} AND #{request.endDate})
+                AND
+                (b.end_date IS NULL OR b.end_date NOT BETWEEN #{request.startDate} AND #{request.endDate})
+            )
+            <if test="request.priceStart != null and request.priceEnd != null">
+                AND p.price BETWEEN #{request.priceStart} AND #{request.priceEnd}
+            </if>
+            <if test="request.provinceId != null">
+                AND p.province_id = #{request.provinceId}
+            </if>
+            <if test="request.regencyId != null">
+                AND p.regency_id = #{request.regencyId}
+            </if>
+            <if test="request.districtId != null">
+                AND p.district_id = #{request.districtId}
+            </if>
+            <if test="request.deliverable != null">
+                AND p.deliverable = #{request.deliverable}
+            </if>
+            <if test="request.transmission != null">
+                AND p.transmission = #{request.transmission}::transmission
+            </if>
+            <if test="request.engineType != null">
+                AND p.engine_type = #{request.engineType}::engine_type
+            </if>
+            <if test="request.brand != null">
+                AND p.brand = #{request.brand}::vehicle_brand
+            </if>
+        </script>
+    """,
+    )
+    fun searchProductListTotal(
+        @Param("request") request: ProductSearchRequest
+    ): Int
 
     @Select(
         """

@@ -1,6 +1,5 @@
 package xcode.cust.api
 
-import com.github.pagehelper.PageInfo
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.GetMapping
@@ -12,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController
 import xcode.biz.domain.request.product.ProductSearchRequest
 import xcode.biz.domain.response.BaseResponse
 import xcode.biz.domain.response.product.ProductListResponse
+import xcode.biz.domain.response.product.ProductSearchListResponse
 import xcode.biz.service.cust.CustomerProductService
 
 @RestController
@@ -23,10 +23,9 @@ class ProductApi @Autowired constructor(
     @PostMapping("/search")
     fun search(
         @RequestBody @Validated request: ProductSearchRequest,
-        @RequestParam("pageNum") pageNumber: Int,
-        @RequestParam("pageSize") pageSize: Int
-    ): BaseResponse<PageInfo<ProductListResponse>> {
-        return customerProductService.searchProduct(request, pageNumber, pageSize)
+        @RequestParam("limit") limit: Int
+    ): BaseResponse<ProductSearchListResponse> {
+        return customerProductService.searchProduct(request, limit)
     }
 
     @GetMapping("/popular/list")
