@@ -23,8 +23,11 @@ interface ProductMapper : BaseMapper<Product> {
 
     companion object {
         private const val PRODUCT_FILTER_CONDITIONS = """
-        <if test="request.priceStart != null and request.priceEnd != null">
-            AND p.price BETWEEN #{request.priceStart} AND #{request.priceEnd}
+        <if test="request.priceStart != null">
+            AND p.price &gt; #{request.priceStart}
+        </if>
+        <if test="request.priceEnd != null">
+            AND p.price &lt; #{request.priceEnd}
         </if>
         <if test="request.provinceId != null">
             AND p.province_id = #{request.provinceId}
