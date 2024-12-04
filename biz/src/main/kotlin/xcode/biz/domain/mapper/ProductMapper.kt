@@ -21,6 +21,64 @@ import xcode.biz.enums.VehicleBrand
 @Mapper
 interface ProductMapper : BaseMapper<Product> {
 
+    companion object {
+        private const val PRODUCT_FILTER_CONDITIONS = """
+        <if test="request.priceStart != null and request.priceEnd != null">
+            AND p.price BETWEEN #{request.priceStart} AND #{request.priceEnd}
+        </if>
+        <if test="request.provinceId != null">
+            AND p.province_id = #{request.provinceId}
+        </if>
+        <if test="request.regencyId != null">
+            AND p.regency_id = #{request.regencyId}
+        </if>
+        <if test="request.districtId != null">
+            AND p.district_id = #{request.districtId}
+        </if>
+        <if test="request.deliverable != null and request.deliverable.size > 0">
+            AND p.deliverable IN
+            <foreach item="deliverable" index="index" collection="request.deliverable" open="(" separator="," close=")">
+                #{deliverable}
+            </foreach>
+        </if>
+        <if test="request.capacity != null and request.capacity.size > 0 and request.capacity.size > 0">
+            AND p.seat IN
+            <foreach item="capacity" index="index" collection="request.capacity" open="(" separator="," close=")">
+                #{capacity}
+            </foreach>
+        </if>
+        <if test="request.transmission != null and request.transmission.size > 0 and request.transmission.size > 0">
+            AND p.transmission IN
+            <foreach item="transmission" index="index" collection="request.transmission" open="(" separator="," close=")">
+                #{transmission}::transmission
+            </foreach>
+        </if>
+        <if test="request.engineType != null and request.engineType.size > 0 and request.engineType.size > 0">
+            AND p.engine_type IN
+            <foreach item="engine" index="index" collection="request.engineType" open="(" separator="," close=")">
+                #{engine}::engine_type
+            </foreach>
+        </if>
+        <if test="request.brand != null and request.brand.size > 0">
+            AND p.brand IN
+            <foreach item="brand" index="index" collection="request.brand" open="(" separator="," close=")">
+                #{brand}::vehicle_brand
+            </foreach>
+        </if>
+    """
+
+        private const val PRODUCT_COUNT_FILTER_CONDITIONS = """
+            AND (
+                (b.start_date IS NULL OR b.start_date NOT BETWEEN #{request.startDate} AND #{request.endDate})
+                AND
+                (b.end_date IS NULL OR b.end_date NOT BETWEEN #{request.startDate} AND #{request.endDate})
+            )
+            <if test="request.provinceId != null">
+                AND p.province_id = #{request.provinceId}
+            </if>
+        """
+    }
+
     @Insert(
         """
         INSERT INTO t_product(name, company_id, price, province_id, province_name, regency_id, regency_name, district_id, district_name, deliverable, transmission, seat, engine_type, brand, status) 
@@ -58,30 +116,7 @@ interface ProductMapper : BaseMapper<Product> {
                 AND
                 (b.end_date IS NULL OR b.end_date NOT BETWEEN #{request.startDate} AND #{request.endDate})
             )
-            <if test="request.priceStart != null and request.priceEnd != null">
-                AND p.price BETWEEN #{request.priceStart} AND #{request.priceEnd}
-            </if>
-            <if test="request.provinceId != null">
-                AND p.province_id = #{request.provinceId}
-            </if>
-            <if test="request.regencyId != null">
-                AND p.regency_id = #{request.regencyId}
-            </if>
-            <if test="request.districtId != null">
-                AND p.district_id = #{request.districtId}
-            </if>
-            <if test="request.deliverable != null">
-                AND p.deliverable = #{request.deliverable}
-            </if>
-            <if test="request.transmission != null">
-                AND p.transmission = #{request.transmission}::transmission
-            </if>
-            <if test="request.engineType != null">
-                AND p.engine_type = #{request.engineType}::engine_type
-            </if>
-            <if test="request.brand != null">
-                AND p.brand = #{request.brand}::vehicle_brand
-            </if>
+            $PRODUCT_FILTER_CONDITIONS
             LIMIT #{limit}
         </script>
     """,
@@ -101,30 +136,7 @@ interface ProductMapper : BaseMapper<Product> {
                 AND
                 (b.end_date IS NULL OR b.end_date NOT BETWEEN #{request.startDate} AND #{request.endDate})
             )
-            <if test="request.priceStart != null and request.priceEnd != null">
-                AND p.price BETWEEN #{request.priceStart} AND #{request.priceEnd}
-            </if>
-            <if test="request.provinceId != null">
-                AND p.province_id = #{request.provinceId}
-            </if>
-            <if test="request.regencyId != null">
-                AND p.regency_id = #{request.regencyId}
-            </if>
-            <if test="request.districtId != null">
-                AND p.district_id = #{request.districtId}
-            </if>
-            <if test="request.deliverable != null">
-                AND p.deliverable = #{request.deliverable}
-            </if>
-            <if test="request.transmission != null">
-                AND p.transmission = #{request.transmission}::transmission
-            </if>
-            <if test="request.engineType != null">
-                AND p.engine_type = #{request.engineType}::engine_type
-            </if>
-            <if test="request.brand != null">
-                AND p.brand = #{request.brand}::vehicle_brand
-            </if>
+            $PRODUCT_FILTER_CONDITIONS
         </script>
     """,
     )
@@ -138,36 +150,7 @@ interface ProductMapper : BaseMapper<Product> {
             SELECT p.* FROM t_product p
             WHERE p.company_id = #{companyId}
             AND p.deleted_date IS NULL
-            <if test="request.id != null">
-                AND p.id = #{request.id}
-            </if>
-            <if test="request.name != null">
-                AND p.name ILIKE CONCAT('%', #{request.name}, '%')
-            </if>
-            <if test="request.deliverable != null">
-                AND p.deliverable = #{request.deliverable}
-            </if>
-            <if test="request.transmission != null">
-                AND p.transmission = #{request.transmission}::transmission
-            </if>
-            <if test="request.engineType != null">
-                AND p.engine_type = #{request.engineType}::engine_type
-            </if>
-            <if test="request.brand != null">
-                AND p.brand = #{request.brand}::vehicle_brand
-            </if>
-            <if test="request.status != null">
-                AND p.status = #{request.status}::product_status
-            </if>
-            <if test="request.provinceId != null">
-                AND p.province_id = #{request.provinceId}
-            </if>
-            <if test="request.regencyId != null">
-                AND p.regency_id = #{request.regencyId}
-            </if>
-            <if test="request.districtId != null">
-                AND p.district_id = #{request.districtId}
-            </if>
+            $PRODUCT_FILTER_CONDITIONS
             ORDER BY p.updated_date DESC
         </script>
     """,
@@ -232,37 +215,10 @@ interface ProductMapper : BaseMapper<Product> {
     @Select(
         """
         <script>
-            SELECT COUNT(p.id) FROM t_product p WHERE transmission = #{transmission}::transmission AND p.deleted_date IS NULL
-            <if test="request.id != null">
-                AND p.id = #{request.id}
-            </if>
-            <if test="request.name != null">
-                AND p.name ILIKE CONCAT('%', #{request.name}, '%')
-            </if>
-            <if test="request.deliverable != null">
-                AND p.deliverable = #{request.deliverable}
-            </if>
-            <if test="request.transmission != null">
-                AND p.transmission = #{request.transmission}::transmission
-            </if>
-            <if test="request.engineType != null">
-                AND p.engine_type = #{request.engineType}::engine_type
-            </if>
-            <if test="request.brand != null">
-                AND p.brand = #{request.brand}::vehicle_brand
-            </if>
-            <if test="request.status != null">
-                AND p.status = #{request.status}::product_status
-            </if>
-            <if test="request.provinceId != null">
-                AND p.province_id = #{request.provinceId}
-            </if>
-            <if test="request.regencyId != null">
-                AND p.regency_id = #{request.regencyId}
-            </if>
-            <if test="request.districtId != null">
-                AND p.district_id = #{request.districtId}
-            </if>
+            SELECT COUNT(p.id) FROM t_product p 
+            LEFT JOIN t_booking b ON b.product_id = p.id
+            WHERE transmission = #{transmission}::transmission AND p.deleted_date IS NULL
+            $PRODUCT_COUNT_FILTER_CONDITIONS
         </script>
         """
     )
@@ -274,37 +230,10 @@ interface ProductMapper : BaseMapper<Product> {
     @Select(
         """
         <script>
-            SELECT COUNT(p.id) FROM t_product p WHERE deliverable = #{deliverable} AND p.deleted_date IS NULL
-            <if test="request.id != null">
-                AND p.id = #{request.id}
-            </if>
-            <if test="request.name != null">
-                AND p.name ILIKE CONCAT('%', #{request.name}, '%')
-            </if>
-            <if test="request.deliverable != null">
-                AND p.deliverable = #{request.deliverable}
-            </if>
-            <if test="request.transmission != null">
-                AND p.transmission = #{request.transmission}::transmission
-            </if>
-            <if test="request.engineType != null">
-                AND p.engine_type = #{request.engineType}::engine_type
-            </if>
-            <if test="request.brand != null">
-                AND p.brand = #{request.brand}::vehicle_brand
-            </if>
-            <if test="request.status != null">
-                AND p.status = #{request.status}::product_status
-            </if>
-            <if test="request.provinceId != null">
-                AND p.province_id = #{request.provinceId}
-            </if>
-            <if test="request.regencyId != null">
-                AND p.regency_id = #{request.regencyId}
-            </if>
-            <if test="request.districtId != null">
-                AND p.district_id = #{request.districtId}
-            </if>
+            SELECT COUNT(p.id) FROM t_product p 
+            LEFT JOIN t_booking b ON b.product_id = p.id
+            WHERE deliverable = #{deliverable} AND p.deleted_date IS NULL
+            $PRODUCT_COUNT_FILTER_CONDITIONS
         </script>"""
     )
     fun getTotalProductDeliverable(
@@ -315,37 +244,10 @@ interface ProductMapper : BaseMapper<Product> {
     @Select(
         """
         <script>
-            SELECT COUNT(p.id) FROM t_product p WHERE brand = #{brand}::vehicle_brand AND p.deleted_date IS NULL
-            <if test="request.id != null">
-                AND p.id = #{request.id}
-            </if>
-            <if test="request.name != null">
-                AND p.name ILIKE CONCAT('%', #{request.name}, '%')
-            </if>
-            <if test="request.deliverable != null">
-                AND p.deliverable = #{request.deliverable}
-            </if>
-            <if test="request.transmission != null">
-                AND p.transmission = #{request.transmission}::transmission
-            </if>
-            <if test="request.engineType != null">
-                AND p.engine_type = #{request.engineType}::engine_type
-            </if>
-            <if test="request.brand != null">
-                AND p.brand = #{request.brand}::vehicle_brand
-            </if>
-            <if test="request.status != null">
-                AND p.status = #{request.status}::product_status
-            </if>
-            <if test="request.provinceId != null">
-                AND p.province_id = #{request.provinceId}
-            </if>
-            <if test="request.regencyId != null">
-                AND p.regency_id = #{request.regencyId}
-            </if>
-            <if test="request.districtId != null">
-                AND p.district_id = #{request.districtId}
-            </if>
+            SELECT COUNT(p.id) FROM t_product p 
+            LEFT JOIN t_booking b ON b.product_id = p.id
+            WHERE brand = #{brand}::vehicle_brand AND p.deleted_date IS NULL
+            $PRODUCT_COUNT_FILTER_CONDITIONS
         </script>
         """
     )
@@ -354,37 +256,10 @@ interface ProductMapper : BaseMapper<Product> {
     @Select(
         """
         <script>
-            SELECT COUNT(p.id) FROM t_product p WHERE engine_type = #{engine}::engine_type AND p.deleted_date IS NULL
-            <if test="request.id != null">
-                AND p.id = #{request.id}
-            </if>
-            <if test="request.name != null">
-                AND p.name ILIKE CONCAT('%', #{request.name}, '%')
-            </if>
-            <if test="request.deliverable != null">
-                AND p.deliverable = #{request.deliverable}
-            </if>
-            <if test="request.transmission != null">
-                AND p.transmission = #{request.transmission}::transmission
-            </if>
-            <if test="request.engineType != null">
-                AND p.engine_type = #{request.engineType}::engine_type
-            </if>
-            <if test="request.brand != null">
-                AND p.brand = #{request.brand}::vehicle_brand
-            </if>
-            <if test="request.status != null">
-                AND p.status = #{request.status}::product_status
-            </if>
-            <if test="request.provinceId != null">
-                AND p.province_id = #{request.provinceId}
-            </if>
-            <if test="request.regencyId != null">
-                AND p.regency_id = #{request.regencyId}
-            </if>
-            <if test="request.districtId != null">
-                AND p.district_id = #{request.districtId}
-            </if>
+            SELECT COUNT(p.id) FROM t_product p 
+            LEFT JOIN t_booking b ON b.product_id = p.id
+            WHERE engine_type = #{engine}::engine_type AND p.deleted_date IS NULL
+            $PRODUCT_COUNT_FILTER_CONDITIONS
         </script>
         """
     )
@@ -393,39 +268,13 @@ interface ProductMapper : BaseMapper<Product> {
     @Select(
         """
         <script>
-            SELECT COUNT(p.id) FROM t_product p WHERE seat = #{seat} AND p.deleted_date IS NULL
-            <if test="request.id != null">
-                AND p.id = #{request.id}
-            </if>
-            <if test="request.name != null">
-                AND p.name ILIKE CONCAT('%', #{request.name}, '%')
-            </if>
-            <if test="request.deliverable != null">
-                AND p.deliverable = #{request.deliverable}
-            </if>
-            <if test="request.transmission != null">
-                AND p.transmission = #{request.transmission}::transmission
-            </if>
-            <if test="request.engineType != null">
-                AND p.engine_type = #{request.engineType}::engine_type
-            </if>
-            <if test="request.brand != null">
-                AND p.brand = #{request.brand}::vehicle_brand
-            </if>
-            <if test="request.status != null">
-                AND p.status = #{request.status}::product_status
-            </if>
-            <if test="request.provinceId != null">
-                AND p.province_id = #{request.provinceId}
-            </if>
-            <if test="request.regencyId != null">
-                AND p.regency_id = #{request.regencyId}
-            </if>
-            <if test="request.districtId != null">
-                AND p.district_id = #{request.districtId}
-            </if>
+            SELECT COUNT(p.id) FROM t_product p
+            LEFT JOIN t_booking b ON b.product_id = p.id
+            WHERE seat = #{seat} AND p.deleted_date IS NULL
+            $PRODUCT_COUNT_FILTER_CONDITIONS
         </script>
         """
     )
     fun getTotalProductSeat(@Param("request") request: ProductSearchRequest, @Param("seat") seat: Int): Int
+
 }
