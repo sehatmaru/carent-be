@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service
 import xcode.biz.domain.mapper.ProductMapper
 import xcode.biz.domain.request.product.ProductSearchRequest
 import xcode.biz.domain.response.BaseResponse
+import xcode.biz.domain.response.product.ProductDetailResponse
 import xcode.biz.domain.response.product.ProductFilterCountListResponse
 import xcode.biz.domain.response.product.ProductListResponse
 import xcode.biz.domain.response.product.ProductSearchListResponse
@@ -52,6 +53,14 @@ class CustomerProductService @Autowired constructor(
         val result = BaseResponse<Int>()
 
         result.setSuccess(productMapper.getTotalProduct())
+
+        return result
+    }
+
+    fun getProductDetail(id: Int): BaseResponse<ProductDetailResponse> {
+        val result = BaseResponse<ProductDetailResponse>()
+
+        result.setSuccess(productMapper.getProductDetail(id))
 
         return result
     }

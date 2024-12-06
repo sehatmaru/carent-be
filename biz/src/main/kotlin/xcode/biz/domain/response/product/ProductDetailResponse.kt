@@ -6,16 +6,16 @@ import xcode.biz.enums.VehicleBrand
 
 class ProductDetailResponse {
     var id: Int? = null
-    var vehicleName = ""
     var transmission: Transmission? = null
+    var seat: Int? = 0
+    var name = ""
+    var price: Int? = null
+    var rating: Float? = null
+    var deliverable = false
+    var brand: VehicleBrand? = null
     var provinceName = ""
     var regencyName = ""
     var districtName = ""
     var engineType: EngineType? = null
-    var brand: VehicleBrand? = null
     var companyName = ""
-    var seat = ""
-    var name = ""
-    var price: Int? = null
-    var deliverable = false
 }

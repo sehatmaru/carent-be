@@ -11,6 +11,7 @@ import xcode.biz.domain.model.Product
 import xcode.biz.domain.request.product.ProductRegisterRequest
 import xcode.biz.domain.request.product.ProductSearchRequest
 import xcode.biz.domain.request.product.ProductUpdateRequest
+import xcode.biz.domain.response.product.ProductDetailResponse
 import xcode.biz.domain.response.product.ProductListResponse
 import xcode.biz.domain.response.product.ProductOptionListResponse
 import xcode.biz.domain.response.product.TenantProductListResponse
@@ -279,5 +280,16 @@ interface ProductMapper : BaseMapper<Product> {
         """
     )
     fun getTotalProductSeat(@Param("request") request: ProductSearchRequest, @Param("seat") seat: Int): Int
+
+    @Select(
+        """
+            SELECT p.*, c.alias_name AS "company_name" FROM t_product p
+            LEFT JOIN public.t_company c on p.company_id = c.id
+            WHERE p.id = #{id}
+            AND p.deleted_date IS NULL
+            ORDER BY p.updated_date DESC
+        """
+    )
+    fun getProductDetail(@Param("id") id: Int): ProductDetailResponse
 
 }
