@@ -8,6 +8,7 @@ import xcode.biz.domain.model.Order
 import xcode.biz.domain.request.customer.CustomerFilterRequest
 import xcode.biz.domain.response.customer.TenantCustomerResponse
 import xcode.biz.domain.response.order.OrderHistoryResponse
+import xcode.biz.domain.response.product.ProductReviewListResponse
 
 @Mapper
 interface OrderMapper : BaseMapper<Order> {
@@ -129,4 +130,13 @@ interface OrderMapper : BaseMapper<Order> {
         @Param("companyId") companyId: Int,
         @Param("request") request: CustomerFilterRequest,
     ): List<TenantCustomerResponse>
+
+    @Select(
+        """
+            SELECT o.* FROM t_order o
+            WHERE o.deleted_date IS NULL
+            AND o.product_id = #{productId}
+    """,
+    )
+    fun getProductReviewList(@Param("productId") productId: Int): List<ProductReviewListResponse>
 }

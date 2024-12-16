@@ -198,10 +198,10 @@ interface ProductMapper : BaseMapper<Product> {
             SELECT p.* FROM t_product p
             WHERE p.deleted_date IS NULL
             ORDER BY p.rating DESC
-            LIMIT 5
+            LIMIT #{limit}
     """,
     )
-    fun getPopularProductList(): List<ProductListResponse>
+    fun getPopularProductList(@Param("limit") limit: Int): List<ProductListResponse>
 
     @Select(
         """
