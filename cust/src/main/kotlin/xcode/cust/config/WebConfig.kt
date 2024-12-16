@@ -21,6 +21,7 @@ class WebConfig(
                 "https://tenant.xcodeid.uk/",
                 "https://tenant-admin.xcodeid.uk/",
                 "https://carent-admin.onrender.com/",
+                "https://carent-m32k.onrender.com/"
             )
             .allowedMethods("*")
             .allowedHeaders("*")
